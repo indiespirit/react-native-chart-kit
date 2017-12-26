@@ -25,15 +25,15 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "expo": "^23.0.4",
-    "react-native": "0.50.3",
     "google-palette": "^1.0.0",
     "lodash": "^4.17.4",
     "paths-js": "^0.4.5",
     "point-in-polygon": "^1.0.1",
     "prop-types": "^15.6.0",
     "react": "16.0.0",
+    "react-native": "0.50.3",
     "react-native-scrollable-tab-view": "^0.8.0",
-    "react-native-svg": "5.4.2"
+    "react-native-svg": "^6.0.1-rc.1"
   },
   "xo": {
     "extends": "xo-react",

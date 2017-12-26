@@ -68,7 +68,7 @@ class ProgressChart extends AbstractChart {
                 <Path
                   key={Math.random()}
                   d={pie.curves[0].sector.path.print()}
-                  strokeWidth="16"
+                  strokeWidth={16}
                   stroke={this.props.chartConfig.color(0.2)}
                 />
               )
@@ -80,23 +80,25 @@ class ProgressChart extends AbstractChart {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d={pie.curves[0].sector.path.print()}
-                  strokeWidth="16"
+                  strokeWidth={16}
                   stroke={this.props.chartConfig.color((i / pies.length * 0.5) + 0.5)}
 
                 />)
             })}
             {pies.map((_, i) => {
-              return (<Rect
-                key={Math.random()}
-                width="16"
-                height="16"
-                fill={this.props.chartConfig.color(0.2 * (i + 1))}
-                rx={8}
-                ry={8}
-                transform={{
-                  translate: [(this.props.width / 2.5) - 24, -(this.props.height / 2.5) + ((this.props.height * 0.8) / this.props.data.length * i) + 12].join(',')
-                }}
-                      />)
+              return (
+                <Rect
+                  key={Math.random()}
+                  width="16"
+                  height="16"
+                  fill={this.props.chartConfig.color(0.2 * (i + 1))}
+                  rx={8}
+                  ry={8}
+                  transform={{
+                    translate: [(this.props.width / 2.5) - 24, -(this.props.height / 2.5) + ((this.props.height * 0.8) / this.props.data.length * i) + 12].join(',')
+                  }}
+                />
+              )
             })}
             {pies.map((_, i) => {
               return (
@@ -107,7 +109,8 @@ class ProgressChart extends AbstractChart {
                   transform={{
                     translate: [this.props.width / 2.5, -(this.props.height / 2.5) + ((this.props.height * 0.8) / this.props.data.length * i) + 12].join(',')
                   }}
-                >{Math.round(100 * this.props.data[i]) + '%'}
+                >
+                  {Math.round(100 * this.props.data[i]) + '%'}
                 </Text>)
             })}
           </G>
