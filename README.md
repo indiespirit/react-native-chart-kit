@@ -3,15 +3,18 @@
 # React Native Chart Kit Documentation
 
 ## Import components
-1. Place the folder with the project in your working directory
+1. `yarn add react-native-chart-kit`
 2. Use with ES6 syntax to import components
 
 ```js
-import LineChart from 'react-native-graph-kit/src/line-chart'
-import BarChart from 'react-native-graph-kit/src/bar-chart'
-import PieChart from 'react-native-graph-kit/src/pie-chart'
-import Progress from 'react-native-graph-kit/src/progress-chart'
-import LineChart from 'react-native-graph-kit/src/contribution-graph'
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph
+} from 'react-native-chart-kit'
+
 ```
 
 ## Chart style object
