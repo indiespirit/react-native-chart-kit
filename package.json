@@ -1,17 +1,17 @@
 {
   "name": "react-native-chart-kit",
   "version": "0.1.0",
-  "private": true,
   "devDependencies": {
     "babel-eslint": "^8.0.2",
-    "eslint-config-xo-react": "^0.14.0",
+    "eslint-config-xo-react": "^0.15.0",
     "eslint-plugin-react": "^7.4.0",
     "jest-expo": "^22.0.0",
     "react-native-scripts": "1.7.0",
     "react-test-renderer": "16.0.0-beta.5",
     "xo": "^0.18.2"
   },
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "react-native-main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "main": "./index.js",
   "scripts": {
     "start": "react-native-scripts start",
     "eject": "react-native-scripts eject",
