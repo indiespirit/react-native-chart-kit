@@ -10,7 +10,7 @@
     "react-test-renderer": "16.0.0",
     "xo": "^0.18.2"
   },
-  "react-native-main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "_main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "main": "./index.js",
   "scripts": {
     "start": "react-native-scripts start",
@@ -33,7 +33,7 @@
     "react": "16.0.0",
     "react-native": "0.50.3",
     "react-native-scrollable-tab-view": "^0.8.0",
-    "react-native-svg": "^6.0.1-rc.1"
+    "react-native-svg": "5.5.1"
   },
   "xo": {
     "extends": "xo-react",
