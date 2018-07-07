@@ -62,9 +62,9 @@ class LineChart extends AbstractChart {
   }
 
   renderLine = config => {
-    // if (this.props.bezier) {
-    //   return this.renderBezierLine(config)
-    // }
+    if (this.props.bezier) {
+      return this.renderBezierLine(config)
+    }
     const { width, height, paddingRight, paddingTop, data } = config
     let output = [];
     data.map((dataset,index) => {
@@ -93,14 +93,18 @@ class LineChart extends AbstractChart {
     
   }
 
-  getBezierLinePoints = config => {
+  getBezierLinePoints = (dataset, config) => {
+
+    console.log("Dataset GBLP: ", dataset)
     const { width, height, paddingRight, paddingTop, data } = config
-    if (data.length === 0) {
+    let output = []; 
+    if (dataset.data.length === 0) {
       return 'M0,0'
     }
-    const x = i => Math.floor(paddingRight + i * (width - paddingRight) / data.length)
-    const y = i => Math.floor(((height / 4 * 3 * (1 - ((data[i] - Math.min(...data)) / this.calcScaler(data)))) + paddingTop))
-    return [`M${x(0)},${y(0)}`].concat(data.slice(0, -1).map((_, i) => {
+    const x = i => Math.floor(paddingRight + i * (width - paddingRight) / dataset.data.length)
+    const y = i => Math.floor(((height / 4 * 3 * (1 - ((data[i] - Math.min(...dataset.data)) / this.calcScaler(dataset.data)))) + paddingTop))
+    
+    return [`M${x(0)},${y(0)}`].concat(dataset.data.slice(0, -1).map((_, i) => {
       const x_mid = (x(i) + x(i + 1)) / 2
       const y_mid = (y(i) + y(i + 1)) / 2
       const cp_x1 = (x_mid + x(i)) / 2
@@ -108,18 +112,26 @@ class LineChart extends AbstractChart {
       return `Q ${cp_x1}, ${y(i)}, ${x_mid}, ${y_mid}` +
       ` Q ${cp_x2}, ${y(i + 1)}, ${x(i + 1)}, ${y(i + 1)}`
     })).join(' ')
+
+    
   }
 
   renderBezierLine = config => {
+    let output = [];
+    config.data.map((dataset,index)=>{
+      let result = this.getBezierLinePoints(dataset,config);
+      console.log("Result: ",result)
+      return (
+          <Path
+            d={result}
+            fill="none"
+            stroke={this.props.chartConfig.color(0.2)}
+            strokeWidth={3}
+          />
+        )
+      });
 
-    return (
-      <Path
-        d={this.getBezierLinePoints(config)}
-        fill="none"
-        stroke={this.props.chartConfig.color(0.2)}
-        strokeWidth={3}
-      />
-    )
+    
   }
 
   renderBezierShadow = config => {
