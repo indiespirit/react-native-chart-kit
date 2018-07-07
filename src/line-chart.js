@@ -15,16 +15,24 @@ class LineChart extends AbstractChart {
 
   renderDots = config => {
     const { data, width, height, paddingTop, paddingRight } = config
-    return data.map((x, i) => {
-      return (
-        <Circle
-          key={Math.random()}
-          cx={paddingRight + (i * (width - paddingRight) / data.length)}
-          cy={((height / 4 * 3 * (1 - ((x - Math.min(...data)) / this.calcScaler(data)))) + paddingTop)}
-          r="4"
-          fill={this.props.chartConfig.color(0.7)}
-        />)
+    let output = [];
+    data.map((dataset,index)=>{
+      dataset.data.map((x, i) => {
+        output.push (
+          <Circle
+            key={Math.random()}
+            cx={paddingRight + (i * (width - paddingRight) / dataset.data.length)}
+            cy={((height / 4 * 3 * (1 - ((x - Math.min(...dataset.data)) / this.calcScaler(dataset.data)))) + paddingTop)}
+            r="4"
+            fill={this.props.chartConfig.color(0.7)}
+          />)
+      })
     })
+    return (
+      output
+    )
+
+    
   }
 
   renderShadow = config => {
@@ -169,7 +177,8 @@ class LineChart extends AbstractChart {
           })}
           {withDots && this.renderDots({
             ...config,
-            data: data.datasets[0].data,
+            // data: data.datasets[0].data,
+            data: data.datasets,
             paddingTop,
             paddingRight
           })}
