@@ -36,20 +36,29 @@ class LineChart extends AbstractChart {
   }
 
   renderShadow = config => {
-    if (this.props.bezier) {
-      return this.renderBezierShadow(config)
-    }
+    // if (this.props.bezier) {
+    //   return this.renderBezierShadow(config)
+    // }
     const { data, width, height, paddingRight, paddingTop } = config
+    let output = [];
+    config.data.map((dataset,index)=>{
+      output.push (
+        <Polygon
+          key={index}
+          points={dataset.data.map((x, i) =>
+            (paddingRight + (i * (width - paddingRight) / dataset.data.length)) +
+          ',' +
+           (((height / 4 * 3 * (1 - ((x - Math.min(...dataset.data)) / this.calcScaler(dataset.data)))) + paddingTop))
+          ).join(' ') + ` ${paddingRight + ((width - paddingRight) / dataset.data.length * (dataset.data.length - 1))},${(height / 4 * 3) + paddingTop} ${paddingRight},${(height / 4 * 3) + paddingTop}`}
+          fill="url(#fillShadowGradient)"
+          strokeWidth={0}
+        />)
+    })
     return (
-      <Polygon
-        points={data.map((x, i) =>
-          (paddingRight + (i * (width - paddingRight) / data.length)) +
-        ',' +
-         (((height / 4 * 3 * (1 - ((x - Math.min(...data)) / this.calcScaler(data)))) + paddingTop))
-        ).join(' ') + ` ${paddingRight + ((width - paddingRight) / data.length * (data.length - 1))},${(height / 4 * 3) + paddingTop} ${paddingRight},${(height / 4 * 3) + paddingTop}`}
-        fill="url(#fillShadowGradient)"
-        strokeWidth={0}
-      />)
+      output
+    )
+    
+    
   }
 
   renderLine = config => {
@@ -102,6 +111,7 @@ class LineChart extends AbstractChart {
   }
 
   renderBezierLine = config => {
+
     return (
       <Path
         d={this.getBezierLinePoints(config)}
@@ -185,7 +195,8 @@ class LineChart extends AbstractChart {
           })}
           {withShadow && this.renderShadow({
             ...config,
-            data: data.datasets[0].data,
+            // data: data.datasets[0].data,
+            data: data.datasets,
             paddingRight,
             paddingTop
           })}
