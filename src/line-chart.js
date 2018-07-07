@@ -36,9 +36,9 @@ class LineChart extends AbstractChart {
   }
 
   renderShadow = config => {
-    // if (this.props.bezier) {
-    //   return this.renderBezierShadow(config)
-    // }
+    if (this.props.bezier) {
+      return this.renderBezierShadow(config)
+    }
     const { data, width, height, paddingRight, paddingTop } = config
     let output = [];
     config.data.map((dataset,index)=>{
@@ -95,14 +95,13 @@ class LineChart extends AbstractChart {
 
   getBezierLinePoints = (dataset, config) => {
 
-    console.log("Dataset GBLP: ", dataset)
     const { width, height, paddingRight, paddingTop, data } = config
     let output = []; 
     if (dataset.data.length === 0) {
       return 'M0,0'
     }
     const x = i => Math.floor(paddingRight + i * (width - paddingRight) / dataset.data.length)
-    const y = i => Math.floor(((height / 4 * 3 * (1 - ((data[i] - Math.min(...dataset.data)) / this.calcScaler(dataset.data)))) + paddingTop))
+    const y = i => Math.floor(((height / 4 * 3 * (1 - ((dataset.data[i] - Math.min(...dataset.data)) / this.calcScaler(dataset.data)))) + paddingTop))
     
     return [`M${x(0)},${y(0)}`].concat(dataset.data.slice(0, -1).map((_, i) => {
       const x_mid = (x(i) + x(i + 1)) / 2
@@ -120,9 +119,9 @@ class LineChart extends AbstractChart {
     let output = [];
     config.data.map((dataset,index)=>{
       let result = this.getBezierLinePoints(dataset,config);
-      console.log("Result: ",result)
-      return (
+      output.push (
           <Path
+            key = {index}
             d={result}
             fill="none"
             stroke={this.props.chartConfig.color(0.2)}
@@ -130,19 +129,31 @@ class LineChart extends AbstractChart {
           />
         )
       });
+    return (
+      output
+    )
 
     
   }
 
   renderBezierShadow = config => {
     const { width, height, paddingRight, paddingTop, data } = config
+    let output = [];
+    data.map((dataset,index)=>{
+      let d = this.getBezierLinePoints(dataset,config) +
+      ` L${paddingRight + ((width - paddingRight) / dataset.data.length * (dataset.data.length - 1))},${(height / 4 * 3) + paddingTop} L${paddingRight},${(height / 4 * 3) + paddingTop} Z`
+      output.push (
+        <Path
+          key={index}
+          d={d}
+          fill="url(#fillShadowGradient)"
+          strokeWidth={0}
+        />)
+    })
     return (
-      <Path
-        d={this.getBezierLinePoints(config) +
-          ` L${paddingRight + ((width - paddingRight) / data.length * (data.length - 1))},${(height / 4 * 3) + paddingTop} L${paddingRight},${(height / 4 * 3) + paddingTop} Z`}
-        fill="url(#fillShadowGradient)"
-        strokeWidth={0}
-      />)
+      output
+    )
+    
   }
 
   render() {
