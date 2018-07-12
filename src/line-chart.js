@@ -218,14 +218,12 @@ class LineChart extends AbstractChart {
           })}
           {withShadow && this.renderShadow({
             ...config,
-            // data: data.datasets[0].data,
             data: data.datasets,
             paddingRight,
             paddingTop
           })}
           {withDots && this.renderDots({
             ...config,
-            // data: data.datasets[0].data,
             data: data.datasets,
             paddingTop,
             paddingRight
