@@ -73,7 +73,7 @@ class PieChart extends AbstractChart {
           })}
           <Rect width="100%" height={this.props.height} rx={borderRadius} ry={borderRadius} fill={backgroundColor}/>
           <G
-            x={((this.props.width / 2) / 2) + Number(this.props.paddingLeft)}
+            x={((this.props.width / 2) / 2) + Number((this.props.paddingLeft)?this.props.paddingLeft:0)}
             y={this.props.height / 2}
           >
             {slices}
