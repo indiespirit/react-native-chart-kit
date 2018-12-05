@@ -34,32 +34,39 @@ class AbstractChart extends Component {
       paddingTop,
       paddingRight,
       yLabelsOffset = 12,
+      showHorizontalLabel = null,
     } = config;
     var decimalPlaces =
       this.props.chartConfig.decimalPlaces !== undefined
         ? this.props.chartConfig.decimalPlaces
         : 2;
     return [...new Array(count)].map((_, i) => {
-      return (
-        <Text
-          key={Math.random()}
-          x={paddingRight - yLabelsOffset}
-          textAnchor="end"
-          y={(height * 3) / 4 - ((height - paddingTop) / count) * i + 12}
-          fontSize={12}
-          fill={
-            this.props.chartConfig.labelColor ||
-            this.props.chartConfig.color(0.5)
-          }
-        >
-          {count === 1
-            ? data[0].toFixed(decimalPlaces)
-            : (
-                (this.calcScaler(data) / (count - 1)) * i +
-                Math.min(...data)
-              ).toFixed(decimalPlaces)}
-        </Text>
-      );
+      if (
+        showHorizontalLabel === null ||
+        (showHorizontalLabel && showHorizontalLabel(i, count))
+      ) {
+        return (
+          <Text
+            key={Math.random()}
+            x={paddingRight - yLabelsOffset}
+            textAnchor="end"
+            y={(height * 3) / 4 - ((height - paddingTop) / count) * i + 12}
+            fontSize={12}
+            fill={
+              this.props.chartConfig.labelColor ||
+              this.props.chartConfig.color(0.5)
+            }
+          >
+            {count === 1
+              ? data[0].toFixed(decimalPlaces)
+              : (
+                  (this.calcScaler(data) / (count - 1)) * i +
+                  Math.min(...data)
+                ).toFixed(decimalPlaces)}
+          </Text>
+        );
+      }
+      return null;
     });
   };
 
@@ -71,28 +78,35 @@ class AbstractChart extends Component {
       paddingRight,
       paddingTop,
       horizontalOffset = 0,
+      showVerticalLabel = null,
     } = config;
     const fontSize = 12;
     return labels.map((label, i) => {
-      return (
-        <Text
-          key={Math.random()}
-          x={
-            ((width - paddingRight) / labels.length) * i +
-            paddingRight +
-            horizontalOffset
-          }
-          y={(height * 3) / 4 + paddingTop + fontSize * 2}
-          fontSize={fontSize}
-          fill={
-            this.props.chartConfig.labelColor ||
-            this.props.chartConfig.color(0.5)
-          }
-          textAnchor="middle"
-        >
-          {label}
-        </Text>
-      );
+      if (
+        showVerticalLabel === null ||
+        (showVerticalLabel && showVerticalLabel(i, labels.length))
+      ) {
+        return (
+          <Text
+            key={Math.random()}
+            x={
+              ((width - paddingRight) / labels.length) * i +
+              paddingRight +
+              horizontalOffset
+            }
+            y={(height * 3) / 4 + paddingTop + fontSize * 2}
+            fontSize={fontSize}
+            fill={
+              this.props.chartConfig.labelColor ||
+              this.props.chartConfig.color(0.5)
+            }
+            textAnchor="middle"
+          >
+            {label}
+          </Text>
+        );
+      }
+      return null;
     });
   };
 

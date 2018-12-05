@@ -205,6 +205,8 @@ class LineChart extends AbstractChart {
       withShadow = true,
       withDots = true,
       style = {},
+      showHorizontalLabel = null,
+      showVerticalLabel = null,
     } = this.props;
     const { labels = [] } = data;
     const { borderRadius = 0 } = style;
@@ -243,6 +245,7 @@ class LineChart extends AbstractChart {
               data: data.datasets[0].data,
               paddingTop,
               paddingRight,
+              showHorizontalLabel,
             })}
             {this.renderVerticalLines({
               ...config,
@@ -255,6 +258,7 @@ class LineChart extends AbstractChart {
               labels,
               paddingRight,
               paddingTop,
+              showVerticalLabel,
             })}
             {this.renderLine({
               ...config,
