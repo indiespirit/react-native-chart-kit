@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { LinearGradient, Line, Text, Defs, Stop } from "react-native-svg";
+import { LinearGradient, Line, Text, Defs, Stop } from 'react-native-svg';
 
 class AbstractChart extends Component {
   calcScaler = data => Math.max(...data) - Math.min(...data) || 1;
@@ -33,7 +33,7 @@ class AbstractChart extends Component {
       height,
       paddingTop,
       paddingRight,
-      yLabelsOffset = 12
+      yLabelsOffset = 12,
     } = config;
     var decimalPlaces =
       this.props.chartConfig.decimalPlaces !== undefined
@@ -70,7 +70,7 @@ class AbstractChart extends Component {
       height,
       paddingRight,
       paddingTop,
-      horizontalOffset = 0
+      horizontalOffset = 0,
     } = config;
     const fontSize = 12;
     return labels.map((label, i) => {
@@ -126,7 +126,7 @@ class AbstractChart extends Component {
       width,
       height,
       backgroundGradientFrom,
-      backgroundGradientTo
+      backgroundGradientTo,
     } = config;
     return (
       <Defs>

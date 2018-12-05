@@ -5,6 +5,7 @@
     "babel-eslint": "^8.2.5",
     "eslint-config-xo-react": "^0.17.0",
     "eslint-plugin-react": "^7.10.0",
+    "eslint-config-prettier": "3.3.0",
     "jest-expo": "28.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",

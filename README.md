@@ -17,8 +17,8 @@ import {
   BarChart,
   PieChart,
   ProgressChart,
-  ContributionGraph
-} from "react-native-chart-kit";
+  ContributionGraph,
+} from 'react-native-chart-kit';
 ```
 
 ## Quick Example
@@ -28,7 +28,7 @@ import {
   <Text>Bezier Line Chart</Text>
   <LineChart
     data={{
-      labels: ["January", "February", "March", "April", "May", "June"],
+      labels: ['January', 'February', 'March', 'April', 'May', 'June'],
       datasets: [
         {
           data: [
@@ -37,27 +37,27 @@ import {
             Math.random() * 100,
             Math.random() * 100,
             Math.random() * 100,
-            Math.random() * 100
-          ]
-        }
-      ]
+            Math.random() * 100,
+          ],
+        },
+      ],
     }}
-    width={Dimensions.get("window").width} // from react-native
+    width={Dimensions.get('window').width} // from react-native
     height={220}
     chartConfig={{
-      backgroundColor: "#e26a00",
-      backgroundGradientFrom: "#fb8c00",
-      backgroundGradientTo: "#ffa726",
+      backgroundColor: '#e26a00',
+      backgroundGradientFrom: '#fb8c00',
+      backgroundGradientTo: '#ffa726',
       decimalPlaces: 2, // optional, defaults to 2dp
       color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
       style: {
-        borderRadius: 16
-      }
+        borderRadius: 16,
+      },
     }}
     bezier
     style={{
       marginVertical: 8,
-      borderRadius: 16
+      borderRadius: 16,
     }}
   />
 </View>
@@ -69,13 +69,13 @@ Define a chart style object with following properies as such:
 
 ```js
 const chartConfig = {
-  backgroundGradientFrom: "#1E2923",
-  backgroundGradientTo: "#08130D",
+  backgroundGradientFrom: '#1E2923',
+  backgroundGradientTo: '#08130D',
   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  lineColor: "#1aff92",
-  dotColor: "#00e08e",
-  gridLineColor: "rgba(26,255,146,0.2)",
-  labelColor: "#4D4D4D"
+  lineColor: '#1aff92',
+  dotColor: '#00e08e',
+  gridLineColor: 'rgba(26,255,146,0.2)',
+  labelColor: '#4D4D4D',
 };
 ```
 
@@ -94,8 +94,8 @@ const chartConfig = {
 To render a responsive chart, use `Dimensions` react-native library to get the width of the screen of your device like such
 
 ```js
-import { Dimensions } from "react-native";
-const screenWidth = Dimensions.get("window").width;
+import { Dimensions } from 'react-native';
+const screenWidth = Dimensions.get('window').width;
 ```
 
 ## Line Chart
@@ -104,12 +104,12 @@ const screenWidth = Dimensions.get("window").width;
 
 ```js
 const data = {
-  labels: ["January", "February", "March", "April", "May", "June"],
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
   datasets: [
     {
-      data: [20, 45, 28, 80, 99, 43]
-    }
-  ]
+      data: [20, 45, 28, 80, 99, 43],
+    },
+  ],
 };
 ```
 
@@ -178,12 +178,12 @@ const data = [0.4, 0.6, 0.8];
 
 ```js
 const data = {
-  labels: ["January", "February", "March", "April", "May", "June"],
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
   datasets: [
     {
-      data: [20, 45, 28, 80, 99, 43]
-    }
-  ]
+      data: [20, 45, 28, 80, 99, 43],
+    },
+  ],
 };
 ```
 
@@ -215,40 +215,40 @@ const data = {
 ```js
 const data = [
   {
-    name: "Seoul",
+    name: 'Seoul',
     population: 21500000,
-    color: "rgba(131, 167, 234, 1)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
+    color: 'rgba(131, 167, 234, 1)',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
   },
   {
-    name: "Toronto",
+    name: 'Toronto',
     population: 2800000,
-    color: "#F00",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
+    color: '#F00',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
   },
   {
-    name: "Beijing",
+    name: 'Beijing',
     population: 527612,
-    color: "red",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
+    color: 'red',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
   },
   {
-    name: "New York",
+    name: 'New York',
     population: 8538000,
-    color: "#ffffff",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
+    color: '#ffffff',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
   },
   {
-    name: "Moscow",
+    name: 'Moscow',
     population: 11920000,
-    color: "rgb(0, 0, 255)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  }
+    color: 'rgb(0, 0, 255)',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
+  },
 ];
 ```
 
@@ -282,17 +282,17 @@ This type of graph is often use to display a developer contribution activity. Ho
 
 ```js
 const commitsData = [
-  { date: "2017-01-02", count: 1 },
-  { date: "2017-01-03", count: 2 },
-  { date: "2017-01-04", count: 3 },
-  { date: "2017-01-05", count: 4 },
-  { date: "2017-01-06", count: 5 },
-  { date: "2017-01-30", count: 2 },
-  { date: "2017-01-31", count: 3 },
-  { date: "2017-03-01", count: 2 },
-  { date: "2017-04-02", count: 4 },
-  { date: "2017-03-05", count: 2 },
-  { date: "2017-02-30", count: 4 }
+  { date: '2017-01-02', count: 1 },
+  { date: '2017-01-03', count: 2 },
+  { date: '2017-01-04', count: 3 },
+  { date: '2017-01-05', count: 4 },
+  { date: '2017-01-06', count: 5 },
+  { date: '2017-01-30', count: 2 },
+  { date: '2017-01-31', count: 3 },
+  { date: '2017-03-01', count: 2 },
+  { date: '2017-04-02', count: 4 },
+  { date: '2017-03-05', count: 2 },
+  { date: '2017-02-30', count: 4 },
 ];
 ```
 
