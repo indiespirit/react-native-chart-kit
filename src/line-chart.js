@@ -37,7 +37,7 @@ class LineChart extends AbstractChart {
         );
       });
     });
-    return output;
+    return <G>{output}</G>;
   };
 
   renderShadow = config => {
@@ -75,7 +75,7 @@ class LineChart extends AbstractChart {
         />
       );
     });
-    return output;
+    return <G>{output}</G>;
   };
 
   renderLine = config => {
@@ -108,7 +108,7 @@ class LineChart extends AbstractChart {
       );
     });
 
-    return output;
+    return <G>{output}</G>;
   };
 
   getBezierLinePoints = (dataset, config) => {
@@ -161,7 +161,7 @@ class LineChart extends AbstractChart {
         />
       );
     });
-    return output;
+    return <G>{output}</G>;
   };
 
   renderBezierShadow = config => {
@@ -183,7 +183,7 @@ class LineChart extends AbstractChart {
         />
       );
     });
-    return output;
+    return <G>{output}</G>;
   };
 
   render() {
