@@ -15,7 +15,10 @@ class AbstractChart extends Component {
           y1={(height / 4) * i + paddingTop}
           x2={width}
           y2={(height / 4) * i + paddingTop}
-          stroke={this.props.chartConfig.color(0.2)}
+          stroke={
+            this.props.chartConfig.gridLineColor ||
+            this.props.chartConfig.color(0.2)
+          }
           strokeDasharray="5, 10"
           strokeWidth={1}
         />
@@ -44,7 +47,10 @@ class AbstractChart extends Component {
           textAnchor="end"
           y={(height * 3) / 4 - ((height - paddingTop) / count) * i + 12}
           fontSize={12}
-          fill={this.props.chartConfig.color(0.5)}
+          fill={
+            this.props.chartConfig.labelColor ||
+            this.props.chartConfig.color(0.5)
+          }
         >
           {count === 1
             ? data[0].toFixed(decimalPlaces)
@@ -78,7 +84,10 @@ class AbstractChart extends Component {
           }
           y={(height * 3) / 4 + paddingTop + fontSize * 2}
           fontSize={fontSize}
-          fill={this.props.chartConfig.color(0.5)}
+          fill={
+            this.props.chartConfig.labelColor ||
+            this.props.chartConfig.color(0.5)
+          }
           textAnchor="middle"
         >
           {label}
@@ -101,7 +110,10 @@ class AbstractChart extends Component {
             ((width - paddingRight) / data.length) * i + paddingRight
           )}
           y2={height - height / 4 + paddingTop}
-          stroke={this.props.chartConfig.color(0.2)}
+          stroke={
+            this.props.chartConfig.gridLineColor ||
+            this.props.chartConfig.color(0.2)
+          }
           strokeDasharray="5, 10"
           strokeWidth={1}
         />

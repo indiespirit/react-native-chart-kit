@@ -32,7 +32,10 @@ class LineChart extends AbstractChart {
               paddingTop
             }
             r="4"
-            fill={this.props.chartConfig.color(0.7)}
+            fill={
+              this.props.chartConfig.dotColor ||
+              this.props.chartConfig.color(0.7)
+            }
           />
         );
       });
@@ -102,7 +105,10 @@ class LineChart extends AbstractChart {
           key={index}
           points={points.join(' ')}
           fill="none"
-          stroke={this.props.chartConfig.color(0.2)}
+          stroke={
+            this.props.chartConfig.lineColor ||
+            this.props.chartConfig.color(0.2)
+          }
           strokeWidth={3}
         />
       );
@@ -156,7 +162,10 @@ class LineChart extends AbstractChart {
           key={index}
           d={result}
           fill="none"
-          stroke={this.props.chartConfig.color(0.2)}
+          stroke={
+            this.props.chartConfig.lineColor ||
+            this.props.chartConfig.color(0.2)
+          }
           strokeWidth={3}
         />
       );

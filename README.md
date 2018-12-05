@@ -72,6 +72,10 @@ const chartConfig = {
   backgroundGradientFrom: '#1E2923',
   backgroundGradientTo: '#08130D',
   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+  lineColor: '#1aff92',
+  dotColor: '#00e08e',
+  gridLineColor: 'rgba(26,255,146,0.2)',
+  labelColor: '#4D4D4D',
 };
 ```
 
@@ -80,6 +84,10 @@ const chartConfig = {
 | backgroundGradientFrom | string             | Defines the first color in the linear gradient of a chart's background                                 |
 | backgroundGradientTo   | string             | Defines the second color in the linear gradient of a chart's background                                |
 | color                  | function => string | Defines the base color function that is used to calculate colors of labels and sectors used in a chart |
+| lineColor              | string - OPTIONAL  | Defines the color of the line in a line chart                                                          |
+| gridLineColor          | string - OPTIONAL  | Defines the color of the grid lines                                                                    |
+| labelColor             | string - OPTIONAL  | Defines the color of the labels                                                                        |
+| dotColor               | string - OPTIONAL  | Defines the color of the dots in a line chart                                                          |
 
 ## Responsive charts
 
