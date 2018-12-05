@@ -1,5 +1,5 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import {
   Svg,
   Circle,
@@ -7,9 +7,9 @@ import {
   Polyline,
   Path,
   Rect,
-  G
-} from "react-native-svg";
-import AbstractChart from "./abstract-chart";
+  G,
+} from 'react-native-svg';
+import AbstractChart from './abstract-chart';
 
 class LineChart extends AbstractChart {
   renderDots = config => {
@@ -56,7 +56,7 @@ class LineChart extends AbstractChart {
                 (x, i) =>
                   paddingRight +
                   (i * (width - paddingRight)) / dataset.data.length +
-                  "," +
+                  ',' +
                   ((height / 4) *
                     3 *
                     (1 -
@@ -64,7 +64,7 @@ class LineChart extends AbstractChart {
                         this.calcScaler(dataset.data)) +
                     paddingTop)
               )
-              .join(" ") +
+              .join(' ') +
             ` ${paddingRight +
               ((width - paddingRight) / dataset.data.length) *
                 (dataset.data.length - 1)},${(height / 4) * 3 +
@@ -89,7 +89,7 @@ class LineChart extends AbstractChart {
         (x, i) =>
           paddingRight +
           (i * (width - paddingRight)) / dataset.data.length +
-          "," +
+          ',' +
           ((height / 4) *
             3 *
             (1 -
@@ -100,7 +100,7 @@ class LineChart extends AbstractChart {
       output.push(
         <Polyline
           key={index}
-          points={points.join(" ")}
+          points={points.join(' ')}
           fill="none"
           stroke={this.props.chartConfig.color(0.2)}
           strokeWidth={3}
@@ -115,7 +115,7 @@ class LineChart extends AbstractChart {
     const { width, height, paddingRight, paddingTop, data } = config;
     let output = [];
     if (dataset.data.length === 0) {
-      return "M0,0";
+      return 'M0,0';
     }
     const x = i =>
       Math.floor(
@@ -144,7 +144,7 @@ class LineChart extends AbstractChart {
           );
         })
       )
-      .join(" ");
+      .join(' ');
   };
 
   renderBezierLine = config => {
@@ -195,13 +195,13 @@ class LineChart extends AbstractChart {
       data,
       withShadow = true,
       withDots = true,
-      style = {}
+      style = {},
     } = this.props;
     const { labels = [] } = data;
     const { borderRadius = 0 } = style;
     const config = {
       width,
-      height
+      height,
     };
     return (
       <View style={style}>
@@ -209,7 +209,7 @@ class LineChart extends AbstractChart {
           <G>
             {this.renderDefs({
               ...config,
-              ...this.props.chartConfig
+              ...this.props.chartConfig,
             })}
             <Rect
               width="100%"
@@ -222,7 +222,7 @@ class LineChart extends AbstractChart {
               ...config,
               count: 4,
               paddingTop,
-              paddingRight
+              paddingRight,
             })}
             {this.renderHorizontalLabels({
               ...config,
@@ -233,40 +233,40 @@ class LineChart extends AbstractChart {
                   : 4,
               data: data.datasets[0].data,
               paddingTop,
-              paddingRight
+              paddingRight,
             })}
             {this.renderVerticalLines({
               ...config,
               data: data.datasets[0].data,
               paddingTop,
-              paddingRight
+              paddingRight,
             })}
             {this.renderVerticalLabels({
               ...config,
               labels,
               paddingRight,
-              paddingTop
+              paddingTop,
             })}
             {this.renderLine({
               ...config,
               paddingRight,
               paddingTop,
               // data: data.datasets[0].data
-              data: data.datasets
+              data: data.datasets,
             })}
             {withShadow &&
               this.renderShadow({
                 ...config,
                 data: data.datasets,
                 paddingRight,
-                paddingTop
+                paddingTop,
               })}
             {withDots &&
               this.renderDots({
                 ...config,
                 data: data.datasets,
                 paddingTop,
-                paddingRight
+                paddingRight,
               })}
           </G>
         </Svg>
