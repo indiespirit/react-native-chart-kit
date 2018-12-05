@@ -1,13 +1,18 @@
-import React from 'react'
-import { ScrollView, StatusBar, Dimensions, Text } from 'react-native'
-import ScrollableTabView from 'react-native-scrollable-tab-view'
-import LineChart from './src/line-chart'
-import PieChart from './src/pie-chart'
-import ProgressChart from './src/progress-chart'
-import BarChart from './src/bar-chart'
-import ContributionGraph from './src/contribution-graph'
-import { data, contributionData, pieChartData, progressChartData } from './data'
-import 'babel-polyfill'
+import React from 'react';
+import { ScrollView, StatusBar, Dimensions, Text } from 'react-native';
+import ScrollableTabView from 'react-native-scrollable-tab-view';
+import LineChart from './src/line-chart';
+import PieChart from './src/pie-chart';
+import ProgressChart from './src/progress-chart';
+import BarChart from './src/bar-chart';
+import ContributionGraph from './src/contribution-graph';
+import {
+  data,
+  contributionData,
+  pieChartData,
+  progressChartData,
+} from './data';
+import 'babel-polyfill';
 
 // in Expo - swipe left to see the following styling, or create your own
 const chartConfigs = [
@@ -17,8 +22,8 @@ const chartConfigs = [
     backgroundGradientTo: '#08130D',
     color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
     style: {
-      borderRadius: 16
-    }
+      borderRadius: 16,
+    },
   },
   {
     backgroundColor: '#022173',
@@ -26,14 +31,14 @@ const chartConfigs = [
     backgroundGradientTo: '#1b3fa0',
     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     style: {
-      borderRadius: 16
-    }
+      borderRadius: 16,
+    },
   },
   {
     backgroundColor: '#ffffff',
     backgroundGradientFrom: '#ffffff',
     backgroundGradientTo: '#ffffff',
-    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   },
   {
     backgroundColor: '#26872a',
@@ -41,19 +46,20 @@ const chartConfigs = [
     backgroundGradientTo: '#66bb6a',
     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     style: {
-      borderRadius: 16
-    }
+      borderRadius: 16,
+    },
   },
   {
     backgroundColor: '#000000',
     backgroundGradientFrom: '#000000',
     backgroundGradientTo: '#000000',
-    color: (opacity = 1) => `rgba(${255}, ${255}, ${255}, ${opacity})`
-  }, {
+    color: (opacity = 1) => `rgba(${255}, ${255}, ${255}, ${opacity})`,
+  },
+  {
     backgroundColor: '#0091EA',
     backgroundGradientFrom: '#0091EA',
     backgroundGradientTo: '#0091EA',
-    color: (opacity = 1) => `rgba(${255}, ${255}, ${255}, ${opacity})`
+    color: (opacity = 1) => `rgba(${255}, ${255}, ${255}, ${opacity})`,
   },
   {
     backgroundColor: '#e26a00',
@@ -61,8 +67,8 @@ const chartConfigs = [
     backgroundGradientTo: '#ffa726',
     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     style: {
-      borderRadius: 16
-    }
+      borderRadius: 16,
+    },
   },
   {
     backgroundColor: '#b90602',
@@ -70,25 +76,25 @@ const chartConfigs = [
     backgroundGradientTo: '#ef5350',
     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     style: {
-      borderRadius: 16
-    }
+      borderRadius: 16,
+    },
   },
   {
     backgroundColor: '#ff3e03',
     backgroundGradientFrom: '#ff3e03',
     backgroundGradientTo: '#ff3e03',
-    color: (opacity = 1) => `rgba(${0}, ${0}, ${0}, ${opacity})`
-  }
-]
+    color: (opacity = 1) => `rgba(${0}, ${0}, ${0}, ${opacity})`,
+  },
+];
 
 export default class App extends React.Component {
   renderTabBar() {
-    return <StatusBar hidden/>
+    return <StatusBar hidden />;
   }
 
   render() {
-    const { width } = Dimensions.get('window')
-    const height = 220
+    const { width } = Dimensions.get('window');
+    const height = 220;
     return (
       <ScrollableTabView renderTabBar={this.renderTabBar}>
         {chartConfigs.map(chartConfig => {
@@ -96,17 +102,17 @@ export default class App extends React.Component {
             color: chartConfig.color(),
             marginVertical: 10,
             textAlign: 'center',
-            fontSize: 16
-          }
+            fontSize: 16,
+          };
           const graphStyle = {
             marginVertical: 8,
-            ...chartConfig.style
-          }
+            ...chartConfig.style,
+          };
           return (
             <ScrollView
               key={Math.random()}
               style={{
-                backgroundColor: chartConfig.backgroundColor
+                backgroundColor: chartConfig.backgroundColor,
               }}
             >
               <Text style={labelStyle}>Bezier Line Chart</Text>
@@ -164,9 +170,9 @@ export default class App extends React.Component {
                 style={graphStyle}
               />
             </ScrollView>
-          )
+          );
         })}
       </ScrollableTabView>
-    )
+    );
   }
 }
