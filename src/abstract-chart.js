@@ -43,8 +43,7 @@ class AbstractChart extends Component {
     return [...new Array(count)].map((_, i) => {
       if (
         showHorizontalLabel === null ||
-        (showHorizontalLabel &&
-          showHorizontalLabel(i, [...new Array(count)].length))
+        (showHorizontalLabel && showHorizontalLabel(i, count))
       ) {
         return (
           <Text

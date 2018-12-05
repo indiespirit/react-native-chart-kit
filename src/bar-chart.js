@@ -54,7 +54,14 @@ class BarChart extends AbstractChart {
   render() {
     const paddingTop = 16;
     const paddingRight = 64;
-    const { width, height, data, style = {} } = this.props;
+    const {
+      width,
+      height,
+      data,
+      style = {},
+      showHorizontalLabel = null,
+      showVerticalLabel = null,
+    } = this.props;
     const { borderRadius = 0 } = style;
     const config = {
       width,
@@ -85,7 +92,7 @@ class BarChart extends AbstractChart {
             data: data.datasets[0].data,
             paddingTop,
             paddingRight,
-            showHorizontalLabel: this.props.showHorizontalLabel,
+            showHorizontalLabel,
           })}
           {this.renderVerticalLabels({
             ...config,
@@ -93,7 +100,7 @@ class BarChart extends AbstractChart {
             paddingRight,
             paddingTop,
             horizontalOffset: barWidth,
-            showVerticalLabel: this.props.showVerticalLabel,
+            showVerticalLabel,
           })}
           {this.renderBars({
             ...config,
