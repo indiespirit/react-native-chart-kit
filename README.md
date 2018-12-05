@@ -122,12 +122,14 @@ const data = {
 />
 ```
 
-| Property    | Type   | Description                                                                                 |
-| ----------- | ------ | ------------------------------------------------------------------------------------------- |
-| data        | Object | Data for the chart - see example above                                                      |
-| width       | Number | Width of the chart, use 'Dimensions' library to get the width of your screen for responsive |
-| height      | Number | Height of the chart                                                                         |
-| chartConfig | Object | Configuration object for the chart, see example config object above                         |
+| Property            | Type                | Description                                                                                 |
+| ------------------- | ------------------- | ------------------------------------------------------------------------------------------- |
+| data                | Object              | Data for the chart - see example above                                                      |
+| width               | Number              | Width of the chart, use 'Dimensions' library to get the width of your screen for responsive |
+| height              | Number              | Height of the chart                                                                         |
+| chartConfig         | Object              | Configuration object for the chart, see example config object above                         |
+| showHorizontalLabel | Function - OPTIONAL | Control whether to show the labels for horizontal lines                                     |
+| showVerticalLabel   | Function - OPTIONAL | Control whether to show the labels for vertical lines                                       |
 
 ## Bezier Line Chart
 
@@ -197,12 +199,14 @@ const data = {
 />
 ```
 
-| Property    | Type   | Description                                                                                 |
-| ----------- | ------ | ------------------------------------------------------------------------------------------- |
-| data        | Object | Data for the chart - see example above                                                      |
-| width       | Number | Width of the chart, use 'Dimensions' library to get the width of your screen for responsive |
-| height      | Number | Height of the chart                                                                         |
-| chartConfig | Object | Configuration object for the chart, see example config in the beginning of this file        |
+| Property            | Type                | Description                                                                                 |
+| ------------------- | ------------------- | ------------------------------------------------------------------------------------------- |
+| data                | Object              | Data for the chart - see example above                                                      |
+| width               | Number              | Width of the chart, use 'Dimensions' library to get the width of your screen for responsive |
+| height              | Number              | Height of the chart                                                                         |
+| chartConfig         | Object              | Configuration object for the chart, see example config in the beginning of this file        |
+| showHorizontalLabel | Function - OPTIONAL | Control whether to show the labels for horizontal lines                                     |
+| showVerticalLabel   | Function - OPTIONAL | Control whether to show the labels for vertical lines                                       |
 
 ## Pie chart
 

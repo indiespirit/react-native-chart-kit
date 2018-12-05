@@ -243,6 +243,7 @@ class LineChart extends AbstractChart {
               data: data.datasets[0].data,
               paddingTop,
               paddingRight,
+              showHorizontalLabel: this.props.showHorizontalLabel,
             })}
             {this.renderVerticalLines({
               ...config,
@@ -255,6 +256,7 @@ class LineChart extends AbstractChart {
               labels,
               paddingRight,
               paddingTop,
+              showVerticalLabel: this.props.showVerticalLabel,
             })}
             {this.renderLine({
               ...config,

@@ -85,6 +85,7 @@ class BarChart extends AbstractChart {
             data: data.datasets[0].data,
             paddingTop,
             paddingRight,
+            showHorizontalLabel: this.props.showHorizontalLabel,
           })}
           {this.renderVerticalLabels({
             ...config,
@@ -92,6 +93,7 @@ class BarChart extends AbstractChart {
             paddingRight,
             paddingTop,
             horizontalOffset: barWidth,
+            showVerticalLabel: this.props.showVerticalLabel,
           })}
           {this.renderBars({
             ...config,
