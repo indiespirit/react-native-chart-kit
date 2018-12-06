@@ -53,7 +53,7 @@ class BarChart extends AbstractChart {
 
   render() {
     const paddingTop = 16;
-    const paddingRight = 64;
+    const paddingRight = 50;
     const {
       width,
       height,
