@@ -257,26 +257,21 @@ const data = [
 ```
 
 ```html
-<PieChart
-  data={data}
-  width={screenWidth}
-  height={220}
-  chartConfig={chartConfig}
-  accessor="population"
-  backgroundColor="transparent"
-  paddingLeft="15"
-/>
+<PieChart data={data} width={screenWidth} height={220} chartConfig={chartConfig}
+accessor="population" backgroundColor="transparent" paddingLeft="15"
+showPercentage={false} // optional, defaults to true />
 ```
 
-| Property    | Type   | Description                                                                                 |
-| ----------- | ------ | ------------------------------------------------------------------------------------------- |
-| data        | Object | Data for the chart - see example above                                                      |
-| width       | Number | Width of the chart, use 'Dimensions' library to get the width of your screen for responsive |
-| height      | Number | Height of the chart                                                                         |
-| chartConfig | Object | Configuration object for the chart, see example config in the beginning of this file        |
-| accessor    | string | Property in the `data` object from which the number values are taken                        |
-| bgColor     | string | background color - if you want to set transparent, input `transparent` or `none`.           |
-| paddingLeft | string | left padding of the pie chart                                                               |
+| Property       | Type    | Description                                                                                 |
+| -------------- | ------- | ------------------------------------------------------------------------------------------- |
+| data           | Object  | Data for the chart - see example above                                                      |
+| width          | Number  | Width of the chart, use 'Dimensions' library to get the width of your screen for responsive |
+| height         | Number  | Height of the chart                                                                         |
+| chartConfig    | Object  | Configuration object for the chart, see example config in the beginning of this file        |
+| accessor       | string  | Property in the `data` object from which the number values are taken                        |
+| bgColor        | string  | background color - if you want to set transparent, input `transparent` or `none`.           |
+| paddingLeft    | string  | left padding of the pie chart                                                               |
+| showPercentage | boolean | show percentage in legend                                                                   |
 
 ## Contribution graph (heatmap)
 

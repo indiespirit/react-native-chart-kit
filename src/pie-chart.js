@@ -7,7 +7,7 @@ const Pie = require('paths-js/pie');
 
 class PieChart extends AbstractChart {
   render() {
-    const { style = {}, backgroundColor } = this.props;
+    const { style = {}, backgroundColor, showPercentage = true } = this.props;
     const { borderRadius = 0 } = style;
     const chart = Pie({
       center: this.props.center || [0, 0],
@@ -48,7 +48,8 @@ class PieChart extends AbstractChart {
               12 * 2
             }
           >
-            {Math.round((100 / total) * c.item[this.props.accessor])}%{' '}
+            {showPercentage &&
+              `${Math.round((100 / total) * c.item[this.props.accessor])}% `}
             {c.item.name}
           </Text>
         </G>
