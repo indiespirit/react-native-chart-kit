@@ -30,14 +30,14 @@ class AbstractChart extends Component {
   }
 
   renderHorizontalLine = config => {
-    const { width, height, paddingRight } = config
+    const { width, height, paddingTop, paddingRight } = config
       return (
           <Line
               key={Math.random()}
               x1={paddingRight}
-              y1={(height) - 27}
+              y1={height - (height / 4) + paddingTop}
               x2={width}
-              y2={(height) - 27}
+              y2={height - (height / 4) + paddingTop}
               stroke={this.props.chartConfig.color(0.2)}
               strokeDasharray="5, 10"
               strokeWidth={1}
@@ -100,14 +100,14 @@ class AbstractChart extends Component {
   }
 
   renderVerticalLine = config => {
-    const { height, paddingRight } = config
+    const { height, paddingTop, paddingRight } = config
       return (
           <Line
               key={Math.random()}
               x1={Math.floor(paddingRight)}
               y1={0}
               x2={Math.floor(paddingRight)}
-              y2={height - (height / 4) + 27}
+              y2={height - (height / 4) + paddingTop}
               stroke={this.props.chartConfig.color(0.2)}
               strokeDasharray="5, 10"
               strokeWidth={1}
