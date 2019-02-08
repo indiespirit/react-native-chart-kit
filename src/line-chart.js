@@ -152,7 +152,7 @@ class LineChart extends AbstractChart {
   render() {
     const paddingTop = 16
     const paddingRight = 64
-    const { width, height, data, withShadow = true, withDots = true, style = {} } = this.props
+    const { width, height, data, withShadow = true, withDots = true, withLines = true, style = {} } = this.props
     const { labels = [] } = data
     const { borderRadius = 0 } = style
     const config = {
@@ -177,7 +177,7 @@ class LineChart extends AbstractChart {
               ry={borderRadius}
               fill="url(#backgroundGradient)"/>
             <G>
-            {this.renderHorizontalLines({
+            {withLines && this.renderHorizontalLines({
               ...config,
               count: 4,
               paddingTop,
@@ -195,7 +195,7 @@ class LineChart extends AbstractChart {
             })}
             </G>
             <G>
-            {this.renderVerticalLines({
+            {withLines && this.renderVerticalLines({
               ...config,
               data: data.datasets[0].data,
               paddingTop,
