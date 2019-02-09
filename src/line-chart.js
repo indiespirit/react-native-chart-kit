@@ -159,9 +159,7 @@ class LineChart extends AbstractChart {
       width,
       height
     }
-    if(withoutInnerLines) {
-        paddingTop = 27
-    }
+
     return (
       <View style={style}>
         <Svg
