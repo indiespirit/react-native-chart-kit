@@ -187,6 +187,7 @@ class LineChart extends AbstractChart {
                     })
                     : this.renderHorizontalLine({
                         ...config,
+                        paddingTop,
                         paddingRight
                     })
                 }
