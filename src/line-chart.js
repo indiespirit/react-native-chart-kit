@@ -159,7 +159,7 @@ class LineChart extends AbstractChart {
       width,
       height
     }
-
+    const datas = data.datasets.reduce((acc, item) => item.data ? [...acc, ...item.data] : acc,[])
     return (
       <View style={style}>
         <Svg
@@ -197,7 +197,7 @@ class LineChart extends AbstractChart {
               ...config,
               count: (Math.min(...data.datasets[0].data) === Math.max(...data.datasets[0].data)) ?
                 1 : 4,
-              data: data.datasets[0].data,
+              data: datas,
               paddingTop,
               paddingRight
             })}
