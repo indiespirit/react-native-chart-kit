@@ -71,12 +71,13 @@ class LineChart extends AbstractChart {
     }
     const { width, height, paddingRight, paddingTop, data } = config
     let output = [];
+    const datas = this.getDatas(data)
     data.map((dataset,index) => {
 
       const points = dataset.data.map((x, i) =>
       (paddingRight + (i * (width - paddingRight) / dataset.data.length)) +
       ',' +
-       (((height / 4 * 3 * (1 - ((x - Math.min(...dataset.data)) / this.calcScaler(dataset.data))))) + paddingTop))
+       (((height / 4 * 3 * (1 - ((x - Math.min(...datas)) / this.calcScaler(datas))))) + paddingTop))
 
       output.push (
         <Polyline
