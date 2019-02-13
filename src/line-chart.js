@@ -244,6 +244,14 @@ class LineChart extends AbstractChart {
             })}
             </G>
             <G>
+            {withDots && this.renderDots({
+              ...config,
+              data: data.datasets,
+              paddingTop,
+              paddingRight
+            })}
+            </G>
+            <G>
             {decorator && decorator({
               ...config,
               data: data.datasets,
