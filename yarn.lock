@@ -6291,6 +6291,13 @@ react-native-branch@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
 
+react-native-flash-message@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/react-native-flash-message/-/react-native-flash-message-0.1.10.tgz#aa1f4526cb798a2a1d2911c1c5143391c922ee0b"
+  integrity sha512-hGOEoViRXLMR6cNry39qlDKG9QI+5rSQsjgzFZHcm+KlnuFoFJDuD2rdI92G8Tp85CHhYzhRGopYdT+RhQuOBA==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-gesture-handler@1.0.12:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.0.12.tgz#99a22f90212df299245357dbd3a9a01c788f310b"

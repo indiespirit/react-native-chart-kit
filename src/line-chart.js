@@ -10,6 +10,7 @@ import {
   G
 } from 'react-native-svg'
 import AbstractChart from './abstract-chart'
+import { DotMessage, showDotMessage} from "./components/message-dot"
 
 class LineChart extends AbstractChart {
 
@@ -24,19 +25,31 @@ class LineChart extends AbstractChart {
   getDatas = data => data.reduce((acc, item) => item.data ? [...acc, ...item.data] : acc,[])
 
   renderDots = config => {
-    const { data, width, height, paddingTop, paddingRight } = config
+    const { data, width, height, paddingTop, paddingRight, messageTitle, messagePosition } = config
     let output = [];
     const datas = this.getDatas(data)
     data.map((dataset,index)=>{
       dataset.data.map((x, i) => {
         output.push (
-          <Circle
-            key={Math.random()}
-            cx={paddingRight + (i * (width - paddingRight) / dataset.data.length)}
-            cy={((height / 4 * 3 * (1 - ((x - Math.min(...datas)) / this.calcScaler(datas)))) + paddingTop)}
-            r="4"
-            fill={this.getColor(dataset, 0.7)}
-          />)
+          <View key={Math.random()}>
+            <Circle
+              onPress={() => showDotMessage(messageTitle, x, this.getColor(dataset, 0.9))}
+              cx={
+                paddingRight +
+                (i * (width - paddingRight)) / dataset.data.length
+              }
+              cy={
+                (height / 4) *
+                  3 *
+                  (1 - (x - Math.min(...datas)) / this.calcScaler(datas)) +
+                paddingTop
+              }
+              r="4"
+              fill={this.getColor(dataset, 0.9)}
+            />
+            <DotMessage position={messagePosition} />
+          </View>
+        )
       })
     })
     return (
@@ -163,7 +176,7 @@ class LineChart extends AbstractChart {
   render() {
     const paddingTop = 16
     const paddingRight = 64
-    const { width, height, data, withShadow = true, withDots = true, withInnerLines = true, style = {}, decorator } = this.props
+    const { width, height, data, withShadow = true, withDots = true, withInnerLines = true, style = {}, decorator, messageTitle, messagePosition } = this.props
     const { labels = [] } = data
     const { borderRadius = 0 } = style
     const config = {
@@ -258,6 +271,8 @@ class LineChart extends AbstractChart {
             {withDots && this.renderDots({
               ...config,
               data: data.datasets,
+              messageTitle,
+              messagePosition,
               paddingTop,
               paddingRight
             })}

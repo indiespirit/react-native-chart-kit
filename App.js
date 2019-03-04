@@ -115,6 +115,8 @@ export default class App extends React.Component {
                 width={width}
                 height={height}
                 chartConfig={chartConfig}
+                messageTitle="Test Title"
+                messagePosition="top"
                 bezier
                 style={graphStyle}
               />
