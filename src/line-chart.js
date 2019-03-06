@@ -163,7 +163,7 @@ class LineChart extends AbstractChart {
   render() {
     const paddingTop = 16
     const paddingRight = 64
-    const { width, height, data, withShadow = true, withDots = true, withInnerLines = true, style = {}, decorator } = this.props
+    const { width, height, data, withShadow = true, withDots = true, withInnerLines = true, withOuterLines = true, style = {}, decorator } = this.props
     const { labels = [] } = data
     const { borderRadius = 0 } = style
     const config = {
@@ -196,11 +196,13 @@ class LineChart extends AbstractChart {
                         paddingTop,
                         paddingRight
                     })
-                    : this.renderHorizontalLine({
+                    : withOuterLines
+                    ? this.renderHorizontalLine({
                         ...config,
                         paddingTop,
                         paddingRight
                     })
+                    : null
                 }
             </G>
             <G>
@@ -221,11 +223,13 @@ class LineChart extends AbstractChart {
                         paddingTop,
                         paddingRight
                     })
-                    : this.renderVerticalLine({
+                    : withOuterLines
+                    ? this.renderVerticalLine({
                         ...config,
                         paddingTop,
                         paddingRight
                     })
+                    : null
                 }
             </G>
             <G>
