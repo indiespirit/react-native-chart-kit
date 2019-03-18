@@ -24,6 +24,7 @@ class AbstractChart extends Component {
           stroke={this.props.chartConfig.color(0.2)}
           strokeDasharray="5, 10"
           strokeWidth={1}
+          strokeOpacity={0.2}
         />
       )
     })
@@ -67,6 +68,7 @@ class AbstractChart extends Component {
     const { labels = [], width, height, paddingRight, paddingTop, horizontalOffset = 0 } = config
     const fontSize = 12
     return labels.map((label, i) => {
+      if (i % 2 === 0)
       return (
         <Text
           key={Math.random()}
@@ -94,6 +96,7 @@ class AbstractChart extends Component {
           stroke={this.props.chartConfig.color(0.2)}
           strokeDasharray="5, 10"
           strokeWidth={1}
+          strokeOpacity={0.2}
         />
       )
     })

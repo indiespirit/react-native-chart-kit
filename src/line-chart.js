@@ -1,6 +1,6 @@
 import React from 'react'
-import {View} from 'react-native'
-import {Svg, Circle, Polygon, Polyline, Path, Rect, G} from 'react-native-svg'
+import { View } from 'react-native'
+import { Svg, Circle, Polygon, Polyline, Path, Rect, G } from 'react-native-svg'
 import AbstractChart from './abstract-chart'
 
 class LineChart extends AbstractChart {
@@ -28,43 +28,50 @@ class LineChart extends AbstractChart {
     const datas = this.getDatas(data)
     data.map((dataset, index) => {
       dataset.data.map((x, i) => {
-        const cx =
-          paddingRight + (i * (width - paddingRight)) / dataset.data.length
-        const cy =
-          (height / 4) *
+        if (x !== null) {
+          var values = datas.map(function (o) {
+            return o;
+          }).filter(function (val) {
+            return val !== null
+          });
+          const cx =
+            paddingRight + (i * (width - paddingRight)) / dataset.data.length
+          const cy =
+            (height / 4) *
             3 *
-            (1 - (x - Math.min(...datas)) / this.calcScaler(datas)) +
-          paddingTop
-        const onPress = () => {
-          if (!onDataPointClick) {
-            return
+            (1 - (x - Math.min(...values)) / this.calcScaler(datas)) +
+            paddingTop
+          const onPress = () => {
+            if (!onDataPointClick) {
+              return
+            }
+
+            onDataPointClick({
+              value: x,
+              dataset,
+              getColor: opacity => this.getColor(dataset, opacity)
+            })
           }
 
-          onDataPointClick({
-            value: x,
-            dataset,
-            getColor: opacity => this.getColor(dataset, opacity)
-          })
+          output.push(
+            <View key={Math.random()}>
+              <Circle
+                cx={cx}
+                cy={cy}
+                r="4"
+                fill={this.getColor(dataset, 0.9)}
+                onPress={onPress}
+              />
+              <Circle
+                cx={cx}
+                cy={cy}
+                r="12"
+                fill={this.getColor(dataset, 0)}
+                onPress={onPress}
+              />
+            </View>
+          )
         }
-
-        output.push(
-          <View key={Math.random()}>
-            <Circle
-              cx={cx}
-              cy={cy}
-              r="4"
-              fill={this.getColor(dataset, 0.9)}
-              onPress={onPress}
-            />
-            <Circle
-              cx={cx}
-              cy={cy}
-              r="12"
-              fill={this.getColor(dataset, 0)}
-              onPress={onPress}
-            />
-          </View>
-        )
       })
     })
     return output
@@ -75,32 +82,58 @@ class LineChart extends AbstractChart {
       return this.renderBezierShadow(config)
     }
 
-    const {data, width, height, paddingRight, paddingTop} = config
+    const { data, width, height, paddingRight, paddingTop } = config
     const output = []
     const datas = this.getDatas(data)
     config.data.map((dataset, index) => {
+      var values = datas.map(function (o) {
+        return o;
+      }).filter(function (val) {
+        return val !== null
+      });
       output.push(
         <Polygon
           key={index}
           points={
             dataset.data
               .map(
-                (x, i) =>
-                  paddingRight +
-                  (i * (width - paddingRight)) / dataset.data.length +
-                  ',' +
-                  ((height / 4) *
-                    3 *
-                    (1 - (x - Math.min(...datas)) / this.calcScaler(datas)) +
-                    paddingTop)
+                (x, i) => x !== null ?
+                  (
+                    paddingRight +
+                    (i * (width - paddingRight)) / dataset.data.length +
+                    ',' +
+                    ((height / 4) *
+                      3 *
+                      (1 - (x - Math.min(...values)) / this.calcScaler(datas)) +
+                      paddingTop)
+                  )
+                  :
+                  [(
+                    paddingRight +
+                    ((i !== 0 ? (i - 1) : (i)) * (width - paddingRight)) / dataset.data.length +
+                    ',' +
+                    ((height / 4) *
+                      3 *
+                      (1 - (x) / this.calcScaler(datas)) +
+                      paddingTop)
+                  ),
+                  (
+                    paddingRight +
+                    ((i + 1) * (width - paddingRight)) / dataset.data.length +
+                    ',' +
+                    ((height / 4) *
+                      3 *
+                      (1 - (x) / this.calcScaler(datas)) +
+                      paddingTop)
+                  )]
               )
               .join(' ') +
             ` ${paddingRight +
-              ((width - paddingRight) / dataset.data.length) *
-                (dataset.data.length - 1)},${(height / 4) * 3 +
-              paddingTop} ${paddingRight},${(height / 4) * 3 + paddingTop}`
+            ((width - paddingRight) / dataset.data.length) *
+            (dataset.data.length - 1)},${(height / 4) * 3 +
+            paddingTop} ${paddingRight},${(height / 4) * 3 + paddingTop}`
           }
-          fill="url(#fillShadowGradient)"
+          fill={this.getColor(dataset, 0.1)}
           strokeWidth={0}
         />
       )
@@ -112,38 +145,51 @@ class LineChart extends AbstractChart {
     if (this.props.bezier) {
       return this.renderBezierLine(config)
     }
-
-    const {width, height, paddingRight, paddingTop, data} = config
+    const { width, height, paddingRight, paddingTop, data } = config
     const output = []
     const datas = this.getDatas(data)
     data.map((dataset, index) => {
-      const points = dataset.data.map(
-        (x, i) =>
-          paddingRight +
-          (i * (width - paddingRight)) / dataset.data.length +
-          ',' +
-          ((height / 4) *
-            3 *
-            (1 - (x - Math.min(...datas)) / this.calcScaler(datas)) +
-            paddingTop)
+      var values = datas.map(function (o) {
+        return o;
+      }).filter(function (val) {
+        return val !== null
+      });
+      const points = [[]]
+      var j = 0
+      dataset.data.map(
+        (x, i) => {
+          if (x !== null) {
+            points[j].push(paddingRight +
+              (i * (width - paddingRight)) / dataset.data.length +
+              ',' +
+              ((height / 4) *
+                3 *
+                (1 - (x - Math.min(...values)) / this.calcScaler(datas)) +
+                paddingTop))
+          } else {
+            points.push([])
+            j++
+          }
+        }
       )
-
-      output.push(
-        <Polyline
-          key={index}
-          points={points.join(' ')}
-          fill="none"
-          stroke={this.getColor(dataset, 0.2)}
-          strokeWidth={this.getStrokeWidth(dataset)}
-        />
-      )
+      points.map((point) =>{
+        output.push(
+          <Polyline
+            key={Math.random()}
+            points={point.join(' ')}
+            fill="none"
+            stroke={this.getColor(dataset, 0.2)}
+            strokeWidth={this.getStrokeWidth(dataset)}
+          />
+        )
+      })
     })
 
     return output
   }
 
   getBezierLinePoints = (dataset, config) => {
-    const {width, height, paddingRight, paddingTop, data} = config
+    const { width, height, paddingRight, paddingTop, data } = config
     if (dataset.data.length === 0) {
       return 'M0,0'
     }
@@ -156,10 +202,10 @@ class LineChart extends AbstractChart {
     const y = i =>
       Math.floor(
         (height / 4) *
-          3 *
-          (1 -
-            (dataset.data[i] - Math.min(...datas)) / this.calcScaler(datas)) +
-          paddingTop
+        3 *
+        (1 -
+          (dataset.data[i] - Math.min(...datas)) / this.calcScaler(datas)) +
+        paddingTop
       )
 
     return [`M${x(0)},${y(0)}`]
@@ -196,15 +242,15 @@ class LineChart extends AbstractChart {
   }
 
   renderBezierShadow = config => {
-    const {width, height, paddingRight, paddingTop, data} = config
+    const { width, height, paddingRight, paddingTop, data } = config
     const output = []
     data.map((dataset, index) => {
       const d =
         this.getBezierLinePoints(dataset, config) +
         ` L${paddingRight +
-          ((width - paddingRight) / dataset.data.length) *
-            (dataset.data.length - 1)},${(height / 4) * 3 +
-          paddingTop} L${paddingRight},${(height / 4) * 3 + paddingTop} Z`
+        ((width - paddingRight) / dataset.data.length) *
+        (dataset.data.length - 1)},${(height / 4) * 3 +
+        paddingTop} L${paddingRight},${(height / 4) * 3 + paddingTop} Z`
       output.push(
         <Path
           key={index}
@@ -232,15 +278,20 @@ class LineChart extends AbstractChart {
       decorator,
       onDataPointClick,
       backgroundColor = "rgb(255, 255, 255)",
-      backgroundOpacity= "1"
+      backgroundOpacity = "1"
     } = this.props
-    const {labels = []} = data
-    const {borderRadius = 0} = style
+    const { labels = [] } = data
+    const { borderRadius = 0 } = style
     const config = {
       width,
       height
     }
     const datas = this.getDatas(data.datasets)
+    var values = datas.map(function (o) {
+      return o;
+    }).filter(function (val) {
+      return val !== null
+    });
     return (
       <View style={style}>
         <Svg height={height} width={width}>
@@ -258,48 +309,48 @@ class LineChart extends AbstractChart {
               fillOpacity={backgroundOpacity}
             />
             <G>
-                {withInnerLines
-                    ? this.renderHorizontalLines({
-                        ...config,
-                        count: 4,
-                        paddingTop,
-                        paddingRight
-                    })
-                    : 
-                    withOuterLines
-                    ? this.renderHorizontalLine({
-                        ...config,
-                        paddingTop,
-                        paddingRight
-                    })
-                    : null
-                }
+              {withInnerLines
+                ? this.renderHorizontalLines({
+                  ...config,
+                  count: 4,
+                  paddingTop,
+                  paddingRight
+                })
+                :
+                withOuterLines
+                  ? this.renderHorizontalLine({
+                    ...config,
+                    paddingTop,
+                    paddingRight
+                  })
+                  : null
+              }
             </G>
             <G>
               {this.renderHorizontalLabels({
                 ...config,
-                count: Math.min(...datas) === Math.max(...datas) ? 1 : 4,
-                data: datas,
+                count: Math.min(...values) === Math.max(...values) ? 1 : 4,
+                data: values,
                 paddingTop,
                 paddingRight
               })}
             </G>
             <G>
-                {withInnerLines
-                    ? this.renderVerticalLines({
-                        ...config,
-                        data: data.datasets[0].data,
-                        paddingTop,
-                        paddingRight
-                    })
-                    : withOuterLines
-                    ? this.renderVerticalLine({
-                        ...config,
-                        paddingTop,
-                        paddingRight
-                    })
-                    : null
-                }
+              {withInnerLines
+                ? this.renderVerticalLines({
+                  ...config,
+                  data: data.datasets[0].data,
+                  paddingTop,
+                  paddingRight
+                })
+                : withOuterLines
+                  ? this.renderVerticalLine({
+                    ...config,
+                    paddingTop,
+                    paddingRight
+                  })
+                  : null
+              }
             </G>
             <G>
               {this.renderVerticalLabels({

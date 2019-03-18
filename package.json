@@ -1,46 +1,72 @@
 {
-  "name": "react-native-chart-kit",
-  "version": "2.3.0",
+  "_from": "react-native-chart-kit@^2.3.0",
+  "_id": "react-native-chart-kit@2.3.0",
+  "_inBundle": false,
+  "_integrity": "sha512-Al2keMFZu6109iHeU6dnppR9IddEY2qpFilFFALi4fmdUUKEx3daLlvhxf6/IRN0EJ+4/pX2qzBycfCIaW/TUQ==",
+  "_location": "/react-native-chart-kit",
+  "_main": "./node_modules/expo/AppEntry.js",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "react-native-chart-kit@^2.3.0",
+    "name": "react-native-chart-kit",
+    "escapedName": "react-native-chart-kit",
+    "rawSpec": "^2.3.0",
+    "saveSpec": null,
+    "fetchSpec": "^2.3.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-chart-kit/-/react-native-chart-kit-2.3.0.tgz",
+  "_shasum": "0803bf43c6d744bfa8647ab17d58704e0a8118ac",
+  "_spec": "react-native-chart-kit@^2.3.0",
+  "_where": "C:\\Users\\Faga\\iCloudDrive\\Documents\\Projetos\\React Native\\KafraApp",
+  "bundleDependencies": false,
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "paths-js": "^0.4.7",
+    "point-in-polygon": "^1.0.1"
+  },
+  "deprecated": false,
+  "description": "If you're looking to **build a website or a cross-platform mobile app** – we will be happy to help you! Send a note to clients@ui1.io and we will be in touch with you shortly.",
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "babel-plugin-module-resolver": "^3.1.1",
-    "eslint-plugin-react-hooks": "^1.4.0",
     "babel-polyfill": "^6.26.0",
     "eslint-config-xo-react": "^0.19.0",
     "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react-hooks": "^1.4.0",
     "expo": "32.0.1",
     "jest-expo": "28.0.0",
     "prop-types": "^15.6.2",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-scrollable-tab-view": "^0.10.0",
     "react-native-flash-message": "^0.1.10",
+    "react-native-scrollable-tab-view": "^0.10.0",
     "react-test-renderer": "16.7.0",
     "xo": "^0.24.0"
-  },
-  "_main": "./node_modules/expo/AppEntry.js",
-  "main": "./index.js",
-  "scripts": {
-    "start": "expo start",
-    "eject": "expo eject",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "test": "jest"
   },
   "jest": {
     "preset": "jest-expo"
   },
+  "main": "./index.js",
+  "name": "react-native-chart-kit",
   "peerDependencies": {
     "prop-types": "> 15.6.0",
     "react": "> 16.7.0",
     "react-native": ">= 0.50.0",
     "react-native-svg": "> 6.4.1"
   },
-  "dependencies": {
-    "lodash": "^4.17.11",
-    "paths-js": "^0.4.7",
-    "point-in-polygon": "^1.0.1"
+  "scripts": {
+    "android": "expo start --android",
+    "eject": "expo eject",
+    "ios": "expo start --ios",
+    "start": "expo start",
+    "test": "jest"
   },
+  "version": "2.3.0",
   "xo": {
     "extends": "xo-react",
     "parser": "babel-eslint",
