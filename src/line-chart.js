@@ -209,7 +209,7 @@ class LineChart extends AbstractChart {
         <Path
           key={index}
           d={d}
-          fill="url(#fillShadowGradient)"
+          fill={this.getColor(dataset, 0.1)}
           strokeWidth={0}
         />
       )
@@ -230,7 +230,9 @@ class LineChart extends AbstractChart {
       withOuterLines = true,
       style = {},
       decorator,
-      onDataPointClick
+      onDataPointClick,
+      backgroundColor = "rgb(255, 255, 255)",
+      backgroundOpacity= "1"
     } = this.props
     const {labels = []} = data
     const {borderRadius = 0} = style
@@ -252,7 +254,8 @@ class LineChart extends AbstractChart {
               height={height}
               rx={borderRadius}
               ry={borderRadius}
-              fill="url(#backgroundGradient)"
+              fill={backgroundColor}
+              fillOpacity={backgroundOpacity}
             />
             <G>
                 {withInnerLines
@@ -262,7 +265,8 @@ class LineChart extends AbstractChart {
                         paddingTop,
                         paddingRight
                     })
-                    : withOuterLines
+                    : 
+                    withOuterLines
                     ? this.renderHorizontalLine({
                         ...config,
                         paddingTop,
