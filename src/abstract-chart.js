@@ -66,11 +66,15 @@ class AbstractChart extends Component {
   renderVerticalLabels = config => {
     const { labels = [], width, height, paddingRight, paddingTop, horizontalOffset = 0 } = config
     const fontSize = 12
+    var fac = 1;
+    if(stackedBar){
+      fac = 0.71
+    }
     return labels.map((label, i) => {
       return (
         <Text
           key={Math.random()}
-          x={((width - paddingRight) / labels.length * (i)) + paddingRight + horizontalOffset}
+          x={(((width - paddingRight) / labels.length * (i)) + paddingRight + horizontalOffset)*fac}
           y={(height * 3 / 4) + paddingTop + (fontSize * 2)}
           fontSize={fontSize}
           fill={this.props.chartConfig.color(0.5)}
