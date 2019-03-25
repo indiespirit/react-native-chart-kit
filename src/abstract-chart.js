@@ -64,7 +64,7 @@ class AbstractChart extends Component {
   }
 
   renderVerticalLabels = config => {
-    const { labels = [], width, height, paddingRight, paddingTop, horizontalOffset = 0 } = config
+    const { labels = [], width, height, paddingRight, paddingTop, horizontalOffset = 0, stackedBar = false } = config
     const fontSize = 12
     var fac = 1;
     if(stackedBar){
