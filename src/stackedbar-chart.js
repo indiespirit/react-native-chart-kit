@@ -71,13 +71,13 @@ class StackedBarChart extends AbstractChart {
 	            rx={8}
 	            ry={8}
 	            x={width*0.71}
-	            y={height*0.25+(i)*50}
+	            y={height*0.70-(i)*50}
 	          />
 	          <Text
 	            fill={'#fff'}
 	            fontSize={16}
 	            x={width*0.78}
-	            y={height*0.31+(i)*50}>
+	            y={height*0.75-(i)*50}>
 	          {x}
 
 	          </Text>
