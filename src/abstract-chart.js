@@ -85,7 +85,7 @@ class AbstractChart extends Component {
       paddingRight,
       paddingTop,
       horizontalOffset = 0,
-      stackedBar = false
+      stackedBar = false,
     } = config
     const fontSize = 12
     var fac = 1;
