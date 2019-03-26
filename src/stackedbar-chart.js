@@ -43,7 +43,7 @@ class StackedBarChart extends AbstractChart {
           key={Math.random()}
           x={xC+7+barWidth/2}
           textAnchor="end"
-          y={y+18}
+          y={(h>15) ? (y+15) : (y+7)}
           fontSize={12}
           fill='#fff'
         >{x[z]}
