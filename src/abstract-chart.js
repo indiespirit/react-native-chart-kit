@@ -3,7 +3,19 @@ import React, {Component} from 'react'
 import {LinearGradient, Line, Text, Defs, Stop} from 'react-native-svg'
 
 class AbstractChart extends Component {
-  calcScaler = data => Math.max(...data) - Math.min(...data) || 1
+  calcScaler = data => Math.max(...data, 0) - Math.min(...data, 0) || 1
+
+  calcBaseHeight = (data, height) => {
+    const min = Math.min(...data)
+    const max = Math.max(...data)
+    if (min >= 0 && max >= 0) {
+      return height
+    } else if (min < 0 && max <= 0) {
+      return 0
+    } else if (min < 0 && max > 0) {
+      return height * max / this.calcScaler(data)
+    }
+  }
 
   renderHorizontalLines = config => {
     const {count, width, height, paddingTop, paddingRight} = config
@@ -58,7 +70,7 @@ class AbstractChart extends Component {
         yLabel = `${yAxisLabel}${data[0].toFixed(decimalPlaces)}`
       } else {
         const label =
-          (this.calcScaler(data) / (count - 1)) * i + Math.min(...data)
+          (this.calcScaler(data) / (count - 1)) * i + Math.min(...data, 0)
         yLabel = `${yAxisLabel}${label.toFixed(decimalPlaces)}`
       }
 
