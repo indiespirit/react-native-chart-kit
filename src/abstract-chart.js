@@ -3,7 +3,13 @@ import React, {Component} from 'react'
 import {LinearGradient, Line, Text, Defs, Stop} from 'react-native-svg'
 
 class AbstractChart extends Component {
-  calcScaler = data => Math.max(...data, 0) - Math.min(...data, 0) || 1
+  calcScaler = data => {
+    if (this.props.fromZero) {
+      return Math.max(...data, 0) - Math.min(...data, 0) || 1
+    } else {
+      return Math.max(...data) - Math.min(...data) || 1
+    }
+  }
 
   calcBaseHeight = (data, height) => {
     const min = Math.min(...data)
@@ -14,6 +20,22 @@ class AbstractChart extends Component {
       return 0
     } else if (min < 0 && max > 0) {
       return height * max / this.calcScaler(data)
+    }
+  }
+
+  calcHeight = (val, data, height) => {
+    const max = Math.max(...data)
+    const min = Math.min(...data)
+    if (min < 0 && max > 0) {
+       return height * (val / this.calcScaler(data))
+    } else if (min >= 0 && max >= 0) {
+      return this.props.fromZero ?
+        height * (val / this.calcScaler(data)) :
+        height * ((val - min) / this.calcScaler(data))
+    } else if (min < 0 && max <= 0) {
+      return this.props.fromZero ?
+        height * (val / this.calcScaler(data)) :
+        height * ((val - max) / this.calcScaler(data))
     }
   }
 
@@ -69,8 +91,9 @@ class AbstractChart extends Component {
       if (count === 1) {
         yLabel = `${yAxisLabel}${data[0].toFixed(decimalPlaces)}`
       } else {
-        const label =
-          (this.calcScaler(data) / (count - 1)) * i + Math.min(...data, 0)
+        const label = this.props.fromZero ?
+          (this.calcScaler(data) / (count - 1)) * i + Math.min(...data, 0) :
+          (this.calcScaler(data) / (count - 1)) * i + Math.min(...data)
         yLabel = `${yAxisLabel}${label.toFixed(decimalPlaces)}`
       }
 

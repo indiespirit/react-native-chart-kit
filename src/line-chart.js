@@ -88,7 +88,7 @@ class LineChart extends AbstractChart {
               .map(
                 (d, i) => {
                   const x = paddingRight + (i * (width - paddingRight)) / dataset.data.length
-                  const y = (baseHeight - height * (d / this.calcScaler(datas))) / 4 * 3 + paddingTop
+                  const y = (baseHeight -  this.calcHeight(d, datas, height)) / 4 * 3 + paddingTop
                   return `${x},${y}`
                 }
               )
@@ -119,7 +119,7 @@ class LineChart extends AbstractChart {
       const points = dataset.data.map(
         (d, i) => {
           const x  = (i * (width - paddingRight)) / dataset.data.length + paddingRight
-          const y = (baseHeight - height * (d / this.calcScaler(datas))) / 4 * 3 + paddingTop
+          const y = (baseHeight -  this.calcHeight(d, datas, height)) / 4 * 3 + paddingTop
           return `${x},${y}`
         }
       )
@@ -151,7 +151,7 @@ class LineChart extends AbstractChart {
       )
     const baseHeight = this.calcBaseHeight(datas, height)
     const y = i => {
-      const yHeight = height * (dataset.data[i] / this.calcScaler(datas))
+      const yHeight = this.calcHeight(dataset.data[i], datas, height)
       return Math.floor((baseHeight - yHeight) / 4 * 3 + paddingTop)
     }
 

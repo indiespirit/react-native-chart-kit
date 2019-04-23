@@ -10,7 +10,7 @@ class BarChart extends AbstractChart {
     const {data, width, height, paddingTop, paddingRight} = config
     const baseHeight = this.calcBaseHeight(data, height)
     return data.map((x, i) => {
-      const barHeight = height * (x / this.calcScaler(data))
+      const barHeight = this.calcHeight(x, data, height)
       const barWidth = 32
       return (
         <Rect
@@ -33,7 +33,7 @@ class BarChart extends AbstractChart {
     const {data, width, height, paddingTop, paddingRight} = config
     const baseHeight = this.calcBaseHeight(data, height)
     return data.map((x, i) => {
-      const barHeight = height * (x / this.calcScaler(data))
+      const barHeight = this.calcHeight(x, data, height)
       return (
         <Rect
           key={Math.random()}
