@@ -10,8 +10,8 @@ class ProgressChart extends AbstractChart {
     const {width, height, style = {}} = this.props
     const {borderRadius = 0} = style
 
-    const pies = this.props.data.map((pieData, i) => {
-      const r = ((height / 2 - 32) / this.props.data.length) * i + 32
+    const pies = this.props.data.data.map((pieData, i) => {
+      const r = ((height / 2 - 32) / this.props.data.data.length) * i + 32
       return Pie({
         r,
         R: r,
@@ -23,8 +23,8 @@ class ProgressChart extends AbstractChart {
       })
     })
 
-    const pieBackgrounds = this.props.data.map((pieData, i) => {
-      const r = ((height / 2 - 32) / this.props.data.length) * i + 32
+    const pieBackgrounds = this.props.data.data.map((pieData, i) => {
+      const r = ((height / 2 - 32) / this.props.data.data.length) * i + 32
       return Pie({
         r,
         R: r,
@@ -35,6 +35,9 @@ class ProgressChart extends AbstractChart {
         }
       })
     })
+
+    const withLabels = () => this.props.data.labels;
+    const withLabel = (i) => withLabels() && this.props.data.labels[i];
 
     return (
       <View
@@ -100,7 +103,7 @@ class ProgressChart extends AbstractChart {
                     x={this.props.width / 2.5 - 24}
                     y={
                       -(this.props.height / 2.5) +
-                      ((this.props.height * 0.8) / this.props.data.length) * i +
+                      ((this.props.height * 0.8) / this.props.data.data.length) * i +
                       12
                     }
                   />
@@ -117,11 +120,11 @@ class ProgressChart extends AbstractChart {
                     x={this.props.width / 2.5}
                     y={
                       -(this.props.height / 2.5) +
-                      ((this.props.height * 0.8) / this.props.data.length) * i +
+                      ((this.props.height * 0.8) / this.props.data.data.length) * i +
                       12 * 2
                     }
                   >
-                    {Math.round(100 * this.props.data[i]) + '%'}
+                    {withLabels && withLabel(i) ? `${this.props.data.labels[i]} ${Math.round(100 * this.props.data.data[i])}%` : `${Math.round(100 * this.props.data.data[i])}%`}
                   </Text>
                 )
               })}
