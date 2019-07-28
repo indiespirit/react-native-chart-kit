@@ -75,8 +75,8 @@ const pieChartData = [
 // Mock data object for Progress
 
 const progressChartData = {
-    labels: ['Swim', 'Bike', 'Run'],
-    data: [0.2, 0.5, 0.3]
+  labels: ['Swim', 'Bike', 'Run'], // optional
+  data: [0.2, 0.5, 0.3]
 }
 
 const stackedBarGraphData = {
