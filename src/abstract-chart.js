@@ -104,7 +104,7 @@ class AbstractChart extends Component {
           textAnchor="end"
           y={(height * 3) / 4 - ((height - paddingTop) / count) * i + 12}
           fontSize={12}
-          fill={this.props.chartConfig.color(0.5)}
+          fill={this.props.chartConfig.labelColor}
         >
           {yLabel}
         </Text>
@@ -140,7 +140,7 @@ class AbstractChart extends Component {
           }
           y={(height * 3) / 4 + paddingTop + fontSize * 2}
           fontSize={fontSize}
-          fill={this.props.chartConfig.color(0.5)}
+          fill={this.props.chartConfig.labelColor}
           textAnchor="middle"
         >
           {label}
