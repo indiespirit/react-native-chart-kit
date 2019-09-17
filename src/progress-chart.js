@@ -120,7 +120,7 @@ class ProgressChart extends AbstractChart {
                 return (
                   <Text
                     key={Math.random()}
-                    fill={this.props.chartConfig.color(0.5)}
+                    fill={this.props.chartConfig.labelColor(0.8) || '#ffffff'}
                     fontSize="11"
                     x={this.props.width / 2.5}
                     y={

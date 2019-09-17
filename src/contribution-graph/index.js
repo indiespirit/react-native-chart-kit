@@ -239,7 +239,7 @@ class ContributionGraph extends AbstractChart {
           fontSize={12}
           x={x + paddingLeft}
           y={y + 8}
-          fill={this.props.chartConfig.color(0.5)}
+          fill={this.props.chartConfig.labelColor(0.8) || '#ffffff'}
         >
           {MONTH_LABELS[endOfWeek.getMonth()]}
         </Text>

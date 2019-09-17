@@ -46,7 +46,7 @@ class StackedBarChart extends AbstractChart {
             textAnchor="end"
             y={h > 15 ? y + 15 : y + 7}
             fontSize={12}
-            fill="#fff"
+            fill={this.props.chartConfig.labelColor(0.8) || '#ffffff'}
           >
             {x[z]}
           </Text>
@@ -74,7 +74,7 @@ class StackedBarChart extends AbstractChart {
             y={height * 0.7 - i * 50}
           />
           <Text
-            fill="#fff"
+            fill={this.props.chartConfig.labelColor(0.8) || '#ffffff'}
             fontSize={16}
             x={width * 0.78}
             y={height * 0.76 - i * 50}
