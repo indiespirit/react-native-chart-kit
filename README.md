@@ -51,6 +51,7 @@ import {
       backgroundGradientTo: '#ffa726',
       decimalPlaces: 2, // optional, defaults to 2dp
       color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+      labelColor: '#CC0000',
       style: {
         borderRadius: 16
       }
