@@ -133,6 +133,8 @@ const data = {
 | chartConfig | Object | Configuration object for the chart, see example config object above |
 |decorator | Function | This function takes a [whole bunch](https://github.com/indiespirit/react-native-chart-kit/blob/master/src/line-chart.js#L266) of stuff and can render extra elements, such as data point info or additional markup. |
 |onDataPointClick| Function| Callback that takes `{value, dataset, getColor}`|
+|horizontalLabelRotation| number| sets the rotation angle of the horizontal labels - default 0|
+|verticalLabelRotation| number| sets the rotation angle of the vertical labels - default 0|
 
 ## Bezier Line Chart
 
