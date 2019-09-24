@@ -53,7 +53,7 @@ class LineChart extends AbstractChart {
             cx={cx}
             cy={cy}
             r="4"
-            fill={(dotColor && dotColor(x, i)) || this.getColor(dataset, 0.9)}
+            fill={typeof dotColor === 'function' ? dotColor(x, i) : this.getColor(dataset, 0.9)}
             onPress={onPress}
           />,
           <Circle
