@@ -1,9 +1,11 @@
 import React from 'react'
-import {View} from 'react-native'
-import {Svg, Rect, G, Text} from 'react-native-svg'
+import { View } from 'react-native'
+import { Svg, Rect, G, Text } from 'react-native-svg'
 import AbstractChart from './abstract-chart'
 
 const barWidth = 32
+
+const isAllZero = (arr) => arr.filter(d => d !== 0).length === 0;
 
 class StackedBarChart extends AbstractChart {
   renderBars = config => {
@@ -22,7 +24,7 @@ class StackedBarChart extends AbstractChart {
       let h = 0
       let st = paddingTop
       for (let z = 0; z < x.length; z++) {
-        h = (height - 55) * (x[z] / border)
+        h = isAllZero(x) ? 0 : (height - 55) * (x[z] / border)
         const y = (height / 4) * 3 - h + st
         const xC =
           (paddingRight +
@@ -39,18 +41,20 @@ class StackedBarChart extends AbstractChart {
             fill={colors[z]}
           />
         )
-        ret.push(
-          <Text
-            key={Math.random()}
-            x={xC + 7 + barWidth / 2}
-            textAnchor="end"
-            y={h > 15 ? y + 15 : y + 7}
-            fontSize={12}
-            fill="#fff"
-          >
-            {x[z]}
-          </Text>
-        )
+        if (x[z] !== 0) {
+          ret.push(
+            <Text
+              key={Math.random()}
+              x={xC + 7 + barWidth / 2}
+              textAnchor="end"
+              y={h > 15 ? y + 15 : y + 7}
+              fontSize={12}
+              fill="#fff"
+            >
+              {x[z]}
+            </Text>
+          );
+        }
 
         st -= h
       }
@@ -60,7 +64,7 @@ class StackedBarChart extends AbstractChart {
   }
 
   renderLegend = config => {
-    const {legend, colors, width, height} = config
+    const { legend, colors, width, height } = config
     return legend.map((x, i) => {
       return (
         <G key={Math.random()}>
@@ -74,7 +78,7 @@ class StackedBarChart extends AbstractChart {
             y={height * 0.7 - i * 50}
           />
           <Text
-            fill="#fff"
+            fill={colors[i]}
             fontSize={16}
             x={width * 0.78}
             y={height * 0.76 - i * 50}
@@ -97,7 +101,7 @@ class StackedBarChart extends AbstractChart {
       withHorizontalLabels = true,
       withVerticalLabels = true,
     } = this.props
-    const {borderRadius = 0} = style
+    const { borderRadius = 0 } = style
     const config = {
       width,
       height
@@ -133,26 +137,26 @@ class StackedBarChart extends AbstractChart {
           </G>
           <G>
             {withHorizontalLabels
-              ? this.renderHorizontalLabels({
-              ...config,
-              count: 4,
-              data: [0, border],
-              paddingTop,
-              paddingRight
-            })
-            : null}
+              && this.renderHorizontalLabels({
+                ...config,
+                count: 4,
+                data: [0, border],
+                paddingTop,
+                paddingRight
+              })
+            }
           </G>
           <G>
             {withVerticalLabels
-              ? this.renderVerticalLabels({
-              ...config,
-              labels: data.labels,
-              paddingRight: paddingRight + 28,
-              stackedBar: true,
-              paddingTop,
-              horizontalOffset: barWidth
-            })
-            : null}
+              && this.renderVerticalLabels({
+                ...config,
+                labels: data.labels,
+                paddingRight: paddingRight + 28,
+                stackedBar: true,
+                paddingTop,
+                horizontalOffset: barWidth
+              })
+            }
           </G>
           <G>
             {this.renderBars({
