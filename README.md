@@ -70,18 +70,24 @@ Define a chart style object with following properies as such:
 ```js
 const chartConfig = {
   backgroundGradientFrom: '#1E2923',
+  backgroundGradientFromOpacity: 0,
   backgroundGradientTo: '#08130D',
+  backgroundGradientToOpacity: 0.5,
   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
   strokeWidth: 2 // optional, default 3
+  barPercentage:0.5
 }
 ```
 
 | Property        | Type           | Description  |
 | ------------- |-------------| -----|
 | backgroundGradientFrom | string | Defines the first color in the linear gradient of a chart's background  |
+| backgroundGradientFromOpacity | Number | Defines the first color opacity in the linear gradient of a chart's background  |
 | backgroundGradientTo | string | Defines the second color in the linear gradient of a chart's background |
+| backgroundGradientToOpacity | Number | Defines the second color opacity in the linear gradient of a chart's background  |
 | color | function => string | Defines the base color function that is used to calculate colors of labels and sectors used in a chart |
 | strokeWidth | Number | Defines the base stroke width in a chart |
+| barPercentage | Number | Defines the percent (0-1) of the available width each bar width in a chart |
 
 ## Responsive charts
 To render a responsive chart, use `Dimensions` react-native library to get the width of the screen of your device like such
@@ -129,7 +135,10 @@ const data = {
 | yAxisLabel | string | Prepend text to horizontal labels -- default: '' |
 | chartConfig | Object | Configuration object for the chart, see example config object above |
 |decorator | Function | This function takes a [whole bunch](https://github.com/indiespirit/react-native-chart-kit/blob/master/src/line-chart.js#L266) of stuff and can render extra elements, such as data point info or additional markup. |
-|onDataPointClick| Function| Callback that takes `{value, dataset, getColor}`|
+|onDataPointClick| Function | Callback that takes `{value, dataset, getColor}`|
+|horizontalLabelRotation| number (degree) | Rotation angle of the horizontal labels - default 0|
+|verticalLabelRotation| number (degree) | Rotation angle of the vertical labels - default 0|
+|getDotColor| function => string | Defines the dot color function that is used to calculate colors of dots in a line chart and takes `(dataPoint, dataPointIndex)`
 
 ## Bezier Line Chart
 
@@ -139,7 +148,8 @@ const data = {
 <LineChart
   data={data}
   width={screenWidth}
-  height={220}
+  height={256}
+  verticalLabelRotation={30}
   chartConfig={chartConfig}
   bezier
 />
@@ -196,6 +206,7 @@ const data = {
   height={220}
   yAxisLabel={'$'}
   chartConfig={chartConfig}
+  verticalLabelRotation={30}
 />
 ```
 
@@ -209,6 +220,9 @@ const data = {
 | fromZero | boolean | Render charts from 0 not from the minimum value. - default: False |
 | yAxisLabel | string | Prepend text to horizontal labels -- default: '' |
 | chartConfig | Object | Configuration object for the chart, see example config in the beginning of this file |
+|horizontalLabelRotation| number (degree) | Rotation angle of the horizontal labels - default 0|
+|verticalLabelRotation| number (degree) | Rotation angle of the vertical labels - default 0|
+
 
 ## StackedBar chart
 
@@ -374,8 +388,12 @@ Render definitions of background and shadow gradients
   height: Number,
   // first color of background gradient
   backgroundGradientFrom: String,
+  // first color opacity of background gradient (0 - 1.0)
+  backgroundGradientFromOpacity: Number,
   // second color of background gradient
-  backgroundGradientTo: String
+  backgroundGradientTo: String,
+  // second color opacity of background gradient (0 - 1.0)
+  backgroundGradientToOpacity: Number,
 }
 ```
 

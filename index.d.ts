@@ -20,6 +20,9 @@ export interface LineChartProps {
   onDataPointClick?: Function
   style?: object
   bezier?: boolean
+  getDotColor?: (dataPoint: any, index: number) => string
+  horizontalLabelRotation?: number
+  verticalLabelRotation?: number
 }
 
 export class LineChart extends React.Component<LineChartProps> {}
@@ -43,6 +46,8 @@ export interface BarChartProps {
   yAxisLabel: string
   chartConfig: object
   style?: object
+  horizontalLabelRotation?: number
+  verticalLabelRotation?: number
 }
 
 export class BarChart extends React.Component<BarChartProps> {}

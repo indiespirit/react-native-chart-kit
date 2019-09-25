@@ -80,7 +80,8 @@ class AbstractChart extends Component {
       height,
       paddingTop,
       paddingRight,
-      yLabelsOffset = 12
+      yLabelsOffset = 12,
+      horizontalLabelRotation = 0
     } = config
     const decimalPlaces = this.props.chartConfig.decimalPlaces === undefined ? 2 : this.props.chartConfig.decimalPlaces
     const yAxisLabel = this.props.yAxisLabel || ''
@@ -97,12 +98,16 @@ class AbstractChart extends Component {
         yLabel = `${yAxisLabel}${label.toFixed(decimalPlaces)}`
       }
 
+      const x = paddingRight - yLabelsOffset
+      const y = (height * 3) / 4 - ((height - paddingTop) / count) * i + 12
       return (
         <Text
+          rotation={horizontalLabelRotation}
+          origin={`${x}, ${y}`}
           key={Math.random()}
-          x={paddingRight - yLabelsOffset}
+          x={x}
           textAnchor="end"
-          y={(height * 3) / 4 - ((height - paddingTop) / count) * i + 12}
+          y={y}
           fontSize={12}
           fill={this.props.chartConfig.labelColor(0.8) || '#ffffff'}
         >
@@ -120,7 +125,8 @@ class AbstractChart extends Component {
       paddingRight,
       paddingTop,
       horizontalOffset = 0,
-      stackedBar = false
+      stackedBar = false,
+      verticalLabelRotation = 0
     } = config
     const fontSize = 12
     let fac = 1
@@ -129,19 +135,22 @@ class AbstractChart extends Component {
     }
 
     return labels.map((label, i) => {
+      const x =
+        (((width - paddingRight) / labels.length) * i +
+          paddingRight +
+          horizontalOffset) *
+        fac;
+      const y = (height * 3) / 4 + paddingTop + fontSize * 2;
       return (
         <Text
+          origin={`${x}, ${y}`}
+          rotation={verticalLabelRotation}
           key={Math.random()}
-          x={
-            (((width - paddingRight) / labels.length) * i +
-              paddingRight +
-              horizontalOffset) *
-            fac
-          }
-          y={(height * 3) / 4 + paddingTop + fontSize * 2}
+          x={x}
+          y={y}
           fontSize={fontSize}
           fill={this.props.chartConfig.labelColor(0.8) || '#ffffff'}
-          textAnchor="middle"
+          textAnchor={verticalLabelRotation === 0 ? "middle" : "start"}
         >
           {label}
         </Text>
@@ -189,6 +198,9 @@ class AbstractChart extends Component {
 
   renderDefs = config => {
     const {width, height, backgroundGradientFrom, backgroundGradientTo} = config
+    const fromOpacity = config.hasOwnProperty('backgroundGradientFromOpacity') ? config.backgroundGradientFromOpacity : 1.0;
+    const toOpacity = config.hasOwnProperty('backgroundGradientToOpacity') ? config.backgroundGradientToOpacity : 1.0;
+
     return (
       <Defs>
         <LinearGradient
@@ -198,8 +210,8 @@ class AbstractChart extends Component {
           x2={width}
           y2={0}
         >
-          <Stop offset="0" stopColor={backgroundGradientFrom} />
-          <Stop offset="1" stopColor={backgroundGradientTo} />
+          <Stop offset="0" stopColor={backgroundGradientFrom} stopOpacity={fromOpacity} />
+          <Stop offset="1" stopColor={backgroundGradientTo} stopOpacity={toOpacity} />
         </LinearGradient>
         <LinearGradient
           id="fillShadowGradient"

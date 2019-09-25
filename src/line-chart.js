@@ -27,6 +27,7 @@ class LineChart extends AbstractChart {
     const output = []
     const datas = this.getDatas(data)
     const baseHeight = this.calcBaseHeight(datas, height)
+    const getDotColor = this.props.getDotColor || null
     data.map((dataset, index) => {
       dataset.data.map((x, i) => {
         const cx =
@@ -52,7 +53,7 @@ class LineChart extends AbstractChart {
             cx={cx}
             cy={cy}
             r="4"
-            fill={this.getColor(dataset, 0.9)}
+            fill={typeof getDotColor === 'function' ? getDotColor(x, i) : this.getColor(dataset, 0.9)}
             onPress={onPress}
           />,
           <Circle
@@ -225,13 +226,17 @@ class LineChart extends AbstractChart {
       withVerticalLabels = true,
       style = {},
       decorator,
-      onDataPointClick
+      onDataPointClick,
+      verticalLabelRotation = 0,
+      horizontalLabelRotation = 0
     } = this.props
     const {labels = []} = data
     const {borderRadius = 0} = style
     const config = {
       width,
-      height
+      height,
+      verticalLabelRotation,
+      horizontalLabelRotation
     }
     const datas = this.getDatas(data.datasets)
     return (
