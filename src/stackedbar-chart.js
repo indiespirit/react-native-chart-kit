@@ -19,13 +19,15 @@ class StackedBarChart extends AbstractChart {
       colors,
       barWidth,
     } = config;
+    const { usePercentage } = this.props;
     return data.map((x, i) => {
       const ret = [];
       let h = 0;
       let st = paddingTop;
       for (let z = 0; z < x.length; z++) {
         h = isAllZero(x) ? 0 : (height - 55) * (x[z] / border)
-        const y = (height / 4) * 3 - h + st
+        const label = usePercentage ? `${Math.trunc(x[z] * 100 / x.reduce((a, b) => a + b, 0))}%` : x[z];
+        const y = (height / 4) * 3 - h + st;
         const xC =
           (paddingRight +
             (i * (width - paddingRight)) / data.length +
@@ -45,13 +47,13 @@ class StackedBarChart extends AbstractChart {
           ret.push(
             <Text
               key={Math.random()}
-              x={xC + 7 + barWidth / 2}
-              textAnchor="end"
+              x={xC + barWidth / 2}
+              textAnchor="middle"
               y={h > 15 ? y + 15 : y + 7}
               fontSize={12}
               fill="#fff"
             >
-              {x[z]}
+              {label}
             </Text>
           );
         }
@@ -113,7 +115,7 @@ class StackedBarChart extends AbstractChart {
       }
     }
 
-    const barWidth = 32//(screenWidth - 50 - (this.hasLegend() ? 20 : 0)) / data.data.length;
+    const barWidth = 40//(screenWidth - 50 - (this.hasLegend() ? 20 : 0)) / data.data.length;
 
     return (
       <View style={style}>

@@ -244,6 +244,7 @@ const data ={
   data={data}
   width={screenWidth}
   height={220}
+  usePercentage
   chartConfig={chartConfig}
 />
 ```
