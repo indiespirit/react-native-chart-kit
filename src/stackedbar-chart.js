@@ -1,9 +1,9 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Dimensions } from 'react-native'
 import { Svg, Rect, G, Text } from 'react-native-svg'
 import AbstractChart from './abstract-chart'
 
-const barWidth = 32
+const screenWidth = Dimensions.get('window').width;
 
 const isAllZero = (arr) => arr.filter(d => d !== 0).length === 0;
 
@@ -16,13 +16,13 @@ class StackedBarChart extends AbstractChart {
       paddingTop,
       paddingRight,
       border,
-      colors
-    } = config
+      colors,
+      barWidth,
+    } = config;
     return data.map((x, i) => {
-      const barWidth = 32
-      const ret = []
-      let h = 0
-      let st = paddingTop
+      const ret = [];
+      let h = 0;
+      let st = paddingTop;
       for (let z = 0; z < x.length; z++) {
         h = isAllZero(x) ? 0 : (height - 55) * (x[z] / border)
         const y = (height / 4) * 3 - h + st
@@ -90,6 +90,8 @@ class StackedBarChart extends AbstractChart {
     })
   }
 
+  hasLegend = () => this.props.data.legend && this.props.data.legend.length
+
   render() {
     const paddingTop = 15
     const paddingRight = 50
@@ -100,27 +102,23 @@ class StackedBarChart extends AbstractChart {
       data,
       withHorizontalLabels = true,
       withVerticalLabels = true,
-    } = this.props
-    const { borderRadius = 0 } = style
-    const config = {
-      width,
-      height
-    }
-    let border = 0
+    } = this.props;
+    const { borderRadius = 0 } = style;
+    const config = { width, height };
+    let border = 0;
     for (let i = 0; i < data.data.length; i++) {
       const actual = data.data[i].reduce((pv, cv) => pv + cv, 0)
       if (actual > border) {
-        border = actual
+        border = actual;
       }
     }
+
+    const barWidth = 32//(screenWidth - 50 - (this.hasLegend() ? 20 : 0)) / data.data.length;
 
     return (
       <View style={style}>
         <Svg height={height} width={width}>
-          {this.renderDefs({
-            ...config,
-            ...this.props.chartConfig
-          })}
+          {this.renderDefs({ ...config, ...this.props.chartConfig })}
           <Rect
             width="100%"
             height={height}
@@ -129,11 +127,7 @@ class StackedBarChart extends AbstractChart {
             fill="url(#backgroundGradient)"
           />
           <G>
-            {this.renderHorizontalLines({
-              ...config,
-              count: 4,
-              paddingTop
-            })}
+            {this.renderHorizontalLines({ ...config, count: 4, paddingTop })}
           </G>
           <G>
             {withHorizontalLabels
@@ -154,7 +148,8 @@ class StackedBarChart extends AbstractChart {
                 paddingRight: paddingRight + 28,
                 stackedBar: true,
                 paddingTop,
-                horizontalOffset: barWidth
+                horizontalOffset: barWidth,
+                rotation: "25"
               })
             }
           </G>
@@ -165,10 +160,12 @@ class StackedBarChart extends AbstractChart {
               border,
               colors: this.props.data.barColors,
               paddingTop,
-              paddingRight: paddingRight + 20
+              width: screenWidth - 50,
+              barWidth,
+              paddingRight: paddingRight + (this.hasLegend() ? 20 : 0)
             })}
           </G>
-          {this.renderLegend({
+          {this.hasLegend() && this.renderLegend({
             ...config,
             legend: data.legend,
             colors: this.props.data.barColors

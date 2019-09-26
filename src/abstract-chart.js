@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
-import {LinearGradient, Line, Text, Defs, Stop} from 'react-native-svg'
+import { LinearGradient, Line, Text, Defs, Stop } from 'react-native-svg'
 
 class AbstractChart extends Component {
   calcScaler = data => {
@@ -27,7 +27,7 @@ class AbstractChart extends Component {
     const max = Math.max(...data)
     const min = Math.min(...data)
     if (min < 0 && max > 0) {
-       return height * (val / this.calcScaler(data))
+      return height * (val / this.calcScaler(data))
     } else if (min >= 0 && max >= 0) {
       return this.props.fromZero ?
         height * (val / this.calcScaler(data)) :
@@ -40,7 +40,7 @@ class AbstractChart extends Component {
   }
 
   renderHorizontalLines = config => {
-    const {count, width, height, paddingTop, paddingRight} = config
+    const { count, width, height, paddingTop, paddingRight } = config
     return [...new Array(count)].map((_, i) => {
       return (
         <Line
@@ -58,7 +58,7 @@ class AbstractChart extends Component {
   }
 
   renderHorizontalLine = config => {
-    const {width, height, paddingTop, paddingRight} = config
+    const { width, height, paddingTop, paddingRight } = config
     return (
       <Line
         key={Math.random()}
@@ -126,7 +126,8 @@ class AbstractChart extends Component {
       paddingTop,
       horizontalOffset = 0,
       stackedBar = false,
-      verticalLabelRotation = 0
+      verticalLabelRotation = 0,
+      rotation
     } = config
     const fontSize = 12
     let fac = 1
@@ -151,15 +152,16 @@ class AbstractChart extends Component {
           fontSize={fontSize}
           fill={this.props.chartConfig.color(0.5)}
           textAnchor={verticalLabelRotation === 0 ? "middle" : "start"}
+          rotation={rotation || "0"}
         >
           {label}
-        </Text>
+        </Text >
       )
     })
   }
 
   renderVerticalLines = config => {
-    const {data, width, height, paddingTop, paddingRight} = config
+    const { data, width, height, paddingTop, paddingRight } = config
     return [...new Array(data.length)].map((_, i) => {
       return (
         <Line
@@ -181,7 +183,7 @@ class AbstractChart extends Component {
   }
 
   renderVerticalLine = config => {
-    const {height, paddingTop, paddingRight} = config
+    const { height, paddingTop, paddingRight } = config
     return (
       <Line
         key={Math.random()}
@@ -197,7 +199,7 @@ class AbstractChart extends Component {
   }
 
   renderDefs = config => {
-    const {width, height, backgroundGradientFrom, backgroundGradientTo} = config
+    const { width, height, backgroundGradientFrom, backgroundGradientTo } = config
     const fromOpacity = config.hasOwnProperty('backgroundGradientFromOpacity') ? config.backgroundGradientFromOpacity : 1.0;
     const toOpacity = config.hasOwnProperty('backgroundGradientToOpacity') ? config.backgroundGradientToOpacity : 1.0;
 
