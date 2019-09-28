@@ -74,6 +74,7 @@ export interface PieChartProps {
   paddingLeft: string
   center?: Array<number>
   absolute?: boolean
+  legend?: boolean
 }
 
 export class PieChart extends React.Component<PieChartProps> {}
