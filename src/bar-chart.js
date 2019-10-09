@@ -71,7 +71,7 @@ class BarChart extends AbstractChart {
       verticalLabelRotation = 0,
       horizontalLabelRotation = 0,
       paddingTop = 16,
-      paddingRight = 64,
+      paddingRight = 64
     } = this.props;
     const { borderRadius = 0 } = style;
     const config = {
@@ -104,23 +104,23 @@ class BarChart extends AbstractChart {
           <G>
             {withHorizontalLabels
               ? this.renderHorizontalLabels({
-                ...config,
-                count: 4,
-                data: data.datasets[0].data,
-                paddingTop,
-                paddingRight
-              })
+                  ...config,
+                  count: 4,
+                  data: data.datasets[0].data,
+                  paddingTop,
+                  paddingRight
+                })
               : null}
           </G>
           <G>
             {withVerticalLabels
               ? this.renderVerticalLabels({
-                ...config,
-                labels: data.labels,
-                paddingRight,
-                paddingTop,
-                horizontalOffset: barWidth * this.getBarPercentage()
-              })
+                  ...config,
+                  labels: data.labels,
+                  paddingRight,
+                  paddingTop,
+                  horizontalOffset: barWidth * this.getBarPercentage()
+                })
               : null}
           </G>
           <G>

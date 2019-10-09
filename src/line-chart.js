@@ -109,9 +109,9 @@ class LineChart extends AbstractChart {
               })
               .join(" ") +
             ` ${paddingRight +
-            ((width - paddingRight) / dataset.data.length) *
-            (dataset.data.length - 1)},${(height / 4) * 3 +
-            paddingTop} ${paddingRight},${(height / 4) * 3 + paddingTop}`
+              ((width - paddingRight) / dataset.data.length) *
+                (dataset.data.length - 1)},${(height / 4) * 3 +
+              paddingTop} ${paddingRight},${(height / 4) * 3 + paddingTop}`
           }
           fill="url(#fillShadowGradient)"
           strokeWidth={0}
@@ -207,9 +207,9 @@ class LineChart extends AbstractChart {
       const d =
         this.getBezierLinePoints(dataset, config) +
         ` L${paddingRight +
-        ((width - paddingRight) / dataset.data.length) *
-        (dataset.data.length - 1)},${(height / 4) * 3 +
-        paddingTop} L${paddingRight},${(height / 4) * 3 + paddingTop} Z`;
+          ((width - paddingRight) / dataset.data.length) *
+            (dataset.data.length - 1)},${(height / 4) * 3 +
+          paddingTop} L${paddingRight},${(height / 4) * 3 + paddingTop} Z`;
       return (
         <Path
           key={index}
@@ -222,7 +222,6 @@ class LineChart extends AbstractChart {
   };
 
   render() {
-
     const {
       width,
       height,
@@ -239,7 +238,7 @@ class LineChart extends AbstractChart {
       verticalLabelRotation = 0,
       horizontalLabelRotation = 0,
       paddingTop = 16,
-      paddingRight = 64,
+      paddingRight = 64
     } = this.props;
     const { labels = [] } = data;
     const { borderRadius = 0 } = style;
@@ -268,54 +267,54 @@ class LineChart extends AbstractChart {
             <G>
               {withInnerLines
                 ? this.renderHorizontalLines({
-                  ...config,
-                  count: 4,
-                  paddingTop,
-                  paddingRight
-                })
+                    ...config,
+                    count: 4,
+                    paddingTop,
+                    paddingRight
+                  })
                 : withOuterLines
-                  ? this.renderHorizontalLine({
+                ? this.renderHorizontalLine({
                     ...config,
                     paddingTop,
                     paddingRight
                   })
-                  : null}
+                : null}
             </G>
             <G>
               {withHorizontalLabels
                 ? this.renderHorizontalLabels({
-                  ...config,
-                  count: Math.min(...datas) === Math.max(...datas) ? 1 : 4,
-                  data: datas,
-                  paddingTop,
-                  paddingRight
-                })
+                    ...config,
+                    count: Math.min(...datas) === Math.max(...datas) ? 1 : 4,
+                    data: datas,
+                    paddingTop,
+                    paddingRight
+                  })
                 : null}
             </G>
             <G>
               {withInnerLines
                 ? this.renderVerticalLines({
-                  ...config,
-                  data: data.datasets[0].data,
-                  paddingTop,
-                  paddingRight
-                })
+                    ...config,
+                    data: data.datasets[0].data,
+                    paddingTop,
+                    paddingRight
+                  })
                 : withOuterLines
-                  ? this.renderVerticalLine({
+                ? this.renderVerticalLine({
                     ...config,
                     paddingTop,
                     paddingRight
                   })
-                  : null}
+                : null}
             </G>
             <G>
               {withVerticalLabels
                 ? this.renderVerticalLabels({
-                  ...config,
-                  labels,
-                  paddingRight,
-                  paddingTop
-                })
+                    ...config,
+                    labels,
+                    paddingRight,
+                    paddingTop
+                  })
                 : null}
             </G>
             <G>
