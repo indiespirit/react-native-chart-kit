@@ -92,6 +92,7 @@ const chartConfig = {
 | strokeWidth                   | Number             | Defines the base stroke width in a chart                                                               |
 | barPercentage                 | Number             | Defines the percent (0-1) of the available width each bar width in a chart                             |
 | propsForBackgroundLines       | props              | Override styles of the background lines, refer to react-native-svg's Line documentation                |
+| propsForLabels                | props              | Override styles of the labels, refer to react-native-svg's Text documentation                          |
 
 ## Responsive charts
 

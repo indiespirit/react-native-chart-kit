@@ -261,10 +261,9 @@ class ContributionGraph extends AbstractChart {
       return endOfWeek.getDate() >= 1 && endOfWeek.getDate() <= DAYS_IN_WEEK ? (
         <Text
           key={weekIndex}
-          fontSize={12}
           x={x + paddingLeft}
           y={y + 8}
-          fill={this.props.chartConfig.labelColor(0.8) || '#ffffff'}
+          {...this.getPropsForLabels()}
         >
           {MONTH_LABELS[endOfWeek.getMonth()]}
         </Text>
