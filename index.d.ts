@@ -99,6 +99,7 @@ export class AbstractChart extends React.Component {}
 
 // ChartConfig
 export interface ChartConfig {
+  backgroundColor?: string;
   /**
    * Defines the first color in the linear gradient of a chart's background
    */
