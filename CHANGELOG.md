@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.10.0
+
+- added type for chart config
+- added props config for Dots in the line chart
+
+## v3.9.0
+
+- added propsForLabels to chartConfig
+- added labelColor to chartConfig as a shortcut for propsForLabels / fill
+
 ## v3.8.0
 
 - added dot cx, cy in the onDataPointClick functions arguments
