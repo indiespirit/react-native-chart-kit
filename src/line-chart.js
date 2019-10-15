@@ -45,7 +45,6 @@ class LineChart extends AbstractChart {
     const {
       propsForDots: { strokeWidth = 0, r = 0 } = {}
     } = this.props.chartConfig;
-    const extraOffset = (width - paddingRight) / datas.length / datas.length;
     data.forEach(dataset => {
       dataset.data.forEach((x, i) => {
         if (hidePointsAtIndex.includes(i)) {
@@ -54,9 +53,7 @@ class LineChart extends AbstractChart {
         let cx =
           i === dataset.data.length - 1
             ? width - paddingRight - parseInt(strokeWidth, 10) - parseInt(r, 10)
-            : paddingRight +
-              (i * (width - paddingRight)) / dataset.data.length +
-              extraOffset;
+            : paddingRight + (i * (width - paddingRight)) / dataset.data.length;
 
         const cy =
           ((baseHeight - this.calcHeight(x, datas, height)) / 4) * 3 +
@@ -114,7 +111,6 @@ class LineChart extends AbstractChart {
     const { data, width, height, paddingRight, paddingTop } = config;
     const datas = this.getDatas(data);
     const baseHeight = this.calcBaseHeight(datas, height);
-    const extraOffset = (width - paddingRight) / datas.length / datas.length;
     return config.data.map((dataset, index) => {
       return (
         <Polygon
@@ -129,8 +125,7 @@ class LineChart extends AbstractChart {
                       parseInt(strokeWidth, 10) -
                       parseInt(r, 10)
                     : paddingRight +
-                      (i * (width - paddingRight)) / dataset.data.length +
-                      extraOffset;
+                      (i * (width - paddingRight)) / dataset.data.length;
                 const y =
                   ((baseHeight - this.calcHeight(d, datas, height)) / 4) * 3 +
                   paddingTop;
@@ -158,15 +153,12 @@ class LineChart extends AbstractChart {
     const output = [];
     const datas = this.getDatas(data);
     const baseHeight = this.calcBaseHeight(datas, height);
-    const extraOffset = (width - paddingRight) / datas.length / datas.length;
     data.forEach((dataset, index) => {
       const points = dataset.data.map((d, i) => {
         const x =
           dataset.data.length - 1 === i
             ? width - paddingRight
-            : (i * (width - paddingRight)) / dataset.data.length +
-              paddingRight +
-              extraOffset;
+            : (i * (width - paddingRight)) / dataset.data.length + paddingRight;
         const y =
           ((baseHeight - this.calcHeight(d, datas, height)) / 4) * 3 +
           paddingTop;
@@ -194,14 +186,11 @@ class LineChart extends AbstractChart {
     }
 
     const datas = this.getDatas(data);
-    const extraOffset = (width - paddingRight) / datas.length / datas.length;
     const x = i =>
       dataset.data.length - 1 === i
         ? width - paddingRight
         : Math.floor(
-            paddingRight +
-              (i * (width - paddingRight)) / dataset.data.length +
-              extraOffset
+            paddingRight + (i * (width - paddingRight)) / dataset.data.length
           );
 
     const baseHeight = this.calcBaseHeight(datas, height);
