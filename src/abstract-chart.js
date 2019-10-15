@@ -99,7 +99,6 @@ class AbstractChart extends Component {
       height,
       paddingTop,
       paddingRight,
-      yLabelsOffset = 12,
       horizontalLabelRotation = 0
     } = config;
     const decimalPlaces =
@@ -107,7 +106,7 @@ class AbstractChart extends Component {
         ? 2
         : this.props.chartConfig.decimalPlaces;
     const yAxisLabel = this.props.yAxisLabel || "";
-
+    const yLabelsOffset = this.props.yLabelsOffset || 12;
     return [...new Array(count)].map((_, i) => {
       let yLabel;
 
@@ -157,14 +156,19 @@ class AbstractChart extends Component {
     if (stackedBar) {
       fac = 0.71;
     }
-
+    const xAxisLabel = this.props.xAxisLabel || "";
+    const xLabelsOffset = this.props.xLabelsOffset || 0;
+    const hidePointsAtIndex = this.props.hidePointsAtIndex || [];
     return labels.map((label, i) => {
+      if (hidePointsAtIndex.includes(i)) {
+        return null;
+      }
       const x =
         (((width - paddingRight) / labels.length) * i +
           paddingRight +
           horizontalOffset) *
         fac;
-      const y = (height * 3) / 4 + paddingTop + fontSize * 2;
+      const y = (height * 3) / 4 + paddingTop + fontSize * 2 + xLabelsOffset;
       return (
         <Text
           origin={`${x}, ${y}`}
@@ -175,7 +179,7 @@ class AbstractChart extends Component {
           textAnchor={verticalLabelRotation === 0 ? "middle" : "start"}
           {...this.getPropsForLabels()}
         >
-          {label}
+          {`${label}${xAxisLabel}`}
         </Text>
       );
     });
