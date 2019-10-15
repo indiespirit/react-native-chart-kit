@@ -51,7 +51,9 @@ class LineChart extends AbstractChart {
           return;
         }
         let cx =
-          i === dataset.data.length - 1
+          i === 0
+            ? parseInt(strokeWidth, 10) + parseInt(r, 10)
+            : i === dataset.data.length - 1 && dataset.data.length !== 1
             ? width - paddingRight - parseInt(strokeWidth, 10) - parseInt(r, 10)
             : paddingRight + (i * (width - paddingRight)) / dataset.data.length;
 
@@ -119,7 +121,7 @@ class LineChart extends AbstractChart {
             dataset.data
               .map((d, i) => {
                 const x =
-                  i === dataset.data.length - 1
+                  i === dataset.data.length - 1 && dataset.data.length !== 1
                     ? width -
                       paddingRight -
                       parseInt(strokeWidth, 10) -
@@ -134,8 +136,11 @@ class LineChart extends AbstractChart {
               .join(" ") +
             ` ${paddingRight +
               ((width - paddingRight) / dataset.data.length) *
-                dataset.data.length},${(height / 4) * 3 +
-              paddingTop} ${paddingRight},${(height / 4) * 3 + paddingTop}`
+                dataset.data.length -
+              1},${(height / 4) * 3 + paddingTop} ${paddingRight},${(height /
+              4) *
+              3 +
+              paddingTop}`
           }
           fill="url(#fillShadowGradient)"
           strokeWidth={0}
@@ -156,7 +161,7 @@ class LineChart extends AbstractChart {
     data.forEach((dataset, index) => {
       const points = dataset.data.map((d, i) => {
         const x =
-          dataset.data.length - 1 === i
+          dataset.data.length - 1 === i && dataset.data.length !== 1
             ? width - paddingRight
             : (i * (width - paddingRight)) / dataset.data.length + paddingRight;
         const y =
@@ -187,7 +192,7 @@ class LineChart extends AbstractChart {
 
     const datas = this.getDatas(data);
     const x = i =>
-      dataset.data.length - 1 === i
+      dataset.data.length - 1 === i && dataset.data.length !== 1
         ? width - paddingRight
         : Math.floor(
             paddingRight + (i * (width - paddingRight)) / dataset.data.length
@@ -232,12 +237,17 @@ class LineChart extends AbstractChart {
 
   renderBezierShadow = config => {
     const { width, height, paddingRight, paddingTop, data } = config;
+
     return data.map((dataset, index) => {
+      const dataSetLength =
+        dataset.data.length === 1
+          ? dataset.data.length - 1
+          : dataset.data.length;
       const d =
         this.getBezierLinePoints(dataset, config) +
         ` L${paddingRight +
           ((width - paddingRight) / dataset.data.length) *
-            dataset.data.length},${(height / 4) * 3 +
+            dataSetLength},${(height / 4) * 3 +
           paddingTop} L${paddingRight},${(height / 4) * 3 + paddingTop} Z`;
       return (
         <Path
