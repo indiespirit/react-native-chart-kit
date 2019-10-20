@@ -106,7 +106,7 @@ class AbstractChart extends Component {
         ? 2
         : this.props.chartConfig.decimalPlaces;
     const yAxisLabel = this.props.yAxisLabel || "";
-    const yLabelsOffset = this.props.yLabelsOffset || 12;
+    const yLabelsOffset = this.props.chartConfig.yLabelsOffset || 12;
     return [...new Array(count)].map((_, i) => {
       let yLabel;
 
