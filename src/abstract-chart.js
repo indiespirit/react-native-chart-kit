@@ -107,17 +107,18 @@ class AbstractChart extends Component {
         ? 2
         : this.props.chartConfig.decimalPlaces;
     const yAxisLabel = this.props.yAxisLabel || "";
+    const yAxisSuffix = this.props.yAxisSuffix || "";
 
     return [...new Array(count)].map((_, i) => {
       let yLabel;
 
       if (count === 1) {
-        yLabel = `${yAxisLabel}${data[0].toFixed(decimalPlaces)}`;
+        yLabel = `${yAxisLabel}${data[0].toFixed(decimalPlaces)}${yAxisSuffix}`;
       } else {
         const label = this.props.fromZero
           ? (this.calcScaler(data) / (count - 1)) * i + Math.min(...data, 0)
           : (this.calcScaler(data) / (count - 1)) * i + Math.min(...data);
-        yLabel = `${yAxisLabel}${label.toFixed(decimalPlaces)}`;
+        yLabel = `${yAxisLabel}${label.toFixed(decimalPlaces)}${yAxisSuffix}`;
       }
 
       const x = paddingRight - yLabelsOffset;

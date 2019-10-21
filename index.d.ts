@@ -15,6 +15,7 @@ export interface LineChartProps {
   withOuterLines?: boolean;
   fromZero?: boolean;
   yAxisLabel?: string;
+  yAxisSuffix?: string;
   chartConfig: ChartConfig;
   decorator?: Function;
   onDataPointClick?: Function;
@@ -44,6 +45,7 @@ export interface BarChartProps {
   height: number;
   fromZero?: boolean;
   yAxisLabel: string;
+  yAxisSuffix: string;
   chartConfig: ChartConfig;
   style?: object;
   horizontalLabelRotation?: number;

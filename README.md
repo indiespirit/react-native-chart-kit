@@ -46,6 +46,7 @@ import {
     width={Dimensions.get("window").width} // from react-native
     height={220}
     yAxisLabel={"$"}
+    yAxisSuffix={"k"}
     chartConfig={{
       backgroundColor: "#e26a00",
       backgroundGradientFrom: "#fb8c00",
@@ -77,14 +78,14 @@ Define a chart style object with following properies as such:
 
 ```js
 const chartConfig = {
-  backgroundGradientFrom: '#1E2923',
+  backgroundGradientFrom: "#1E2923",
   backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: '#08130D',
+  backgroundGradientTo: "#08130D",
   backgroundGradientToOpacity: 0.5,
   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
   strokeWidth: 2, // optional, default 3
-  barPercentage:0.5
-}
+  barPercentage: 0.5
+};
 ```
 
 | Property                      | Type               | Description                                                                                            |
@@ -145,6 +146,7 @@ const data = {
 | withHorizontalLabels    | boolean            | Show horizontal labels - default: True                                                                                                                                                                              |
 | fromZero                | boolean            | Render charts from 0 not from the minimum value. - default: False                                                                                                                                                   |
 | yAxisLabel              | string             | Prepend text to horizontal labels -- default: ''                                                                                                                                                                    |
+| yAxisSuffix             | string             | Append text to horizontal labels -- default: ''                                                                                                                                                                     |
 | chartConfig             | Object             | Configuration object for the chart, see example config object above                                                                                                                                                 |
 | decorator               | Function           | This function takes a [whole bunch](https://github.com/indiespirit/react-native-chart-kit/blob/master/src/line-chart.js#L266) of stuff and can render extra elements, such as data point info or additional markup. |
 | onDataPointClick        | Function           | Callback that takes `{value, dataset, getColor}`                                                                                                                                                                    |
@@ -228,6 +230,7 @@ yAxisLabel={'$'} chartConfig={chartConfig} verticalLabelRotation={30} />
 | withHorizontalLabels    | boolean         | Show horizontal labels - default: True                                                      |
 | fromZero                | boolean         | Render charts from 0 not from the minimum value. - default: False                           |
 | yAxisLabel              | string          | Prepend text to horizontal labels -- default: ''                                            |
+| yAxisSuffix             | string          | Append text to horizontal labels -- default: ''                                             |
 | chartConfig             | Object          | Configuration object for the chart, see example config in the beginning of this file        |
 | horizontalLabelRotation | number (degree) | Rotation angle of the horizontal labels - default 0                                         |
 | verticalLabelRotation   | number (degree) | Rotation angle of the vertical labels - default 0                                           |
