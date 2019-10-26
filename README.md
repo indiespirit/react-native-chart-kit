@@ -77,14 +77,14 @@ Define a chart style object with following properies as such:
 
 ```js
 const chartConfig = {
-  backgroundGradientFrom: '#1E2923',
+  backgroundGradientFrom: "#1E2923",
   backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: '#08130D',
+  backgroundGradientTo: "#08130D",
   backgroundGradientToOpacity: 0.5,
   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
   strokeWidth: 2, // optional, default 3
-  barPercentage:0.5
-}
+  barPercentage: 0.5
+};
 ```
 
 | Property                      | Type               | Description                                                                                            |
@@ -227,6 +227,7 @@ yAxisLabel={'$'} chartConfig={chartConfig} verticalLabelRotation={30} />
 | withVerticalLabels      | boolean         | Show vertical labels - default: True                                                        |
 | withHorizontalLabels    | boolean         | Show horizontal labels - default: True                                                      |
 | fromZero                | boolean         | Render charts from 0 not from the minimum value. - default: False                           |
+| withInnerLines          | boolean         | Show inner dashed lines - default: True                                                     |
 | yAxisLabel              | string          | Prepend text to horizontal labels -- default: ''                                            |
 | chartConfig             | Object          | Configuration object for the chart, see example config in the beginning of this file        |
 | horizontalLabelRotation | number (degree) | Rotation angle of the horizontal labels - default 0                                         |
