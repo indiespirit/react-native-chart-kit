@@ -101,12 +101,8 @@ class AbstractChart extends Component {
       paddingRight,
       horizontalLabelRotation = 0
     } = config;
-    const decimalPlaces =
-      this.props.chartConfig.decimalPlaces === undefined
-        ? 2
-        : this.props.chartConfig.decimalPlaces;
-    const yAxisLabel = this.props.yAxisLabel || "";
-    const yLabelsOffset = this.props.chartConfig.yLabelsOffset || 12;
+    const { yAxisLabel = "", yLabelsOffset = 12, chartConfig } = this.props;
+    const { decimalPlaces = 2 } = chartConfig;
     return [...new Array(count)].map((_, i) => {
       let yLabel;
 
@@ -151,14 +147,16 @@ class AbstractChart extends Component {
       stackedBar = false,
       verticalLabelRotation = 0
     } = config;
+    const {
+      xAxisLabel = "",
+      xLabelsOffset = 0,
+      hidePointsAtIndex = []
+    } = this.props;
     const fontSize = 12;
     let fac = 1;
     if (stackedBar) {
       fac = 0.71;
     }
-    const xAxisLabel = this.props.xAxisLabel || "";
-    const xLabelsOffset = this.props.xLabelsOffset || 0;
-    const hidePointsAtIndex = this.props.hidePointsAtIndex || [];
     return labels.map((label, i) => {
       if (hidePointsAtIndex.includes(i)) {
         return null;

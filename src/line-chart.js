@@ -39,8 +39,7 @@ class LineChart extends AbstractChart {
     const output = [];
     const datas = this.getDatas(data);
     const baseHeight = this.calcBaseHeight(datas, height);
-    const getDotColor = this.props.getDotColor || null;
-    const hidePointsAtIndex = this.props.hidePointsAtIndex || [];
+    const { getDotColor, hidePointsAtIndex = [] } = this.props;
     data.forEach(dataset => {
       dataset.data.forEach((x, i) => {
         if (hidePointsAtIndex.includes(i)) {
