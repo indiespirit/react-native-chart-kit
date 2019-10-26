@@ -118,7 +118,7 @@ const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June'],
   datasets: [{
     data: [ 20, 45, 28, 80, 99, 43 ],
-    color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})` // optional
+    color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
     strokeWidth: 2 // optional
   }]
 }
@@ -147,12 +147,16 @@ const data = {
 | fromZero                | boolean            | Render charts from 0 not from the minimum value. - default: False                                                                                                                                                   |
 | yAxisLabel              | string             | Prepend text to horizontal labels -- default: ''                                                                                                                                                                    |
 | yAxisSuffix             | string             | Append text to horizontal labels -- default: ''                                                                                                                                                                     |
+| xAxisLabel              | string             | Prepend text to vertical labels -- default: ''                                                                                                                                                                      |
 | chartConfig             | Object             | Configuration object for the chart, see example config object above                                                                                                                                                 |
 | decorator               | Function           | This function takes a [whole bunch](https://github.com/indiespirit/react-native-chart-kit/blob/master/src/line-chart.js#L266) of stuff and can render extra elements, such as data point info or additional markup. |
 | onDataPointClick        | Function           | Callback that takes `{value, dataset, getColor}`                                                                                                                                                                    |
 | horizontalLabelRotation | number (degree)    | Rotation angle of the horizontal labels - default 0                                                                                                                                                                 |
 | verticalLabelRotation   | number (degree)    | Rotation angle of the vertical labels - default 0                                                                                                                                                                   |
 | getDotColor             | function => string | Defines the dot color function that is used to calculate colors of dots in a line chart and takes `(dataPoint, dataPointIndex)`                                                                                     |
+| yLabelsOffset           | number             | Offset for Y axis labels                                                                                                                                                                                            |
+| xLabelsOffset           | number             | Offset for X axis labels                                                                                                                                                                                            |
+| hidePointsAtIndex       | number[]           | Indices of the data points you don't want to display                                                                                                                                                                |
 
 ## Bezier Line Chart
 
@@ -229,6 +233,7 @@ yAxisLabel={'$'} chartConfig={chartConfig} verticalLabelRotation={30} />
 | withVerticalLabels      | boolean         | Show vertical labels - default: True                                                        |
 | withHorizontalLabels    | boolean         | Show horizontal labels - default: True                                                      |
 | fromZero                | boolean         | Render charts from 0 not from the minimum value. - default: False                           |
+| withInnerLines          | boolean         | Show inner dashed lines - default: True                                                     |
 | yAxisLabel              | string          | Prepend text to horizontal labels -- default: ''                                            |
 | yAxisSuffix             | string          | Append text to horizontal labels -- default: ''                                             |
 | chartConfig             | Object          | Configuration object for the chart, see example config in the beginning of this file        |
