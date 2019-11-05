@@ -101,18 +101,23 @@ class AbstractChart extends Component {
       paddingRight,
       horizontalLabelRotation = 0
     } = config;
-    const { yAxisLabel = "", yLabelsOffset = 12, chartConfig } = this.props;
+    const {
+      yAxisLabel = "",
+      yAxisSuffix = "",
+      yLabelsOffset = 12,
+      chartConfig
+    } = this.props;
     const { decimalPlaces = 2 } = chartConfig;
     return [...new Array(count)].map((_, i) => {
       let yLabel;
 
       if (count === 1) {
-        yLabel = `${yAxisLabel}${data[0].toFixed(decimalPlaces)}`;
+        yLabel = `${yAxisLabel}${data[0].toFixed(decimalPlaces)}${yAxisSuffix}`;
       } else {
         const label = this.props.fromZero
           ? (this.calcScaler(data) / (count - 1)) * i + Math.min(...data, 0)
           : (this.calcScaler(data) / (count - 1)) * i + Math.min(...data);
-        yLabel = `${yAxisLabel}${label.toFixed(decimalPlaces)}`;
+        yLabel = `${yAxisLabel}${label.toFixed(decimalPlaces)}${yAxisSuffix}`;
       }
 
       const x = paddingRight - yLabelsOffset;
@@ -231,6 +236,16 @@ class AbstractChart extends Component {
       ? config.backgroundGradientToOpacity
       : 1.0;
 
+    const fillShadowGradient = config.hasOwnProperty("fillShadowGradient")
+      ? config.fillShadowGradient
+      : this.props.chartConfig.color();
+
+    const fillShadowGradientOpacity = config.hasOwnProperty(
+      "fillShadowGradientOpacity"
+    )
+      ? config.fillShadowGradientOpacity
+      : 0.1;
+
     return (
       <Defs>
         <LinearGradient
@@ -260,14 +275,10 @@ class AbstractChart extends Component {
         >
           <Stop
             offset="0"
-            stopColor={this.props.chartConfig.color()}
-            stopOpacity="0.1"
+            stopColor={fillShadowGradient}
+            stopOpacity={fillShadowGradientOpacity}
           />
-          <Stop
-            offset="1"
-            stopColor={this.props.chartConfig.color()}
-            stopOpacity="0"
-          />
+          <Stop offset="1" stopColor={fillShadowGradient} stopOpacity="0" />
         </LinearGradient>
       </Defs>
     );

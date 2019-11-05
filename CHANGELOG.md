@@ -2,7 +2,9 @@
 
 ## v3.11.0
 
-- added optional props: `xAxisLabel`, `yLabelsOffset`, `xLabelsOffset`, and `hidePointsAtIndex` to `LineChart`
+- added optional props: `xAxisLabel`, `yAxisSuffix`, `yLabelsOffset`, `xLabelsOffset`, and `hidePointsAtIndex` to `LineChart`
+- added optional prop `withInnerLines` to `BarChart`
+- added optional `fillShadowGradient` color and `fillShadowGradientOpacity` to chart config for customizing the area under the data points in `LinChart` and `BarChart`
 
 ## v3.10.0
 
