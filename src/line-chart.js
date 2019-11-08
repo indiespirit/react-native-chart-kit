@@ -248,7 +248,7 @@ class LineChart extends AbstractChart {
       horizontalLabelRotation = 0
     } = this.props;
     const { labels = [] } = data;
-    const { borderRadius = 0, paddingTop = 16, paddingRight = 64 } = style;
+    const { borderRadius = 0, paddingTop = 16, paddingRight = 0 } = style;
     const config = {
       width,
       height,
