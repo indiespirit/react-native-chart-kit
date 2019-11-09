@@ -248,7 +248,13 @@ class LineChart extends AbstractChart {
       horizontalLabelRotation = 0
     } = this.props;
     const { labels = [] } = data;
-    const { borderRadius = 0, paddingTop = 16, paddingRight = 64 } = style;
+    const {
+      borderRadius = 0,
+      paddingTop = 16,
+      paddingRight = 64,
+      margin = 0,
+      marginRight = 0
+    } = style;
     const config = {
       width,
       height,
@@ -260,7 +266,7 @@ class LineChart extends AbstractChart {
       <View style={style}>
         <Svg
           height={height}
-          width={width}
+          width={width - margin * 2 - marginRight}
         >
           <G>
             {this.renderDefs({
