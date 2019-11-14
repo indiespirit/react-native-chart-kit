@@ -245,7 +245,8 @@ class LineChart extends AbstractChart {
       decorator,
       onDataPointClick,
       verticalLabelRotation = 0,
-      horizontalLabelRotation = 0
+      horizontalLabelRotation = 0,
+      formatYLabel = yLabel => yLabel
     } = this.props;
     const { labels = [] } = data;
     const { borderRadius = 0, paddingTop = 16, paddingRight = 64 } = style;
@@ -297,7 +298,8 @@ class LineChart extends AbstractChart {
                     count: Math.min(...datas) === Math.max(...datas) ? 1 : 4,
                     data: datas,
                     paddingTop,
-                    paddingRight
+                    paddingRight,
+                    formatYLabel
                   })
                 : null}
             </G>
