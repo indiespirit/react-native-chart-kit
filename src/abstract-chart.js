@@ -102,18 +102,27 @@ class AbstractChart extends Component {
       horizontalLabelRotation = 0,
       formatYLabel = yLabel => yLabel
     } = config;
-    const { yAxisLabel = "", yAxisSuffix = "", yLabelsOffset = 12, chartConfig } = this.props;
+    const {
+      yAxisLabel = "",
+      yAxisSuffix = "",
+      yLabelsOffset = 12,
+      chartConfig
+    } = this.props;
     const { decimalPlaces = 2 } = chartConfig;
     return [...new Array(count)].map((_, i) => {
       let yLabel;
 
       if (count === 1) {
-        yLabel = `${yAxisLabel}${formatYLabel(data[0].toFixed(decimalPlaces))}${yAxisSuffix}`;
+        yLabel = `${yAxisLabel}${formatYLabel(
+          data[0].toFixed(decimalPlaces)
+        )}${yAxisSuffix}`;
       } else {
         const label = this.props.fromZero
           ? (this.calcScaler(data) / (count - 1)) * i + Math.min(...data, 0)
           : (this.calcScaler(data) / (count - 1)) * i + Math.min(...data);
-        yLabel = `${yAxisLabel}${formatYLabel(label.toFixed(decimalPlaces))}${yAxisSuffix}`;
+        yLabel = `${yAxisLabel}${formatYLabel(
+          label.toFixed(decimalPlaces)
+        )}${yAxisSuffix}`;
       }
 
       const x = paddingRight - yLabelsOffset;
