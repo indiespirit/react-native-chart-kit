@@ -138,8 +138,8 @@ export interface LineChartProps {
    */
   formatYLabel?: (yValue: string) => string;
   /**
-   * This function change the format of the display value of the x label.
-   * Takes the x value as argument and should return the desirable string.
+   * This function change the format of the display value of the X label.
+   * Takes the X value as argument and should return the desirable string.
    */
   formatXLabel?: (xValue: string) => string;
 }
