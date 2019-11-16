@@ -137,6 +137,11 @@ export interface LineChartProps {
    * Takes the y value as argument and should return the desirable string.
    */
   formatYLabel?: (yValue: string) => string;
+  /**
+   * This function change the format of the display value of the x label.
+   * Takes the x value as argument and should return the desirable string.
+   */
+  formatXLabel?: (xValue: string) => string;
 }
 
 export class LineChart extends React.Component<LineChartProps> {}
