@@ -28,6 +28,7 @@ export interface LineChartProps {
   yLabelsOffset?: number;
   xLabelsOffset?: number;
   hidePointsAtIndex?: number[];
+  getDotProps: (dataPoint: any, index: number) => object;
 }
 
 export class LineChart extends React.Component<LineChartProps> {}
