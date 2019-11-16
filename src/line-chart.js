@@ -246,7 +246,8 @@ class LineChart extends AbstractChart {
       onDataPointClick,
       verticalLabelRotation = 0,
       horizontalLabelRotation = 0,
-      formatYLabel = yLabel => yLabel
+      formatYLabel = yLabel => yLabel,
+      formatXLabel = xLabel => xLabel
     } = this.props;
     const { labels = [] } = data;
     const { borderRadius = 0, paddingTop = 16, paddingRight = 64 } = style;
@@ -325,7 +326,8 @@ class LineChart extends AbstractChart {
                     ...config,
                     labels,
                     paddingRight,
-                    paddingTop
+                    paddingTop,
+                    formatXLabel
                   })
                 : null}
             </G>

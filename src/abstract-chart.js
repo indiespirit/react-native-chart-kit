@@ -155,7 +155,8 @@ class AbstractChart extends Component {
       paddingTop,
       horizontalOffset = 0,
       stackedBar = false,
-      verticalLabelRotation = 0
+      verticalLabelRotation = 0,
+      formatXLabel = xLabel => xLabel
     } = config;
     const {
       xAxisLabel = "",
@@ -187,7 +188,7 @@ class AbstractChart extends Component {
           textAnchor={verticalLabelRotation === 0 ? "middle" : "start"}
           {...this.getPropsForLabels()}
         >
-          {`${label}${xAxisLabel}`}
+          {`${formatXLabel(label)}${xAxisLabel}`}
         </Text>
       );
     });
