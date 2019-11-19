@@ -99,7 +99,8 @@ class AbstractChart extends Component {
       height,
       paddingTop,
       paddingRight,
-      horizontalLabelRotation = 0
+      horizontalLabelRotation = 0,
+      formatYLabel = yLabel => yLabel
     } = config;
     const {
       yAxisLabel = "",
@@ -112,12 +113,16 @@ class AbstractChart extends Component {
       let yLabel;
 
       if (count === 1) {
-        yLabel = `${yAxisLabel}${data[0].toFixed(decimalPlaces)}${yAxisSuffix}`;
+        yLabel = `${yAxisLabel}${formatYLabel(
+          data[0].toFixed(decimalPlaces)
+        )}${yAxisSuffix}`;
       } else {
         const label = this.props.fromZero
           ? (this.calcScaler(data) / (count - 1)) * i + Math.min(...data, 0)
           : (this.calcScaler(data) / (count - 1)) * i + Math.min(...data);
-        yLabel = `${yAxisLabel}${label.toFixed(decimalPlaces)}${yAxisSuffix}`;
+        yLabel = `${yAxisLabel}${formatYLabel(
+          label.toFixed(decimalPlaces)
+        )}${yAxisSuffix}`;
       }
 
       const x = paddingRight - yLabelsOffset;
@@ -150,7 +155,8 @@ class AbstractChart extends Component {
       paddingTop,
       horizontalOffset = 0,
       stackedBar = false,
-      verticalLabelRotation = 0
+      verticalLabelRotation = 0,
+      formatXLabel = xLabel => xLabel
     } = config;
     const {
       xAxisLabel = "",
@@ -182,7 +188,7 @@ class AbstractChart extends Component {
           textAnchor={verticalLabelRotation === 0 ? "middle" : "start"}
           {...this.getPropsForLabels()}
         >
-          {`${label}${xAxisLabel}`}
+          {`${formatXLabel(label)}${xAxisLabel}`}
         </Text>
       );
     });
