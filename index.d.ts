@@ -4,6 +4,18 @@
 
 import * as React from "react";
 
+interface LineChartData {
+  /** The x-axis labels */
+  labels: string[];
+  datasets: {
+    data: number[];
+    /** The color of the stroke. E.g. `rgba(134, 65, 244, ${opacity})` */
+    color: (opacity: number) => string;
+    /** The width of the stroke */
+    strokeWidth: number;
+  }[];
+}
+
 // LineChart
 export interface LineChartProps {
   /**
@@ -22,7 +34,7 @@ export interface LineChartProps {
    * }
    * ```
    */
-  data: object;
+  data: LineChartData;
   /**
    * Width of the chart, use 'Dimensions' library to get the width of your screen for responsive.
    */
