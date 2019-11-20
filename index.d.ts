@@ -8,10 +8,11 @@ interface LineChartData {
   /** The x-axis labels */
   labels: string[];
   datasets: {
+    /** The data corresponding to the x-axis label. */
     data: number[];
-    /** The color of the stroke. E.g. `rgba(134, 65, 244, ${opacity})` */
+    /** A function returning the color of the stroke given an input opacity value. */
     color: (opacity: number) => string;
-    /** The width of the stroke */
+    /** The width of the stroke. Defaults to 2. */
     strokeWidth: number;
   }[];
 }
@@ -160,7 +161,7 @@ export interface LineChartProps {
   getDotProps?: (dataPoint: any, index: number) => object;
 }
 
-export class LineChart extends React.Component<LineChartProps> {}
+export class LineChart extends React.Component<LineChartProps> { }
 
 // ProgressChart
 export interface ProgressChartProps {
@@ -170,7 +171,7 @@ export interface ProgressChartProps {
   chartConfig: ChartConfig;
 }
 
-export class ProgressChart extends React.Component<ProgressChartProps> {}
+export class ProgressChart extends React.Component<ProgressChartProps> { }
 
 // BarChart
 export interface BarChartProps {
@@ -187,7 +188,7 @@ export interface BarChartProps {
   verticalLabelRotation?: number;
 }
 
-export class BarChart extends React.Component<BarChartProps> {}
+export class BarChart extends React.Component<BarChartProps> { }
 
 // StackedBarChart
 export interface StackedBarChartProps {
@@ -198,7 +199,7 @@ export interface StackedBarChartProps {
   style?: object;
 }
 
-export class StackedBarChart extends React.Component<StackedBarChartProps> {}
+export class StackedBarChart extends React.Component<StackedBarChartProps> { }
 
 // PieChart
 export interface PieChartProps {
@@ -214,7 +215,7 @@ export interface PieChartProps {
   hasLegend?: boolean;
 }
 
-export class PieChart extends React.Component<PieChartProps> {}
+export class PieChart extends React.Component<PieChartProps> { }
 
 // ContributionGraph
 export interface ContributionGraphProps {
@@ -229,10 +230,10 @@ export interface ContributionGraphProps {
 
 export class ContributionGraph extends React.Component<
   ContributionGraphProps
-> {}
+  > { }
 
 // AbstractChart
-export class AbstractChart extends React.Component {}
+export class AbstractChart extends React.Component { }
 
 // ChartConfig
 export interface ChartConfig {
@@ -259,6 +260,10 @@ export interface ChartConfig {
    * Defines the base color function that is used to calculate colors of labels and sectors used in a chart
    */
   color: (opacity: number) => string;
+  /**
+   * Defines the function that is used to calculate the color of the labels used in a chart.
+   */
+  labelColor: (opacity: number) => string;
   /**
    * Defines the base stroke width in a chart
    */
