@@ -3,6 +3,7 @@
 // TypeScript Version: 3.0
 
 import * as React from "react";
+import { ViewStyle } from "react-native";
 
 interface LineChartData {
   /** The x-axis labels */
@@ -281,5 +282,5 @@ export interface ChartConfig {
    */
   propsForLabels?: object;
   decimalPlaces?: number;
-  style?: object;
+  style?: ViewStyle;
 }
