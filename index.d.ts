@@ -4,18 +4,21 @@
 
 import * as React from "react";
 import { ViewStyle } from "react-native";
+import { TextProps } from "react-native-svg";
 
-export interface LineChartData {
+export interface Dataset {
+  /** The data corresponding to the x-axis label. */
+  data: number[];
+  /** A function returning the color of the stroke given an input opacity value. */
+  color: (opacity: number) => string;
+  /** The width of the stroke. Defaults to 2. */
+  strokeWidth: number;
+}
+
+export interface ChartData {
   /** The x-axis labels */
   labels: string[];
-  datasets: {
-    /** The data corresponding to the x-axis label. */
-    data: number[];
-    /** A function returning the color of the stroke given an input opacity value. */
-    color: (opacity: number) => string;
-    /** The width of the stroke. Defaults to 2. */
-    strokeWidth: number;
-  }[];
+  datasets: Dataset[];
 }
 
 // LineChart
@@ -36,7 +39,7 @@ export interface LineChartProps {
    * }
    * ```
    */
-  data: LineChartData;
+  data: ChartData;
   /**
    * Width of the chart, use 'Dimensions' library to get the width of your screen for responsive.
    */
@@ -109,13 +112,20 @@ export interface LineChartProps {
    */
   decorator?: Function;
   /**
-   * Callback that takes as params: `{value, dataset, getColor}`.
+   * Callback that is called when a data point is clicked.
    */
-  onDataPointClick?: Function;
+  onDataPointClick?: (data: {
+    index: number;
+    value: number;
+    dataset: Dataset;
+    x: number;
+    y: number;
+    getColor: (opacity: number) => string;
+  }) => void;
   /**
    * Style of the container view of the chart.
    */
-  style?: object;
+  style?: ViewStyle;
   /**
    * Add this prop to make the line chart smooth and curvy.
    *
@@ -177,7 +187,7 @@ export class ProgressChart extends React.Component<ProgressChartProps> {}
 
 // BarChart
 export interface BarChartProps {
-  data: object;
+  data: ChartData;
   width: number;
   height: number;
   fromZero?: boolean;
@@ -185,7 +195,7 @@ export interface BarChartProps {
   yAxisLabel: string;
   yAxisSuffix: string;
   chartConfig: ChartConfig;
-  style?: object;
+  style?: ViewStyle;
   horizontalLabelRotation?: number;
   verticalLabelRotation?: number;
 }
@@ -193,12 +203,30 @@ export interface BarChartProps {
 export class BarChart extends React.Component<BarChartProps> {}
 
 // StackedBarChart
+export interface StackedBarChartData {
+  labels: string[];
+  legend: string[];
+  data: number[][];
+  barColors: string[];
+}
+
 export interface StackedBarChartProps {
-  data: object;
+  /**
+   * E.g.
+   * ```javascript
+   * const data = {
+   *   labels: ["Test1", "Test2"],
+   *   legend: ["L1", "L2", "L3"],
+   *   data: [[60, 60, 60], [30, 30, 60]],
+   *   barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
+   * };
+   * ```
+   */
+  data: StackedBarChartData;
   width: number;
   height: number;
   chartConfig: ChartConfig;
-  style?: object;
+  style?: ViewStyle;
 }
 
 export class StackedBarChart extends React.Component<StackedBarChartProps> {}
@@ -281,7 +309,7 @@ export interface ChartConfig {
   /**
    * Override styles of the labels, refer to react-native-svg's Text documentation
    */
-  propsForLabels?: object;
+  propsForLabels?: TextProps;
   decimalPlaces?: number;
   style?: ViewStyle;
 }
