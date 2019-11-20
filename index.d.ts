@@ -5,7 +5,7 @@
 import * as React from "react";
 import { ViewStyle } from "react-native";
 
-interface LineChartData {
+export interface LineChartData {
   /** The x-axis labels */
   labels: string[];
   datasets: {
@@ -95,6 +95,7 @@ export interface LineChartProps {
    *   backgroundGradientTo: "#08130D",
    *   backgroundGradientToOpacity: 0.5,
    *   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+   *   labelColor: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
    *   strokeWidth: 2, // optional, default 3
    *   barPercentage: 0.5
    * };
@@ -162,7 +163,7 @@ export interface LineChartProps {
   getDotProps?: (dataPoint: any, index: number) => object;
 }
 
-export class LineChart extends React.Component<LineChartProps> { }
+export class LineChart extends React.Component<LineChartProps> {}
 
 // ProgressChart
 export interface ProgressChartProps {
@@ -172,7 +173,7 @@ export interface ProgressChartProps {
   chartConfig: ChartConfig;
 }
 
-export class ProgressChart extends React.Component<ProgressChartProps> { }
+export class ProgressChart extends React.Component<ProgressChartProps> {}
 
 // BarChart
 export interface BarChartProps {
@@ -189,7 +190,7 @@ export interface BarChartProps {
   verticalLabelRotation?: number;
 }
 
-export class BarChart extends React.Component<BarChartProps> { }
+export class BarChart extends React.Component<BarChartProps> {}
 
 // StackedBarChart
 export interface StackedBarChartProps {
@@ -200,7 +201,7 @@ export interface StackedBarChartProps {
   style?: object;
 }
 
-export class StackedBarChart extends React.Component<StackedBarChartProps> { }
+export class StackedBarChart extends React.Component<StackedBarChartProps> {}
 
 // PieChart
 export interface PieChartProps {
@@ -216,7 +217,7 @@ export interface PieChartProps {
   hasLegend?: boolean;
 }
 
-export class PieChart extends React.Component<PieChartProps> { }
+export class PieChart extends React.Component<PieChartProps> {}
 
 // ContributionGraph
 export interface ContributionGraphProps {
@@ -231,10 +232,10 @@ export interface ContributionGraphProps {
 
 export class ContributionGraph extends React.Component<
   ContributionGraphProps
-  > { }
+> {}
 
 // AbstractChart
-export class AbstractChart extends React.Component { }
+export class AbstractChart extends React.Component {}
 
 // ChartConfig
 export interface ChartConfig {
