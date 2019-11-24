@@ -23,8 +23,12 @@ class LineChart extends AbstractChart {
   getDatas = data =>
     data.reduce((acc, item) => (item.data ? [...acc, ...item.data] : acc), []);
 
-  getPropsForDots = () => {
-    const { propsForDots = {} } = this.props.chartConfig;
+  getPropsForDots = (x, i) => {
+    const { getDotProps, chartConfig = {} } = this.props;
+    if (typeof getDotProps === "function") {
+      return getDotProps(x, i);
+    }
+    const { propsForDots = {} } = chartConfig;
     return { r: "4", ...propsForDots };
   };
   renderDots = config => {
@@ -76,7 +80,7 @@ class LineChart extends AbstractChart {
                 : this.getColor(dataset, 0.9)
             }
             onPress={onPress}
-            {...this.getPropsForDots()}
+            {...this.getPropsForDots(x, i)}
           />,
           <Circle
             key={Math.random()}
@@ -245,7 +249,9 @@ class LineChart extends AbstractChart {
       decorator,
       onDataPointClick,
       verticalLabelRotation = 0,
-      horizontalLabelRotation = 0
+      horizontalLabelRotation = 0,
+      formatYLabel = yLabel => yLabel,
+      formatXLabel = xLabel => xLabel
     } = this.props;
     const { labels = [] } = data;
     const {
@@ -253,7 +259,8 @@ class LineChart extends AbstractChart {
       paddingTop = 16,
       paddingRight = 64,
       margin = 0,
-      marginRight = 0
+      marginRight = 0,
+      paddingBottom = 0
     } = style;
     const config = {
       width,
@@ -265,7 +272,7 @@ class LineChart extends AbstractChart {
     return (
       <View style={style}>
         <Svg
-          height={height}
+          height={height + paddingBottom}
           width={width - margin * 2 - marginRight}
         >
           <G>
@@ -303,7 +310,8 @@ class LineChart extends AbstractChart {
                     count: Math.min(...datas) === Math.max(...datas) ? 1 : 4,
                     data: datas,
                     paddingTop,
-                    paddingRight
+                    paddingRight,
+                    formatYLabel
                   })
                 : null}
             </G>
@@ -329,7 +337,8 @@ class LineChart extends AbstractChart {
                     ...config,
                     labels,
                     paddingRight,
-                    paddingTop
+                    paddingTop,
+                    formatXLabel
                   })
                 : null}
             </G>
