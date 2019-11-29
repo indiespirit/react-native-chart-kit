@@ -7,6 +7,7 @@ import {
   Polyline,
   Path,
   Rect,
+  Text,
   G
 } from "react-native-svg";
 import AbstractChart from "./abstract-chart";
@@ -95,6 +96,35 @@ class LineChart extends AbstractChart {
       });
     });
     return output;
+  };
+
+  renderLegend = config => {
+    const { legend, data, width, height } = config;
+    return (
+      legend &&
+      legend.map((x, i) => {
+        return (
+          <G key={Math.random()}>
+            <Rect
+              width="16px"
+              height="16px"
+              fill={this.getColor(data[i], 0.9)}
+              rx={8}
+              ry={8}
+              x={width * 0.71}
+              y={height * 0.7 - i * 50}
+            />
+            <Text
+              x={width * 0.78}
+              y={height * 0.76 - i * 50}
+              {...this.getPropsForLabels()}
+            >
+              {x}
+            </Text>
+          </G>
+        );
+      })
+    );
   };
 
   renderShadow = config => {
@@ -378,6 +408,11 @@ class LineChart extends AbstractChart {
                   paddingRight
                 })}
             </G>
+            {this.renderLegend({
+              ...config,
+              legend: data.legend,
+              data: data.datasets
+            })}
           </G>
         </Svg>
       </View>
