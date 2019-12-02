@@ -292,27 +292,40 @@ class LineChart extends AbstractChart {
       marginRight = 0,
       paddingBottom = 0
     } = style;
+
     const config = {
       width,
       height,
       verticalLabelRotation,
       horizontalLabelRotation
     };
+
     const datas = this.getDatas(data.datasets);
+    console.log("height", height);
+
     return (
       <View style={style}>
         <Svg
-          height={height + paddingBottom}
+          height={height + paddingBottom + 30}
           width={width - margin * 2 - marginRight}
         >
-          <G>
+          <Rect
+            width="100%"
+            height={30}
+            x="0"
+            y="0"
+            rx={borderRadius}
+            ry={borderRadius}
+            fill="green"
+          />
+          <G x="0" y="30">
             {this.renderDefs({
               ...config,
               ...this.props.chartConfig
             })}
             <Rect
               width="100%"
-              height={height}
+              height={height + 30}
               rx={borderRadius}
               ry={borderRadius}
               fill="url(#backgroundGradient)"
