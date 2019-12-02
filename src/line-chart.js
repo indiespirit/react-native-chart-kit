@@ -98,35 +98,6 @@ class LineChart extends AbstractChart {
     return output;
   };
 
-  renderLegend = config => {
-    const { legend, data, width, height } = config;
-    return (
-      legend &&
-      legend.map((x, i) => {
-        return (
-          <G key={Math.random()}>
-            <Rect
-              width="16px"
-              height="16px"
-              fill={this.getColor(data[i], 0.9)}
-              rx={8}
-              ry={8}
-              x={width * 0.71}
-              y={height * 0.7 - i * 50}
-            />
-            <Text
-              x={width * 0.78}
-              y={height * 0.76 - i * 50}
-              {...this.getPropsForLabels()}
-            >
-              {x}
-            </Text>
-          </G>
-        );
-      })
-    );
-  };
-
   renderShadow = config => {
     if (this.props.bezier) {
       return this.renderBezierShadow(config);
@@ -264,6 +235,69 @@ class LineChart extends AbstractChart {
     });
   };
 
+  renderLegendItems = config => {
+    const { legend, data, width } = config;
+    /* half the height of the legend Rect, minus half the height of the circle to align the
+       circle from its center, rather than its top. */
+    const CENTER_ALIGNED_CIRCLE = 30 / 2 - 8;
+    // .65 accounts for the height of the text to center it in relation to the circles
+    const CENTER_ALIGNED_TEXT = 30 * 0.65;
+    return (
+      legend &&
+      legend.map((x, i) => {
+        return (
+          <G key={Math.random()}>
+            <Rect
+              width="16px"
+              height="16px"
+              fill={this.getColor(data[i], 0.9)}
+              rx={8}
+              ry={8}
+              // 256 * .7 - 0 * 50
+              x={width - 20 - i * 100}
+              y={CENTER_ALIGNED_CIRCLE}
+            />
+            <Text
+              x={width - i * 100}
+              y={CENTER_ALIGNED_TEXT}
+              {...this.getPropsForLabels()}
+            >
+              {x}
+            </Text>
+          </G>
+        );
+      })
+    );
+  };
+
+  renderLegend = (config, borderRadius) => {
+    console.log(config.width);
+    const { legend, datasets } = this.props.data;
+    const legendItemsConfig = {
+      ...config,
+      legend,
+      data: datasets
+    };
+
+    return (
+      <>
+        <Rect
+          width="100%"
+          height={30}
+          x="0"
+          y="0"
+          rx={0}
+          ry={0}
+          fill="rgba(0,0,0,0)"
+        />
+        <G x="-100" y="0">
+          {/*this is wierd because it's centering off the start of G not the middle, so whether the legend is centered depends on the length of the legend itself */}
+          {this.renderLegendItems(legendItemsConfig)}
+        </G>
+      </>
+    );
+  };
+
   render() {
     const {
       width,
@@ -301,23 +335,15 @@ class LineChart extends AbstractChart {
     };
 
     const datas = this.getDatas(data.datasets);
-    console.log("height", height);
 
     return (
       <View style={style}>
         <Svg
-          height={height + paddingBottom + 30}
+          height={height + paddingBottom + 30} // 30 is hardcoded width of the header
           width={width - margin * 2 - marginRight}
         >
-          <Rect
-            width="100%"
-            height={30}
-            x="0"
-            y="0"
-            rx={borderRadius}
-            ry={borderRadius}
-            fill="green"
-          />
+          {this.renderLegend(config, borderRadius)}
+          {/*this x/y will have to be dynamic depending on whether there is a header or not*/}
           <G x="0" y="30">
             {this.renderDefs({
               ...config,
@@ -325,7 +351,7 @@ class LineChart extends AbstractChart {
             })}
             <Rect
               width="100%"
-              height={height + 30}
+              height={height}
               rx={borderRadius}
               ry={borderRadius}
               fill="url(#backgroundGradient)"
@@ -421,11 +447,6 @@ class LineChart extends AbstractChart {
                   paddingRight
                 })}
             </G>
-            {this.renderLegend({
-              ...config,
-              legend: data.legend,
-              data: data.datasets
-            })}
           </G>
         </Svg>
       </View>
