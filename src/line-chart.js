@@ -8,7 +8,8 @@ import {
   Path,
   Rect,
   Text,
-  G
+  G,
+  Line
 } from "react-native-svg";
 import AbstractChart from "./abstract-chart";
 
@@ -242,9 +243,15 @@ class LineChart extends AbstractChart {
     const CENTER_ALIGNED_CIRCLE = 30 / 2 - 8;
     // .65 accounts for the height of the text to center it in relation to the circles
     const CENTER_ALIGNED_TEXT = 30 * 0.65;
+
+    const legendItemSection = Math.round(width / legend.length);
+    console.log("section", legendItemSection);
+    console.log("width", width);
+
     return (
       legend &&
       legend.map((x, i) => {
+        console.log("something", width / legend.length);
         return (
           <G key={Math.random()}>
             <Rect
@@ -253,12 +260,11 @@ class LineChart extends AbstractChart {
               fill={this.getColor(data[i], 0.9)}
               rx={8}
               ry={8}
-              // 256 * .7 - 0 * 50
-              x={width - 20 - i * 100}
+              x={legendItemSection * i + 20}
               y={CENTER_ALIGNED_CIRCLE}
             />
             <Text
-              x={width - i * 100}
+              x={legendItemSection * i + 40}
               y={CENTER_ALIGNED_TEXT}
               {...this.getPropsForLabels()}
             >
@@ -271,14 +277,13 @@ class LineChart extends AbstractChart {
   };
 
   renderLegend = (config, borderRadius) => {
-    console.log(config.width);
     const { legend, datasets } = this.props.data;
     const legendItemsConfig = {
       ...config,
       legend,
       data: datasets
     };
-
+    console.log("config width", config.width);
     return (
       <>
         <Rect
@@ -288,12 +293,10 @@ class LineChart extends AbstractChart {
           y="0"
           rx={0}
           ry={0}
-          fill="rgba(0,0,0,0)"
+          fill="url(#backgroundGradient)"
         />
-        <G x="-100" y="0">
-          {/*this is wierd because it's centering off the start of G not the middle, so whether the legend is centered depends on the length of the legend itself */}
-          {this.renderLegendItems(legendItemsConfig)}
-        </G>
+        {/* <Line x1="0" x2={config.width} y1="0" y2="0" stroke="red" strokeWidth="2"/> */}
+        <G>{this.renderLegendItems(legendItemsConfig)}</G>
       </>
     );
   };
