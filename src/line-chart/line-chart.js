@@ -7,13 +7,13 @@ import {
   Polyline,
   Path,
   Rect,
-  Text,
-  G,
-  Line
+  G
 } from "react-native-svg";
-import AbstractChart from "./abstract-chart";
+import AbstractChart from "../abstract-chart";
+import { LegendItem } from "./legend-item";
 
 class LineChart extends AbstractChart {
+  LEGEND_HEIGHT = 30;
   getColor = (dataset, opacity) => {
     return (dataset.color || this.props.chartConfig.color)(opacity);
   };
@@ -236,48 +236,28 @@ class LineChart extends AbstractChart {
     });
   };
 
-  renderLegendItems = config => {
-    const { legend, data, width } = config;
-    /* half the height of the legend Rect, minus half the height of the circle to align the
-       circle from its center, rather than its top. */
-    const CENTER_ALIGNED_CIRCLE = 30 / 2 - 8;
-    // .65 accounts for the height of the text to center it in relation to the circles
-    const CENTER_ALIGNED_TEXT = 30 * 0.65;
-
-    // const legendItemSection = Math.round((width * .90) / legend.length);
-    const interval = width / (legend.length + 1);
-    // 0 is at width * .1
-    // end of width is at width * .90
-    // space evenly in between
-
+  renderLegendItems = legendItemsConfig => {
+    const { legend, data, width } = legendItemsConfig;
+    const itemWidthPercentage = width / (legend.length + 1);
     return (
       legend &&
       legend.map((x, i) => {
         return (
           <G key={Math.random()}>
-            <Rect
-              width="16px"
-              height="16px"
-              fill={this.getColor(data[i], 0.9)}
-              rx={8}
-              ry={8}
-              x={interval * (i + 1) - 16} // he width of the circle so the circle and text straddle the interval
-              y={CENTER_ALIGNED_CIRCLE}
+            <LegendItem
+              index={i}
+              iconColor={this.getColor(data[i], 0.9)}
+              itemWidthPercentage={itemWidthPercentage}
+              legendText={x}
+              labelProps={{ ...this.getPropsForLabels() }}
             />
-            <Text
-              x={interval * (i + 1) + 4} // text padding away from circle
-              y={CENTER_ALIGNED_TEXT}
-              {...this.getPropsForLabels()}
-            >
-              {x}
-            </Text>
           </G>
         );
       })
     );
   };
 
-  renderLegend = (config, borderRadius, margin, marginRight) => {
+  renderLegend = (config, borderRadius) => {
     const { legend, datasets } = this.props.data;
     const legendItemsConfig = {
       ...config,
@@ -288,15 +268,14 @@ class LineChart extends AbstractChart {
       <>
         <Rect
           width="100%"
-          height={30}
+          height={this.LEGEND_HEIGHT}
           x="0"
           y="0"
           rx={0}
           ry={0}
           fill="url(#backgroundGradient)"
         />
-        {/* <Line x1="0" x2={config.width} y1="0" y2="0" stroke="red" strokeWidth="2"/> */}
-        <G>{this.renderLegendItems(legendItemsConfig)}</G>
+        {this.renderLegendItems(legendItemsConfig)}
       </>
     );
   };
@@ -338,11 +317,11 @@ class LineChart extends AbstractChart {
     };
 
     const datas = this.getDatas(data.datasets);
-
+    // const legendHeight = this.isLegend
     return (
       <View style={style}>
         <Svg
-          height={height + paddingBottom + 30} // 30 is hardcoded width of the header
+          height={height + paddingBottom + this.LEGEND_HEIGHT} // 30 is hardcoded width of the header
           width={width - margin * 2 - marginRight}
         >
           {this.renderLegend(config, borderRadius, margin, marginRight)}
@@ -353,9 +332,9 @@ class LineChart extends AbstractChart {
               ...this.props.chartConfig
             })}
             <Rect
-              width="100%"
-              height={height}
-              rx={borderRadius}
+              width="100%" //can this be 80% and then the legend be 20% on top of it or something?
+              height={height} // maybe height plus height of legend ...  then we render legend on top?
+              rx={borderRadius} // how can this
               ry={borderRadius}
               fill="url(#backgroundGradient)"
             />
