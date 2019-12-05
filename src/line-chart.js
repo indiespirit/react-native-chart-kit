@@ -244,14 +244,15 @@ class LineChart extends AbstractChart {
     // .65 accounts for the height of the text to center it in relation to the circles
     const CENTER_ALIGNED_TEXT = 30 * 0.65;
 
-    const legendItemSection = Math.round(width / legend.length);
-    console.log("section", legendItemSection);
-    console.log("width", width);
+    // const legendItemSection = Math.round((width * .90) / legend.length);
+    const interval = width / (legend.length + 1);
+    // 0 is at width * .1
+    // end of width is at width * .90
+    // space evenly in between
 
     return (
       legend &&
       legend.map((x, i) => {
-        console.log("something", width / legend.length);
         return (
           <G key={Math.random()}>
             <Rect
@@ -260,11 +261,11 @@ class LineChart extends AbstractChart {
               fill={this.getColor(data[i], 0.9)}
               rx={8}
               ry={8}
-              x={legendItemSection * i + 20}
+              x={interval * (i + 1) - 16} // he width of the circle so the circle and text straddle the interval
               y={CENTER_ALIGNED_CIRCLE}
             />
             <Text
-              x={legendItemSection * i + 40}
+              x={interval * (i + 1) + 4} // text padding away from circle
               y={CENTER_ALIGNED_TEXT}
               {...this.getPropsForLabels()}
             >
@@ -276,14 +277,13 @@ class LineChart extends AbstractChart {
     );
   };
 
-  renderLegend = (config, borderRadius) => {
+  renderLegend = (config, borderRadius, margin, marginRight) => {
     const { legend, datasets } = this.props.data;
     const legendItemsConfig = {
       ...config,
       legend,
       data: datasets
     };
-    console.log("config width", config.width);
     return (
       <>
         <Rect
@@ -345,7 +345,7 @@ class LineChart extends AbstractChart {
           height={height + paddingBottom + 30} // 30 is hardcoded width of the header
           width={width - margin * 2 - marginRight}
         >
-          {this.renderLegend(config, borderRadius)}
+          {this.renderLegend(config, borderRadius, margin, marginRight)}
           {/*this x/y will have to be dynamic depending on whether there is a header or not*/}
           <G x="0" y="30">
             {this.renderDefs({
