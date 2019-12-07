@@ -13,7 +13,8 @@ const data = {
     {
       data: [30, 90, 67, 54, 10, 2]
     }
-  ]
+  ],
+  legend: ["Rainy Days", "Sunny Days", "Cloudy Days"]
 };
 
 // Mock data object used for Contribution Graph
@@ -82,7 +83,10 @@ const progressChartData = {
 const stackedBarGraphData = {
   labels: ["Test1", "Test2"],
   legend: ["L1", "L2", "L3"],
-  data: [[60, 60, 60], [30, 30, 60]],
+  data: [
+    [60, 60, 60],
+    [30, 30, 60]
+  ],
   barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
 };
 
