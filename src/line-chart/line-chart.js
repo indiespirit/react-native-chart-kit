@@ -239,40 +239,38 @@ class LineChart extends AbstractChart {
   renderLegendItems = legendItemsConfig => {
     const { legend, data, width } = legendItemsConfig;
     const itemWidthPercentage = width / (legend.length + 1);
-    return (
-      legend &&
-      legend.map((x, i) => {
-        return (
-          <G key={Math.random()}>
-            <LegendItem
-              index={i}
-              iconColor={this.getColor(data[i], 0.9)}
-              itemWidthPercentage={itemWidthPercentage}
-              legendText={x}
-              labelProps={{ ...this.getPropsForLabels() }}
-            />
-          </G>
-        );
-      })
-    );
+    return legend.map((x, i) => {
+      return (
+        <G key={Math.random()}>
+          <LegendItem
+            index={i}
+            iconColor={this.getColor(data[i], 0.9)}
+            itemWidthPercentage={itemWidthPercentage}
+            legendText={x}
+            labelProps={{ ...this.getPropsForLabels() }}
+            legendOffset={legendItemsConfig.legendOffset}
+          />
+        </G>
+      );
+    });
   };
 
-  renderLegend = (config, borderRadius) => {
+  renderLegend = (config, legendOffset, borderRadius) => {
+    console.log("called");
     const { legend, datasets } = this.props.data;
     const legendItemsConfig = {
       ...config,
       legend,
+      legendOffset,
       data: datasets
     };
     return (
       <>
         <Rect
           width="100%"
-          height={this.LEGEND_HEIGHT}
-          x="0"
-          y="0"
-          rx={0}
-          ry={0}
+          height={legendOffset}
+          rx={borderRadius}
+          ry={borderRadius}
           fill="url(#backgroundGradient)"
         />
         {this.renderLegendItems(legendItemsConfig)}
@@ -317,27 +315,29 @@ class LineChart extends AbstractChart {
     };
 
     const datas = this.getDatas(data.datasets);
-    // const legendHeight = this.isLegend
+    const legendOffset = this.props.data.legend ? height * 0.15 : 0;
+    console.log(this.props.data.legend);
+    console.log(legendOffset);
     return (
       <View style={style}>
         <Svg
-          height={height + paddingBottom + this.LEGEND_HEIGHT} // 30 is hardcoded width of the header
+          height={height + paddingBottom + legendOffset}
           width={width - margin * 2 - marginRight}
         >
-          {this.renderLegend(config, borderRadius, margin, marginRight)}
-          {/*this x/y will have to be dynamic depending on whether there is a header or not*/}
-          <G x="0" y="30">
+          <Rect
+            width="100%"
+            height={height + legendOffset}
+            rx={borderRadius}
+            ry={borderRadius}
+            fill="url(#backgroundGradient)"
+          />
+          {legendOffset &&
+            this.renderLegend(config, legendOffset, borderRadius)}
+          <G x="0" y={legendOffset}>
             {this.renderDefs({
               ...config,
               ...this.props.chartConfig
             })}
-            <Rect
-              width="100%" //can this be 80% and then the legend be 20% on top of it or something?
-              height={height} // maybe height plus height of legend ...  then we render legend on top?
-              rx={borderRadius} // how can this
-              ry={borderRadius}
-              fill="url(#backgroundGradient)"
-            />
             <G>
               {withInnerLines
                 ? this.renderHorizontalLines({
