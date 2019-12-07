@@ -13,7 +13,6 @@ import AbstractChart from "../abstract-chart";
 import { LegendItem } from "./legend-item";
 
 class LineChart extends AbstractChart {
-  LEGEND_HEIGHT = 30;
   getColor = (dataset, opacity) => {
     return (dataset.color || this.props.chartConfig.color)(opacity);
   };
@@ -239,24 +238,21 @@ class LineChart extends AbstractChart {
   renderLegendItems = legendItemsConfig => {
     const { legend, data, width } = legendItemsConfig;
     const itemWidthPercentage = width / (legend.length + 1);
-    return legend.map((x, i) => {
-      return (
-        <G key={Math.random()}>
-          <LegendItem
-            index={i}
-            iconColor={this.getColor(data[i], 0.9)}
-            itemWidthPercentage={itemWidthPercentage}
-            legendText={x}
-            labelProps={{ ...this.getPropsForLabels() }}
-            legendOffset={legendItemsConfig.legendOffset}
-          />
-        </G>
-      );
-    });
+    return legend.map((x, i) => (
+      <G key={Math.random()}>
+        <LegendItem
+          index={i}
+          iconColor={this.getColor(data[i], 0.9)}
+          itemWidthPercentage={itemWidthPercentage}
+          legendText={x}
+          labelProps={{ ...this.getPropsForLabels() }}
+          legendOffset={legendItemsConfig.legendOffset}
+        />
+      </G>
+    ));
   };
 
   renderLegend = (config, legendOffset, borderRadius) => {
-    console.log("called");
     const { legend, datasets } = this.props.data;
     const legendItemsConfig = {
       ...config,
@@ -316,8 +312,6 @@ class LineChart extends AbstractChart {
 
     const datas = this.getDatas(data.datasets);
     const legendOffset = this.props.data.legend ? height * 0.15 : 0;
-    console.log(this.props.data.legend);
-    console.log(legendOffset);
     return (
       <View style={style}>
         <Svg
@@ -331,7 +325,7 @@ class LineChart extends AbstractChart {
             ry={borderRadius}
             fill="url(#backgroundGradient)"
           />
-          {legendOffset &&
+          {this.props.data.legend &&
             this.renderLegend(config, legendOffset, borderRadius)}
           <G x="0" y={legendOffset}>
             {this.renderDefs({
