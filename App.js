@@ -3,7 +3,7 @@ import React from "react";
 import { ScrollView, StatusBar, Dimensions, Text } from "react-native";
 import ScrollableTabView from "react-native-scrollable-tab-view";
 import FlashMessage, { showMessage } from "react-native-flash-message";
-import LineChart from "./src/line-chart";
+import { LineChart } from "./src/line-chart";
 import PieChart from "./src/pie-chart";
 import ProgressChart from "./src/progress-chart";
 import BarChart from "./src/bar-chart";
