@@ -238,6 +238,7 @@ class LineChart extends AbstractChart {
   renderLegendItems = legendItemsConfig => {
     const { legend, data, width } = legendItemsConfig;
     const baseLegendItemX = width / (legend.length + 1);
+
     return legend.map((legendItem, i) => (
       <G key={Math.random()}>
         <LegendItem
@@ -252,14 +253,15 @@ class LineChart extends AbstractChart {
     ));
   };
 
-  renderLegend = (config, legendOffset, borderRadius) => {
+  renderLegend = (width, legendOffset, borderRadius) => {
     const { legend, datasets } = this.props.data;
     const legendItemsConfig = {
-      ...config,
+      width,
       legend,
       legendOffset,
       data: datasets
     };
+
     return (
       <>
         <Rect
@@ -326,7 +328,7 @@ class LineChart extends AbstractChart {
             fill="url(#backgroundGradient)"
           />
           {this.props.data.legend &&
-            this.renderLegend(config, legendOffset, borderRadius)}
+            this.renderLegend(config.width, legendOffset, borderRadius)}
           <G x="0" y={legendOffset}>
             {this.renderDefs({
               ...config,

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 const CIRCLE_WIDTH = 16;
 const PADDING_LEFT = 4;
+const CHARACTER_WIDTH = 6;
 
 export const LegendItem = props => {
   const { baseLegendItemX, index } = props;
@@ -13,7 +14,7 @@ export const LegendItem = props => {
   // 65% of the legend container height centers the text in relation to the circles
   const centerAlignedText = props.legendOffset * 0.65;
   // to center the legendItem on the baseLegendItemX
-  const textLengthOffset = (props.legendText.length * 6) / 2;
+  const textLengthOffset = (props.legendText.length * CHARACTER_WIDTH) / 2;
   const legendItemNumber = index + 1;
 
   return (
