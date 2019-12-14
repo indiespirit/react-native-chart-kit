@@ -238,13 +238,13 @@ class LineChart extends AbstractChart {
   renderLegendItems = legendItemsConfig => {
     const { legend, data, width } = legendItemsConfig;
     const itemWidthPercentage = width / (legend.length + 1);
-    return legend.map((x, i) => (
+    return legend.map((legendItem, i) => (
       <G key={Math.random()}>
         <LegendItem
           index={i}
           iconColor={this.getColor(data[i], 0.9)}
           itemWidthPercentage={itemWidthPercentage}
-          legendText={x}
+          legendText={legendItem}
           labelProps={{ ...this.getPropsForLabels() }}
           legendOffset={legendItemsConfig.legendOffset}
         />

@@ -14,7 +14,7 @@ const data = {
       data: [30, 90, 67, 54, 10, 2]
     }
   ],
-  legend: ["Rainy Days", "Sunny Days", "Cloudy Days"]
+  legend: ["Rainy Days", "Sunny Days", "Snowy Days"] // optional
 };
 
 // Mock data object used for Contribution Graph

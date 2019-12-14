@@ -12,19 +12,29 @@ export const LegendItem = props => {
   const centerAlignedCircle = props.legendOffset / 2 - CIRCLE_WIDTH / 2;
   // 65% of the legend container height centers the text in relation to the circles
   const centerAlignedText = props.legendOffset * 0.65;
+  // to center the legendItem on the itemWidthPercentage
+  const textLengthOffset = (props.legendText.length * 6) / 2;
+  const legendItemNumber = index + 1;
+
   return (
     <>
       <Rect
-        width="16px"
-        height="16px"
+        width={CIRCLE_WIDTH}
+        height={CIRCLE_WIDTH}
         fill={props.iconColor}
         rx={8}
         ry={8}
-        x={itemWidthPercentage * (index + 1) - CIRCLE_WIDTH} //the circle and text are centered on the itemWidthPercentage
+        x={
+          itemWidthPercentage * legendItemNumber -
+          (CIRCLE_WIDTH + textLengthOffset)
+        }
         y={centerAlignedCircle}
       />
       <Text
-        x={itemWidthPercentage * (index + 1) + PADDING_LEFT}
+        x={
+          itemWidthPercentage * legendItemNumber +
+          (PADDING_LEFT - textLengthOffset)
+        }
         y={centerAlignedText}
         {...props.labelProps}
       >
