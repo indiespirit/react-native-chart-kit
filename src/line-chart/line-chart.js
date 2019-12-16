@@ -235,45 +235,22 @@ class LineChart extends AbstractChart {
     });
   };
 
-  renderLegendItems = legendItemsConfig => {
-    const { legend, data, width } = legendItemsConfig;
+  renderLegend = (width, legendOffset) => {
+    const { legend, datasets } = this.props.data;
     const baseLegendItemX = width / (legend.length + 1);
 
     return legend.map((legendItem, i) => (
       <G key={Math.random()}>
         <LegendItem
           index={i}
-          iconColor={this.getColor(data[i], 0.9)}
+          iconColor={this.getColor(datasets[i], 0.9)}
           baseLegendItemX={baseLegendItemX}
           legendText={legendItem}
           labelProps={{ ...this.getPropsForLabels() }}
-          legendOffset={legendItemsConfig.legendOffset}
+          legendOffset={legendOffset}
         />
       </G>
     ));
-  };
-
-  renderLegend = (width, legendOffset, borderRadius) => {
-    const { legend, datasets } = this.props.data;
-    const legendItemsConfig = {
-      width,
-      legend,
-      legendOffset,
-      data: datasets
-    };
-
-    return (
-      <>
-        <Rect
-          width="100%"
-          height={legendOffset}
-          rx={borderRadius}
-          ry={borderRadius}
-          fill="url(#backgroundGradient)"
-        />
-        {this.renderLegendItems(legendItemsConfig)}
-      </>
-    );
   };
 
   render() {
@@ -328,7 +305,7 @@ class LineChart extends AbstractChart {
             fill="url(#backgroundGradient)"
           />
           {this.props.data.legend &&
-            this.renderLegend(config.width, legendOffset, borderRadius)}
+            this.renderLegend(config.width, legendOffset)}
           <G x="0" y={legendOffset}>
             {this.renderDefs({
               ...config,
