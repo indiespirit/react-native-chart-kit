@@ -23,7 +23,7 @@ class StackedBarChart extends AbstractChart {
       colors
     } = config;
     return data.map((x, i) => {
-      const barWidth = 32;
+      const barWidth = 32 * this.getBarPercentage();
       const ret = [];
       let h = 0;
       let st = paddingTop;
