@@ -12,6 +12,11 @@ class StackedBarChart extends AbstractChart {
     return barPercentage;
   };
 
+
+  getBarRadius = ( ret, x) => {
+    return this.props.chartConfig.barRadius && ret.length == (x.length - 1) ? this.props.chartConfig.barRadius : 0
+  }
+
   renderBars = config => {
     const {
       data,
@@ -40,6 +45,8 @@ class StackedBarChart extends AbstractChart {
             key={Math.random()}
             x={xC}
             y={y}
+            rx={this.getBarRadius(ret,x)} 
+            ry={this.getBarRadius(ret,x)}
             width={barWidth}
             height={h}
             fill={colors[z]}
