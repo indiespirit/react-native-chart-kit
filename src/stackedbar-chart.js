@@ -6,6 +6,12 @@ import AbstractChart from "./abstract-chart";
 const barWidth = 32;
 
 class StackedBarChart extends AbstractChart {
+
+  getBarPercentage = () => {
+    const { barPercentage = 1 } = this.props.chartConfig;
+    return barPercentage;
+  };
+
   renderBars = config => {
     const {
       data,
