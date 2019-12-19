@@ -45,6 +45,7 @@ class StackedBarChart extends AbstractChart {
             fill={colors[z]}
           />
         );
+      if(!this.props.chartConfig.hideBarLegend){
         ret.push(
           <Text
             key={Math.random()}
@@ -56,6 +57,7 @@ class StackedBarChart extends AbstractChart {
             {x[z]}
           </Text>
         );
+      }
 
         st -= h;
       }
