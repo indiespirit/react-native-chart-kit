@@ -1,5 +1,22 @@
 # Changelog
 
+## 4.2.0
+
+- line chart supports legend
+
+## 4.1.0
+
+- add `hideLegend` to ProgressChart
+
+## v4.0.0
+
+- patched a lot of indirect dependencies
+- improved ProgressChartProps types
+- added item index to some color calls
+- added an optional bottom padding to LineChart
+- POTENTIALLY BREAKING for typescript: added some typedefs to "LineChart", "BarChart", and "StackedBarChart". Also added some typedefs for styles.
+- corrected the line-chart & progress-chart wrong width calculation
+
 ## v3.12.0
 
 - added `formatXLabel`, `formatYLabel`, and `getDotProps` to `LineChart`

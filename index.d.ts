@@ -3,6 +3,27 @@
 // TypeScript Version: 3.0
 
 import * as React from "react";
+import { ViewStyle } from "react-native";
+import { TextProps } from "react-native-svg";
+
+export interface Dataset {
+  /** The data corresponding to the x-axis label. */
+  data: number[];
+  /** A function returning the color of the stroke given an input opacity value. */
+  color?: (opacity: number) => string;
+  /** The width of the stroke. Defaults to 2. */
+  strokeWidth?: number;
+}
+
+export interface ChartData {
+  /** The x-axis labels */
+  labels: string[];
+  datasets: Dataset[];
+}
+
+export interface LineChartData extends ChartData {
+  legend?: string[];
+}
 
 // LineChart
 export interface LineChartProps {
@@ -18,11 +39,12 @@ export interface LineChartProps {
    *     data: [ 20, 45, 28, 80, 99, 43 ],
    *     color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
    *     strokeWidth: 2 // optional
-   *   }]
+   *   }],
+   *   legend: ["Rainy Days", "Sunny Days", "Snowy Days"] // optional
    * }
    * ```
    */
-  data: object;
+  data: LineChartData;
   /**
    * Width of the chart, use 'Dimensions' library to get the width of your screen for responsive.
    */
@@ -81,6 +103,7 @@ export interface LineChartProps {
    *   backgroundGradientTo: "#08130D",
    *   backgroundGradientToOpacity: 0.5,
    *   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+   *   labelColor: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
    *   strokeWidth: 2, // optional, default 3
    *   barPercentage: 0.5
    * };
@@ -94,13 +117,20 @@ export interface LineChartProps {
    */
   decorator?: Function;
   /**
-   * Callback that takes as params: `{value, dataset, getColor}`.
+   * Callback that is called when a data point is clicked.
    */
-  onDataPointClick?: Function;
+  onDataPointClick?: (data: {
+    index: number;
+    value: number;
+    dataset: Dataset;
+    x: number;
+    y: number;
+    getColor: (opacity: number) => string;
+  }) => void;
   /**
    * Style of the container view of the chart.
    */
-  style?: object;
+  style?: ViewStyle;
   /**
    * Add this prop to make the line chart smooth and curvy.
    *
@@ -151,18 +181,23 @@ export interface LineChartProps {
 export class LineChart extends React.Component<LineChartProps> {}
 
 // ProgressChart
+
+export type ProgressChartData =
+  | Array<number>
+  | { labels: Array<string>; data: Array<number> };
 export interface ProgressChartProps {
-  data: Array<number>;
+  data: ProgressChartData;
   width: number;
   height: number;
   chartConfig: ChartConfig;
+  hideLegend: boolean;
 }
 
 export class ProgressChart extends React.Component<ProgressChartProps> {}
 
 // BarChart
 export interface BarChartProps {
-  data: object;
+  data: ChartData;
   width: number;
   height: number;
   fromZero?: boolean;
@@ -170,7 +205,7 @@ export interface BarChartProps {
   yAxisLabel: string;
   yAxisSuffix: string;
   chartConfig: ChartConfig;
-  style?: object;
+  style?: ViewStyle;
   horizontalLabelRotation?: number;
   verticalLabelRotation?: number;
 }
@@ -178,12 +213,30 @@ export interface BarChartProps {
 export class BarChart extends React.Component<BarChartProps> {}
 
 // StackedBarChart
+export interface StackedBarChartData {
+  labels: string[];
+  legend: string[];
+  data: number[][];
+  barColors: string[];
+}
+
 export interface StackedBarChartProps {
-  data: object;
+  /**
+   * E.g.
+   * ```javascript
+   * const data = {
+   *   labels: ["Test1", "Test2"],
+   *   legend: ["L1", "L2", "L3"],
+   *   data: [[60, 60, 60], [30, 30, 60]],
+   *   barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
+   * };
+   * ```
+   */
+  data: StackedBarChartData;
   width: number;
   height: number;
   chartConfig: ChartConfig;
-  style?: object;
+  style?: ViewStyle;
 }
 
 export class StackedBarChart extends React.Component<StackedBarChartProps> {}
@@ -246,7 +299,11 @@ export interface ChartConfig {
   /**
    * Defines the base color function that is used to calculate colors of labels and sectors used in a chart
    */
-  color: (opacity: number) => string;
+  color: (opacity: number, index?: number) => string;
+  /**
+   * Defines the function that is used to calculate the color of the labels used in a chart.
+   */
+  labelColor: (opacity: number) => string;
   /**
    * Defines the base stroke width in a chart
    */
@@ -262,7 +319,7 @@ export interface ChartConfig {
   /**
    * Override styles of the labels, refer to react-native-svg's Text documentation
    */
-  propsForLabels?: object;
+  propsForLabels?: TextProps;
   decimalPlaces?: number;
-  style?: object;
+  style?: ViewStyle;
 }

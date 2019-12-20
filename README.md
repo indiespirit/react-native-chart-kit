@@ -125,7 +125,8 @@ const data = {
       color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
       strokeWidth: 2 // optional
     }
-  ]
+  ],
+  legend: ["Rainy Days", "Sunny Days", "Snowy Days"] // optional
 };
 ```
 
@@ -203,15 +204,17 @@ const data = {
   width="{screenWidth}"
   height="{220}"
   chartConfig="{chartConfig}"
+  hideLegend="{false}"
 />
 ```
 
-| Property    | Type   | Description                                                                                 |
-| ----------- | ------ | ------------------------------------------------------------------------------------------- |
-| data        | Object | Data for the chart - see example above                                                      |
-| width       | Number | Width of the chart, use 'Dimensions' library to get the width of your screen for responsive |
-| height      | Number | Height of the chart                                                                         |
-| chartConfig | Object | Configuration object for the chart, see example config in the beginning of this file        |
+| Property    | Type    | Description                                                                                 |
+| ----------- | ------- | ------------------------------------------------------------------------------------------- |
+| data        | Object  | Data for the chart - see example above                                                      |
+| width       | Number  | Width of the chart, use 'Dimensions' library to get the width of your screen for responsive |
+| height      | Number  | Height of the chart                                                                         |
+| chartConfig | Object  | Configuration object for the chart, see example config in the beginning of this file        |
+| hideLegend  | Boolean | Switch to hide chart legend (defaults to false)                                             |
 
 ## Bar chart
 
