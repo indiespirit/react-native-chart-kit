@@ -97,7 +97,7 @@ class LineChart extends AbstractChart {
             fillOpacity={0}
             onPress={onPress}
           />,
-          renderDotContent({ cx, cy, i })
+          renderDotContent({ x: cx, y: cy, index: i })
         );
       });
     });
