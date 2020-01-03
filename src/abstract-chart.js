@@ -112,7 +112,7 @@ class AbstractChart extends Component {
       yLabelsOffset = 12
     } = this.props;
 
-    return [...Array(count + 1).keys()].reverse().map((i, _) => {
+    return [...Array(count === 1 ? 1 : count + 1).keys()].map((i, _) => {
       let yLabel = i * count;
 
       if (count === 1) {
