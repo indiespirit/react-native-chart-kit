@@ -25,8 +25,8 @@
     "react-native-svg": "> 6.4.1",
     "react-test-renderer": "16.7.0"
   },
-  "_main": "./node_modules/expo/AppEntry.js",
-  "main": "./index.js",
+  "main": "./node_modules/expo/AppEntry.js",
+  "_main": "./index.js",
   "scripts": {
     "start": "expo start",
     "eject": "expo eject",
