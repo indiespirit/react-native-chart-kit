@@ -64,36 +64,9 @@ class AbstractChart extends Component {
 
   renderHorizontalLines = config => {
     const { count, width, height, paddingTop, paddingRight } = config;
-
     const basePosition = height - height / 4;
-    const topPosition = paddingTop;
-    const middlePosition = height / 2 - paddingTop;
 
-    console.log(basePosition, topPosition, middlePosition, height);
-
-    const baseLine = (
-      <Line
-        key={Math.random()}
-        x1={paddingRight}
-        y1={basePosition}
-        x2={width}
-        y2={basePosition}
-        {...this.getPropsForBackgroundLines()}
-      />
-    );
-
-    const topLine = (
-      <Line
-        key={Math.random()}
-        x1={paddingRight}
-        y1={topPosition}
-        x2={width}
-        y2={topPosition}
-        {...this.getPropsForBackgroundLines()}
-      />
-    );
-
-    const inbetweenLines = [...new Array(count + 1)].map((_, i) => {
+    return [...new Array(count + 1)].map((_, i) => {
       const x = (basePosition / count) * i + paddingTop;
       return (
         <Line
@@ -103,12 +76,9 @@ class AbstractChart extends Component {
           x2={width}
           y2={x}
           {...this.getPropsForBackgroundLines()}
-          stroke="red"
         />
       );
     });
-
-    return [inbetweenLines];
   };
 
   renderHorizontalLine = config => {
