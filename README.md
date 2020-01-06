@@ -46,8 +46,8 @@ import {
     }}
     width={Dimensions.get("window").width} // from react-native
     height={220}
-    yAxisLabel={"$"}
-    yAxisSuffix={"k"}
+    yAxisLabel="$"
+    yAxisSuffix="k"
     chartConfig={{
       backgroundColor: "#e26a00",
       backgroundGradientFrom: "#fb8c00",
@@ -96,11 +96,11 @@ const chartConfig = {
 | backgroundGradientTo          | string             | Defines the second color in the linear gradient of a chart's background                                |
 | backgroundGradientToOpacity   | Number             | Defines the second color opacity in the linear gradient of a chart's background                        |
 | fillShadowGradient            | string             | Defines the color of the area under data                                                               |
-| fillShadowGradientOpacity     | Number             | Defines the intial opacity of the area under data                                                      |
+| fillShadowGradientOpacity     | Number             | Defines the initial opacity of the area under data                                                     |
 | color                         | function => string | Defines the base color function that is used to calculate colors of labels and sectors used in a chart |
 | strokeWidth                   | Number             | Defines the base stroke width in a chart                                                               |
 | barPercentage                 | Number             | Defines the percent (0-1) of the available width each bar width in a chart                             |
-| barRadius                     | Number             | Defince the radius of each bar                                                                         |
+| barRadius                     | Number             | Defines the radius of each bar                                                                         |
 | propsForBackgroundLines       | props              | Override styles of the background lines, refer to react-native-svg's Line documentation                |
 | propsForLabels                | props              | Override styles of the labels, refer to react-native-svg's Text documentation                          |
 
@@ -131,12 +131,12 @@ const data = {
 };
 ```
 
-```html
+```jsx
 <LineChart
-  data="{data}"
-  width="{screenWidth}"
-  height="{220}"
-  chartConfig="{chartConfig}"
+  data={data}
+  width={screenWidth}
+  height={220}
+  chartConfig={chartConfig}
 />
 ```
 
@@ -174,13 +174,13 @@ const data = {
 
 ![Line Chart](https://i.imgur.com/EnUiZZU.jpg)
 
-```html
+```jsx
 <LineChart
-  data="{data}"
-  width="{screenWidth}"
-  height="{256}"
-  verticalLabelRotation="{30}"
-  chartConfig="{chartConfig}"
+  data={data}
+  width={screenWidth}
+  height={256}
+  verticalLabelRotation={30}
+  chartConfig={chartConfig}
   bezier
 />
 ```
@@ -201,13 +201,13 @@ const data = {
 };
 ```
 
-```html
+```jsx
 <ProgressChart
-  data="{data}"
-  width="{screenWidth}"
-  height="{220}"
-  chartConfig="{chartConfig}"
-  hideLegend="{false}"
+  data={data}
+  width={screenWidth}
+  height={220}
+  chartConfig={chartConfig}
+  hideLegend={false}
 />
 ```
 
@@ -234,9 +234,16 @@ const data = {
 };
 ```
 
-```html
-<BarChart style={graphStyle} data={data} width={screenWidth} height={220}
-yAxisLabel={'$'} chartConfig={chartConfig} verticalLabelRotation={30} />
+```jsx
+<BarChart
+  style={graphStyle}
+  data={data}
+  width={screenWidth}
+  height={220}
+  yAxisLabel="$"
+  chartConfig={chartConfig}
+  verticalLabelRotation={30}
+/>
 ```
 
 | Property                | Type            | Description                                                                                 |
@@ -267,13 +274,13 @@ const data = {
 };
 ```
 
-```html
+```jsx
 <StackedBarChart
-  style="{graphStyle}"
-  data="{data}"
-  width="{screenWidth}"
-  height="{220}"
-  chartConfig="{chartConfig}"
+  style={graphStyle}
+  data={data}
+  width={screenWidth}
+  height={220}
+  chartConfig={chartConfig}
 />
 ```
 
@@ -336,12 +343,12 @@ const data = [
 ];
 ```
 
-```html
+```jsx
 <PieChart
-  data="{data}"
-  width="{screenWidth}"
-  height="{220}"
-  chartConfig="{chartConfig}"
+  data={data}
+  width={screenWidth}
+  height={220}
+  chartConfig={chartConfig}
   accessor="population"
   backgroundColor="transparent"
   paddingLeft="15"
@@ -383,9 +390,15 @@ const commitsData = [
 ];
 ```
 
-```html
-<ContributionGraph values={commitsData} endDate={new Date('2017-04-01')}
-numDays={105} width={screenWidth} height={220} chartConfig={chartConfig} />
+```jsx
+<ContributionGraph
+  values={commitsData}
+  endDate={new Date('2017-04-01')}
+  numDays={105}
+  width={screenWidth}
+  height={220}
+  chartConfig={chartConfig}
+/>
 ```
 
 | Property    | Type   | Description                                                                                 |
