@@ -67,14 +67,14 @@ class AbstractChart extends Component {
     const basePosition = height - height / 4;
 
     return [...new Array(count + 1)].map((_, i) => {
-      const x = (basePosition / count) * i + paddingTop;
+      const y = (basePosition / count) * i + paddingTop;
       return (
         <Line
           key={Math.random()}
           x1={paddingRight}
-          y1={x}
+          y1={y}
           x2={width}
-          y2={x}
+          y2={y}
           {...this.getPropsForBackgroundLines()}
         />
       );
@@ -103,7 +103,7 @@ class AbstractChart extends Component {
       paddingTop,
       paddingRight,
       horizontalLabelRotation = 0,
-      decimalPlaces = 0,
+      decimalPlaces = 2,
       formatYLabel = yLabel => yLabel
     } = config;
     const {
