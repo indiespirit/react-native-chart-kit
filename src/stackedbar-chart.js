@@ -130,7 +130,7 @@ class StackedBarChart extends AbstractChart {
         border = actual;
       }
     }
-    var stackedBar = data.legend.length == 0 ? false : true;
+    var stackedBar = data.legend && data.legend.length == 0 ? false : true;
     return (
       <View style={style}>
         <Svg height={height} width={width}>
@@ -187,7 +187,7 @@ class StackedBarChart extends AbstractChart {
               stackedBar,
             })}
           </G>
-          {data.legend.length != 0 && this.renderLegend({
+          {data && data.legend.length != 0 && this.renderLegend({
             ...config,
             legend: data.legend,
             colors: this.props.data.barColors
