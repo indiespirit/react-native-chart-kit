@@ -187,7 +187,7 @@ class StackedBarChart extends AbstractChart {
               stackedBar,
             })}
           </G>
-          {data && data.legend.length != 0 && this.renderLegend({
+          {data.legend && data.legend.length != 0 && this.renderLegend({
             ...config,
             legend: data.legend,
             colors: this.props.data.barColors
