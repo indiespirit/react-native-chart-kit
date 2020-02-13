@@ -201,7 +201,7 @@ class AbstractChart extends Component {
   renderVerticalLines = config => {
     const { data, width, height, paddingTop, paddingRight } = config;
     const { yAxisInterval = 1 } = this.props;
-    return [...new Array(Math.floor(data.length / yAxisInterval))].map(
+    return [...new Array(Math.ceil(data.length / yAxisInterval))].map(
       (_, i) => {
         return (
           <Line
