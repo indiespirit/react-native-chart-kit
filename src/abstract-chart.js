@@ -200,22 +200,27 @@ class AbstractChart extends Component {
 
   renderVerticalLines = config => {
     const { data, width, height, paddingTop, paddingRight } = config;
-    return [...new Array(data.length)].map((_, i) => {
-      return (
-        <Line
-          key={Math.random()}
-          x1={Math.floor(
-            ((width - paddingRight) / data.length) * i + paddingRight
-          )}
-          y1={0}
-          x2={Math.floor(
-            ((width - paddingRight) / data.length) * i + paddingRight
-          )}
-          y2={height - height / 4 + paddingTop}
-          {...this.getPropsForBackgroundLines()}
-        />
-      );
-    });
+    const { yAxisSpaceOut = 1 } = this.prop;
+    return [...new Array(Math.floor(data.length / yAxisSpaceOut))].map(
+      (_, i) => {
+        return (
+          <Line
+            key={Math.random()}
+            x1={Math.floor(
+              ((width - paddingRight) / (data.length / yAxisSpaceOut)) * i +
+                paddingRight
+            )}
+            y1={0}
+            x2={Math.floor(
+              ((width - paddingRight) / (data.length / yAxisSpaceOut)) * i +
+                paddingRight
+            )}
+            y2={height - height / 4 + paddingTop}
+            {...this.getPropsForBackgroundLines()}
+          />
+        );
+      }
+    );
   };
 
   renderVerticalLine = config => {
