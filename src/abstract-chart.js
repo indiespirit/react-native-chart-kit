@@ -200,7 +200,7 @@ class AbstractChart extends Component {
 
   renderVerticalLines = config => {
     const { data, width, height, paddingTop, paddingRight } = config;
-    const { yAxisSpaceOut = 1 } = this.prop;
+    const { yAxisSpaceOut = 1 } = this.props;
     return [...new Array(Math.floor(data.length / yAxisSpaceOut))].map(
       (_, i) => {
         return (
