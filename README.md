@@ -48,6 +48,7 @@ import {
     height={220}
     yAxisLabel="$"
     yAxisSuffix="k"
+    yAxisInterval={1} // optional, defaults to 1
     chartConfig={{
       backgroundColor: "#e26a00",
       backgroundGradientFrom: "#fb8c00",
@@ -155,6 +156,7 @@ const data = {
 | yAxisLabel              | string                  | Prepend text to horizontal labels -- default: ''                                                                                                                                                                               |
 | yAxisSuffix             | string                  | Append text to horizontal labels -- default: ''                                                                                                                                                                                |
 | xAxisLabel              | string                  | Prepend text to vertical labels -- default: ''                                                                                                                                                                                 |
+| yAxisInterval           | string                  | Display y axis line every {x} input. -- default: 1                                                                                                                                                                             |
 | chartConfig             | Object                  | Configuration object for the chart, see example config object above                                                                                                                                                            |
 | decorator               | Function                | This function takes a [whole bunch](https://github.com/indiespirit/react-native-chart-kit/blob/master/src/line-chart/line-chart.js#L292) of stuff and can render extra elements, such as data point info or additional markup. |
 | onDataPointClick        | Function                | Callback that takes `{value, dataset, getColor}`                                                                                                                                                                               |
@@ -270,7 +272,10 @@ const data = {
 const data = {
   labels: ["Test1", "Test2"],
   legend: ["L1", "L2", "L3"],
-  data: [[60, 60, 60], [30, 30, 60]],
+  data: [
+    [60, 60, 60],
+    [30, 30, 60]
+  ],
   barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
 };
 ```
