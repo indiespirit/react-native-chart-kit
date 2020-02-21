@@ -268,8 +268,8 @@ class ContributionGraph extends AbstractChart {
 
   handleDayPress(index) {
     this.props.onDayPress(
-      this.state.valueCache[index]
-        ? this.state.valueCache[index]
+      this.state.valueCache[index] && this.state.valueCache[index].value
+        ? this.state.valueCache[index].value
         : {
             count: 0,
             date: new Date(
