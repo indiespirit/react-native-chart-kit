@@ -237,21 +237,18 @@ class ContributionGraph extends AbstractChart {
     ];
   }
 
-  handleClick(value) {
-    if (this.props.onClick) {
-      this.props.onClick(value);
-    }
-  }
-
   renderSquare(dayIndex, index) {
     const indexOutOfRange =
       index < this.getNumEmptyDaysAtStart() ||
       index >= this.getNumEmptyDaysAtStart() + this.props.numDays;
+
     if (indexOutOfRange && !this.props.showOutOfRangeDays) {
       return null;
     }
+
     const [x, y] = this.getSquareCoordinates(dayIndex);
     const { squareSize = SQUARE_SIZE } = this.props;
+
     return (
       <Rect
         key={index}
@@ -261,8 +258,24 @@ class ContributionGraph extends AbstractChart {
         y={y}
         title={this.getTitleForIndex(index)}
         fill={this.getClassNameForIndex(index)}
+        onPress={() => {
+          this.handleDayPress(index);
+        }}
         {...this.getTooltipDataAttrsForIndex(index)}
       />
+    );
+  }
+
+  handleDayPress(index) {
+    this.props.onDayPress(
+      this.state.valueCache[index]
+        ? this.state.valueCache[index]
+        : {
+            count: 0,
+            date: new Date(
+              this.getStartDate().valueOf() + index * MILLISECONDS_IN_ONE_DAY
+            )
+          }
     );
   }
 
@@ -364,7 +377,7 @@ ContributionGraph.ViewPropTypes = {
   tooltipDataAttrs: PropTypes.oneOfType([PropTypes.object, PropTypes.func]), // data attributes to add to square for setting 3rd party tooltips, e.g. { 'data-toggle': 'tooltip' } for bootstrap tooltips
   titleForValue: PropTypes.func, // function which returns title text for value
   classForValue: PropTypes.func, // function which returns html class for value
-  onClick: PropTypes.func, // callback function when a square is clicked
+  onDayPress: PropTypes.func, // callback function when a square is clicked
   getMonthLabel: PropTypes.func // function which returns label text for month
 };
 

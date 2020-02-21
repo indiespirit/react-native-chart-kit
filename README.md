@@ -415,6 +415,7 @@ const commitsData = [
 | chartConfig   | Object   | Configuration object for the chart, see example config in the beginning of this file        |
 | accessor      | string   | Property in the `data` object from which the number values are taken                        |
 | getMonthLabel | function | Function which returns the label for each month, taking month index (0 - 11) as argument    |
+| onDayPress    | function | Callback invoked when the user clicks a day square on the chart; takes a value-item object  |
 
 ## More styling
 
