@@ -9,7 +9,7 @@ If you're looking to **build a website or a cross-platform mobile app** – we w
 ## Import components
 
 1. `yarn add react-native-chart-kit`
-2. `yarn add react-native-svg prop-types` install peer dependencies
+2. `yarn add react-native-svg` install peer dependencies
 3. Use with ES6 syntax to import components
 
 ```js
@@ -272,10 +272,7 @@ const data = {
 const data = {
   labels: ["Test1", "Test2"],
   legend: ["L1", "L2", "L3"],
-  data: [
-    [60, 60, 60],
-    [30, 30, 60]
-  ],
+  data: [[60, 60, 60], [30, 30, 60]],
   barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
 };
 ```
