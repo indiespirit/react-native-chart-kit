@@ -81,7 +81,7 @@ class BarChart extends AbstractChart {
       height,
       verticalLabelRotation,
       horizontalLabelRotation,
-      barRadius: this.props.chartConfig.barRadius || 0
+      barRadius: (this.props.chartConfig && this.props.chartConfig.barRadius) || 0,
     };
     return (
       <View style={style}>
