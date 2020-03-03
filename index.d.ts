@@ -4,7 +4,7 @@
 
 import * as React from "react";
 import { ViewStyle } from "react-native";
-import { TextProps } from "react-native-svg";
+import { TextProps, CircleProps } from "react-native-svg";
 
 export interface Dataset {
   /** The data corresponding to the x-axis label. */
@@ -198,13 +198,13 @@ export interface LineChartProps {
   segments?: number;
 }
 
-export class LineChart extends React.Component<LineChartProps> {}
+export class LineChart extends React.Component<LineChartProps> { }
 
 // ProgressChart
 
 export type ProgressChartData =
   | Array<number>
-  | { labels: Array<string>; data: Array<number> };
+  | { labels: Array<string>; data: Array<number>; };
 export interface ProgressChartProps {
   data: ProgressChartData;
   width: number;
@@ -213,7 +213,7 @@ export interface ProgressChartProps {
   hideLegend: boolean;
 }
 
-export class ProgressChart extends React.Component<ProgressChartProps> {}
+export class ProgressChart extends React.Component<ProgressChartProps> { }
 
 // BarChart
 export interface BarChartProps {
@@ -235,7 +235,7 @@ export interface BarChartProps {
   showBarTops?: boolean;
 }
 
-export class BarChart extends React.Component<BarChartProps> {}
+export class BarChart extends React.Component<BarChartProps> { }
 
 // StackedBarChart
 export interface StackedBarChartData {
@@ -270,7 +270,7 @@ export interface StackedBarChartProps {
   segments?: number;
 }
 
-export class StackedBarChart extends React.Component<StackedBarChartProps> {}
+export class StackedBarChart extends React.Component<StackedBarChartProps> { }
 
 // PieChart
 export interface PieChartProps {
@@ -286,7 +286,7 @@ export interface PieChartProps {
   hasLegend?: boolean;
 }
 
-export class PieChart extends React.Component<PieChartProps> {}
+export class PieChart extends React.Component<PieChartProps> { }
 
 // ContributionGraph
 export interface ContributionGraphProps {
@@ -303,10 +303,10 @@ export interface ContributionGraphProps {
 
 export class ContributionGraph extends React.Component<
   ContributionGraphProps
-> {}
+  > { }
 
 // AbstractChart
-export class AbstractChart extends React.Component {}
+export class AbstractChart extends React.Component { }
 
 // ChartConfig
 export interface ChartConfig {
@@ -354,6 +354,10 @@ export interface ChartConfig {
    * Override styles of the labels, refer to react-native-svg's Text documentation
    */
   propsForLabels?: TextProps;
+  /**
+   * Override styles of the dots, refer to react-native-svg's Text documentation
+   */
+  propsForDots?: CircleProps;
   decimalPlaces?: number;
   style?: ViewStyle;
 }
