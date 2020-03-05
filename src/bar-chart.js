@@ -73,7 +73,9 @@ class BarChart extends AbstractChart {
       horizontalLabelRotation = 0,
       withInnerLines = true,
       showBarTops = true,
-      segments = 4
+      segments = 4,
+      formatYLabel = yLabel => yLabel,
+      formatXLabel = xLabel => xLabel,
     } = this.props;
     const { borderRadius = 0, paddingTop = 16, paddingRight = 64 } = style;
     const config = {
@@ -82,8 +84,8 @@ class BarChart extends AbstractChart {
       verticalLabelRotation,
       horizontalLabelRotation,
       barRadius: (this.props.chartConfig && this.props.chartConfig.barRadius) || 0,
-      formatYLabel: (this.props.chartConfig && this.props.chartConfig.formatYLabel) || function(label){return label},
-      formatXLabel: (this.props.chartConfig && this.props.chartConfig.formatXLabel) || function(label){return label},
+      formatYLabel,
+      formatXLabel
     };
     return (
       <View style={style}>
@@ -115,7 +117,8 @@ class BarChart extends AbstractChart {
                   count: segments,
                   data: data.datasets[0].data,
                   paddingTop,
-                  paddingRight
+                  paddingRight,
+                  formatXLabel
                 })
               : null}
           </G>
@@ -126,7 +129,8 @@ class BarChart extends AbstractChart {
                   labels: data.labels,
                   paddingRight,
                   paddingTop,
-                  horizontalOffset: barWidth * this.getBarPercentage()
+                  horizontalOffset: barWidth * this.getBarPercentage(),
+                  formatYLabel
                 })
               : null}
           </G>
