@@ -4,7 +4,7 @@
 
 import * as React from "react";
 import { ViewStyle } from "react-native";
-import { TextProps, CircleProps } from "react-native-svg";
+import { TextProps, CircleProps, TextStyle } from "react-native-svg";
 
 export interface Dataset {
   /** The data corresponding to the x-axis label. */
@@ -245,6 +245,11 @@ export interface StackedBarChartData {
   barColors: string[];
 }
 
+export interface Size {
+  width: number;
+  height: number;
+}
+
 export interface StackedBarChartProps {
   /**
    * E.g.
@@ -360,4 +365,49 @@ export interface ChartConfig {
   propsForDots?: CircleProps;
   decimalPlaces?: number;
   style?: ViewStyle;
+
+  /**
+   * Define stroke line join type
+   */
+  linejoinType?: "round" | "butt" | "square";
+
+  /**
+   * Define fill color for scrollable dot
+   */
+  scrollableDotFill?: string;
+
+  /**
+   * Define stroke color for scrollable dot
+   */
+  scrollableDotStrokeColor?: string;
+
+  /**
+   * Define stroke width for scrollable dot
+   */
+  scrollableDotStrokeWidth?: number;
+
+  /**
+   * Define radius for scrollable dot
+   */
+  scrollableDotRadius?: number;
+
+  /**
+   * Override style for additional info view upper scrollable dot
+   */
+  scrollableInfoViewStyle?: ViewStyle;
+
+  /**
+   * Override text style for additional info view upper scrollable dot
+   */
+  scrollableInfoTextStyle?: TextStyle;
+
+  /**
+   * Set Info View offset
+   */
+  scrollableInfoOffset?: number;
+
+  /**
+   * Set Info View size
+   */
+  scrollableInfoSize?: Size;
 }
