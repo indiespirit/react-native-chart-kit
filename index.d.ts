@@ -67,6 +67,8 @@ export interface LineChartProps {
   /**
    * Show inner dashed lines - default: True.
    */
+
+  withScrollableDot?:boolean;
   withInnerLines?: boolean;
   /**
    * Show outer dashed lines - default: True.
@@ -112,11 +114,18 @@ export interface LineChartProps {
    * };
    * ```
    */
-  yAxisInterval?: number;
+  chartConfig: ChartConfig;
+  
   /**
    * Divide axis quantity by the input number -- default: 1.
    */
-  chartConfig: ChartConfig;
+  yAxisInterval?: number;
+  
+
+  /**
+   * Defines if chart is transparent
+   */
+  transparent?:boolean
   /**
    * This function takes a [whole bunch](https://github.com/indiespirit/react-native-chart-kit/blob/master/src/line-chart.js#L266)
    * of stuff and can render extra elements,
@@ -315,6 +324,9 @@ export class AbstractChart extends React.Component {}
 
 // ChartConfig
 export interface ChartConfig {
+   /**
+   * Defines if chart is transparent
+   */
   backgroundColor?: string;
   /**
    * Defines the first color in the linear gradient of a chart's background
