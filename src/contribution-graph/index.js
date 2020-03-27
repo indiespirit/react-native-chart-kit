@@ -35,7 +35,7 @@ class ContributionGraph extends AbstractChart {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let { maxValue, minValue, valueCache } = this.getValueCache(
       nextProps.values
     );
