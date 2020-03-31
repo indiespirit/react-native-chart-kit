@@ -4,7 +4,6 @@ import {
   ScrollView,
   StyleSheet,
   Animated,
-  Text,
   TextInput
 } from "react-native";
 import {
@@ -25,7 +24,7 @@ class LineChart extends AbstractChart {
   label = React.createRef();
 
   state = {
-    x: new Animated.Value(0)
+    scrollableDotHorizontalOffset: new Animated.Value(0)
   };
 
   getColor = (dataset, opacity) => {
@@ -129,7 +128,7 @@ class LineChart extends AbstractChart {
       height,
       paddingTop,
       paddingRight,
-      x,
+      scrollableDotHorizontalOffset,
       scrollableDotFill,
       scrollableDotStrokeColor,
       scrollableDotStrokeWidth,
@@ -151,7 +150,7 @@ class LineChart extends AbstractChart {
     }
     let lastIndex;
 
-    x.addListener(value => {
+    scrollableDotHorizontalOffset.addListener(value => {
       const index = value.value / perData;
       if (!lastIndex) {
         lastIndex = index;
@@ -234,32 +233,31 @@ class LineChart extends AbstractChart {
             dataset.data.length;
         xValues.push(xval);
 
-        scrollableInfoOffset;
         yValuesLabel.push(
           yval - (scrollableInfoSize.height + scrollableInfoOffset)
         );
         xValuesLabel.push(xval - scrollableInfoSize.width / 2);
       }
 
-      const translateX = x.interpolate({
+      const translateX = scrollableDotHorizontalOffset.interpolate({
         inputRange: values,
         outputRange: xValues,
         extrapolate: "clamp"
       });
 
-      const translateY = x.interpolate({
+      const translateY = scrollableDotHorizontalOffset.interpolate({
         inputRange: values,
         outputRange: yValues,
         extrapolate: "clamp"
       });
 
-      const labelTranslateX = x.interpolate({
+      const labelTranslateX = scrollableDotHorizontalOffset.interpolate({
         inputRange: values,
         outputRange: xValuesLabel,
         extrapolate: "clamp"
       });
 
-      const labelTranslateY = x.interpolate({
+      const labelTranslateY = scrollableDotHorizontalOffset.interpolate({
         inputRange: values,
         outputRange: yValuesLabel,
         extrapolate: "clamp"
@@ -487,9 +485,9 @@ class LineChart extends AbstractChart {
       formatYLabel = yLabel => yLabel,
       formatXLabel = xLabel => xLabel,
       segments,
-      transparent
+      transparent = false
     } = this.props;
-    const { x } = this.state;
+    const { scrollableDotHorizontalOffset } = this.state;
     const { labels = [] } = data;
     const {
       borderRadius = 0,
@@ -497,7 +495,7 @@ class LineChart extends AbstractChart {
       paddingRight = 64,
       margin = 0,
       marginRight = 0,
-      paddingBottom = 0,
+      paddingBottom = 0
     } = style;
 
     const config = {
@@ -516,8 +514,6 @@ class LineChart extends AbstractChart {
 
     const legendOffset = this.props.data.legend ? height * 0.15 : 0;
 
-    console.log(transparent);
-    
     return (
       <View style={style}>
         <Svg
@@ -632,7 +628,7 @@ class LineChart extends AbstractChart {
                   paddingTop,
                   paddingRight,
                   onDataPointClick,
-                  x
+                  scrollableDotHorizontalOffset
                 })}
             </G>
             <G>
@@ -655,7 +651,7 @@ class LineChart extends AbstractChart {
             onScroll={Animated.event([
               {
                 nativeEvent: {
-                  contentOffset: { x: x }
+                  contentOffset: { x: scrollableDotHorizontalOffset }
                 }
               }
             ])}
