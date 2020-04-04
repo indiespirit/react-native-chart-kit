@@ -473,8 +473,10 @@ class LineChart extends AbstractChart {
       withScrollableDot = false,
       withShadow = true,
       withDots = true,
-      withInnerLines = true,
-      withOuterLines = true,
+      withVerticalInnerLines = true,
+      withHorizontalInnerLines = true,
+      withVerticalOuterLines = true,
+      withHorizontalOuterLines = true,
       withHorizontalLabels = true,
       withVerticalLabels = true,
       style = {},
@@ -536,14 +538,14 @@ class LineChart extends AbstractChart {
               ...this.props.chartConfig
             })}
             <G>
-              {withInnerLines
+              {withHorizontalInnerLines
                 ? this.renderHorizontalLines({
                     ...config,
                     count: count,
                     paddingTop,
                     paddingRight
                   })
-                : withOuterLines
+                : withHorizontalOuterLines
                 ? this.renderHorizontalLine({
                     ...config,
                     paddingTop,
@@ -565,14 +567,14 @@ class LineChart extends AbstractChart {
                 : null}
             </G>
             <G>
-              {withInnerLines
+              {withVerticalInnerLines
                 ? this.renderVerticalLines({
                     ...config,
                     data: data.datasets[0].data,
                     paddingTop,
                     paddingRight
                   })
-                : withOuterLines
+                : withVerticalOuterLines
                 ? this.renderVerticalLine({
                     ...config,
                     paddingTop,

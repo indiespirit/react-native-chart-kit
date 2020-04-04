@@ -64,16 +64,24 @@ export interface LineChartProps {
    * Show shadow for line - default: True.
    */
   withShadow?: boolean;
-  /**
-   * Show inner dashed lines - default: True.
-   */
-
   withScrollableDot?: boolean;
-  withInnerLines?: boolean;
+
   /**
-   * Show outer dashed lines - default: True.
+   * Show vertical inner dashed lines - default: True.
    */
-  withOuterLines?: boolean;
+  withVerticalInnerLines?: boolean;
+  /**
+   * Show horizontal inner dashed lines - default: True.
+   */
+  withHorizontalInnerLines?: boolean;
+  /**
+   * Show vertical outer dashed lines - default: True.
+   */
+  withVerticalOuterLines?: boolean;
+  /**
+   * Show horizontal outer dashed lines - default: True.
+   */
+  withHorizontalOuterLines?: boolean;
   /**
    * Show vertical labels - default: True.
    */
