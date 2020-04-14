@@ -7,7 +7,7 @@ const Pie = require("paths-js/pie");
 
 class ProgressChart extends AbstractChart {
   render() {
-    const { width, height, style = {}, data, hideLegend, strokeWidth = 16, radius = 32 } = this.props;
+    const { width, height, style, data, hideLegend, strokeWidth, radius } = this.props;
     const { borderRadius = 0, margin = 0, marginRight = 0 } = style;
 
     if (Array.isArray(data)) {
@@ -148,5 +148,11 @@ class ProgressChart extends AbstractChart {
     );
   }
 }
+
+ProgressChart.defaultProps = {
+  style: {},
+  strokeWidth: 16,
+  radius: 32
+};
 
 export default ProgressChart;
