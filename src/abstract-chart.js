@@ -296,10 +296,10 @@ class AbstractChart extends Component {
               >
                 <Stop
                   offset="0"
-                  stopColor={dataset.color()}
+                  stopColor={dataset.color ? dataset.color() : fillShadowGradient}
                   stopOpacity={fillShadowGradientOpacity}
                 />
-                <Stop offset="1" stopColor={dataset.color(fillShadowGradientOpacity)} stopOpacity="0" />
+                <Stop offset="1" stopColor={dataset.color ? dataset.color(fillShadowGradientOpacity) : fillShadowGradient} stopOpacity="0" />
               </LinearGradient>
             ))
           ) : (
