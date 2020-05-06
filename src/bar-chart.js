@@ -61,7 +61,7 @@ class BarChart extends AbstractChart {
     });
   };
 
-  renderTextTop = (config) => {
+  renderValuesOnTopOfBars = (config) => {
     const { data, width, height, paddingTop, paddingRight } = config;
     const baseHeight = this.calcBaseHeight(data, height);
     return data.map((x, i) => {
@@ -98,7 +98,7 @@ class BarChart extends AbstractChart {
       horizontalLabelRotation = 0,
       withInnerLines = true,
       showBarTops = true,
-      showTextTop = false,
+      showValuesOnTopOfBars = false,
       segments = 4,
     } = this.props;
     const { borderRadius = 0, paddingTop = 16, paddingRight = 64 } = style;
@@ -176,8 +176,8 @@ class BarChart extends AbstractChart {
             })}
           </G>
           <G>
-            {showTextTop &&
-              this.renderTextTop({
+            {showValuesOnTopOfBars &&
+              this.renderValuesOnTopOfBars({
                 ...config,
                 data: data.datasets[0].data,
                 paddingTop,
