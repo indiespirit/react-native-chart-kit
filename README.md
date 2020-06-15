@@ -87,7 +87,17 @@ const chartConfig = {
   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
   strokeWidth: 2, // optional, default 3
   barPercentage: 0.5,
-  useShadowColorFromDataset: false // optional
+  useShadowColorFromDataset: false, // optional
+  gutterTop: 10, // optional, default dynamic size: 10% * innerHeight after paddingTop and paddingBottom
+  horizontalLabelWidth: 30, // optional, default dynamic size：20% * innerHeight after paddingTop and paddingBottom
+  verticalLabelHeight: 30, // optional, default dynamic size: 15% * innerWidth after paddingLeft and paddingRight
+  chartStyle: { //optional
+    borderRadius: 10, //default 0
+    paddingTop: 10, //default 0
+    paddingBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
 };
 ```
 
@@ -106,6 +116,9 @@ const chartConfig = {
 | barRadius                     | Number             | Defines the radius of each bar                                                                         |
 | propsForBackgroundLines       | props              | Override styles of the background lines, refer to react-native-svg's Line documentation                |
 | propsForLabels                | props              | Override styles of the labels, refer to react-native-svg's Text documentation                          |
+| gutterTop                     | number             | Define the gap between highest coordinate and padding                           |
+| horizontalLabelWidth          | number             | Define the width of horizontal labels                          |
+| verticalLabelHeight           | number             | Define the height of vertical labels                         |
 
 ## Responsive charts
 
