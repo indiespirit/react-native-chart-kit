@@ -230,7 +230,8 @@ export interface BarChartProps {
   data: ChartData;
   width: number;
   height: number;
-  fromZero?: boolean;
+  defMax?: number;
+  defMin?: number;
   withInnerLines?: boolean;
   yAxisLabel: string;
   yAxisSuffix: string;
@@ -244,6 +245,8 @@ export interface BarChartProps {
   segments?: number;
   showBarTops?: boolean;
   showValuesOnTopOfBars?: boolean;
+  withHorizontalLabels?: boolean;
+  withVerticalLabels?: boolean;
 }
 
 export class BarChart extends React.Component<BarChartProps> {}
@@ -306,6 +309,7 @@ export class PieChart extends React.Component<PieChartProps> {}
 
 // ContributionGraph
 export interface ContributionGraphProps {
+  style?: ViewStyle;
   values: Array<any>;
   endDate: Date;
   numDays: number;
