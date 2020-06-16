@@ -14,12 +14,9 @@ import {
   convertToDate
 } from "./dateHelpers";
 
-const SQUARE_SIZE = 20;
-const MONTH_LABEL_GUTTER_SIZE = 8;
-const paddingLeft = 32;
-
 function mapValue(x, in_min, in_max, out_min, out_max) {
-  return ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
+  const diff = (in_max - in_min) || 1; //prevent divided by 0 if in_max == in_min
+  return ((x - in_min) * (out_max - out_min)) / diff + out_min;
 }
 
 class ContributionGraph extends AbstractChart {
@@ -47,19 +44,70 @@ class ContributionGraph extends AbstractChart {
     });
   }
 
+  setContentLayout(contentWidth, contentHeight) {
+    const { width, height } = this.props;
+    const { paddingTop, paddingLeft, paddingRight, paddingBottom, justifyContent, alignItems } = this.props.chartConfig.chartStyle;
+    var justifyOffset, alignOffset;
+
+    // vertical
+    switch(justifyContent) {
+      case "start": justifyOffset = 0 + paddingTop; break;
+      case "center": justifyOffset = (height - contentHeight) / 2; break;
+      case "end": justifyOffset = height - contentHeight - paddingBottom; break;
+      default: justifyOffset = 0;
+    }
+    // horizontal
+    switch(alignItems) {
+      case "start": alignOffset = 0 + paddingLeft; break;
+      case "center": alignOffset = (width - contentWidth) / 2; break;
+      case "end": alignOffset = width - contentWidth - paddingRight; break;
+      default: alignOffset = 0;
+    }
+
+    return [justifyOffset, alignOffset];
+  }
+
+  mainLayoutSetup() {
+    const { paddingTop, paddingLeft, paddingRight, paddingBottom } = this.props.chartConfig.chartStyle;
+    const [x,y] = this.getViewBox();
+    this.props.width = this.props.width > paddingLeft + paddingRight + x ? this.props.width : paddingLeft + paddingRight + x;
+    this.props.height = this.props.height > paddingTop + paddingBottom + y ? this.props.height : paddingTop + paddingBottom + y;
+  }
+
+  setDynamicSquareSize() {
+    const { paddingTop, paddingLeft, paddingRight, paddingBottom } = this.props.chartConfig.chartStyle;
+    const innerHeight = this.props.height - paddingTop - paddingBottom;
+    const innerWidth = this.props.width - paddingLeft - paddingRight;
+    const labelOrientedSize = (DAYS_IN_WEEK - 1) * this.props.gutterSize + this.props.month_label_gutter_size;
+    const WeekOrientedSize = (this.getWeekCount() - 1) * this.props.gutterSize;
+
+    if(this.props.horizontal) {
+      // + 1 becuase label itself is
+      const height = (innerHeight - labelOrientedSize) / (DAYS_IN_WEEK + 1);
+      const width = (innerWidth - WeekOrientedSize) / this.getWeekCount();
+      return height < width ? height : width;
+    }else {
+      const height = (innerHeight - WeekOrientedSize) / this.getWeekCount();
+      // minus extra gutter size and divided by extra 1 respected to getMonthLabelSize() for vertical layout
+      const width = (innerWidth - labelOrientedSize - this.props.month_label_gutter_size) / (DAYS_IN_WEEK + 2);
+      return height < width ? height : width;
+    }
+    return 0;
+  }
+
   getSquareSizeWithGutter() {
-    return (this.props.squareSize || SQUARE_SIZE) + this.props.gutterSize;
+    return this.props.squareSize + this.props.gutterSize;
   }
 
   getMonthLabelSize() {
-    let { squareSize = SQUARE_SIZE } = this.props;
+    let { squareSize } = this.props;
     if (!this.props.showMonthLabels) {
       return 0;
     }
     if (this.props.horizontal) {
-      return squareSize + MONTH_LABEL_GUTTER_SIZE;
+      return squareSize + this.props.month_label_gutter_size;
     }
-    return 2 * (squareSize + MONTH_LABEL_GUTTER_SIZE);
+    return 2 * (squareSize + this.props.month_label_gutter_size);
   }
 
   getStartDate() {
@@ -189,16 +237,20 @@ class ContributionGraph extends AbstractChart {
 
   getTransformForWeek(weekIndex) {
     if (this.props.horizontal) {
-      return [weekIndex * this.getSquareSizeWithGutter(), 50];
+      const [justifyOffset, alignOffset] = this.setContentLayout(this.getWidth(), this.getHeight());
+      return [weekIndex * this.getSquareSizeWithGutter() + alignOffset,
+        this.getMonthLabelSize() + justifyOffset];
     }
-    return [10, weekIndex * this.getSquareSizeWithGutter()];
+      const [justifyOffset, alignOffset] = this.setContentLayout(this.getHeight(), this.getWidth());
+    return [this.getMonthLabelSize() + alignOffset,
+      weekIndex * this.getSquareSizeWithGutter() + justifyOffset];
   }
 
   getTransformForMonthLabels() {
     if (this.props.horizontal) {
       return null;
     }
-    return `${this.getWeekWidth() + MONTH_LABEL_GUTTER_SIZE}, 0`;
+    return `${this.getWeekWidth() + this.props.month_label_gutter_size}, 0`;
   }
 
   getTransformForAllWeeks() {
@@ -210,9 +262,9 @@ class ContributionGraph extends AbstractChart {
 
   getViewBox() {
     if (this.props.horizontal) {
-      return `${this.getWidth()} ${this.getHeight()}`;
+      return [this.getWidth(), this.getHeight()];
     }
-    return `${this.getHeight()} ${this.getWidth()}`;
+    return [this.getHeight(), this.getWidth()];
   }
 
   getSquareCoordinates(dayIndex) {
@@ -223,16 +275,19 @@ class ContributionGraph extends AbstractChart {
   }
 
   getMonthLabelCoordinates(weekIndex) {
+    const { paddingTop, paddingLeft, paddingRight, paddingBottom, justifyContent, alignItems } = this.props.chartConfig.chartStyle;
     if (this.props.horizontal) {
+      const [justifyOffset, alignOffset] = this.setContentLayout(this.getWidth(), this.getHeight());
       return [
-        weekIndex * this.getSquareSizeWithGutter(),
-        this.getMonthLabelSize() - MONTH_LABEL_GUTTER_SIZE
+        weekIndex * this.getSquareSizeWithGutter() + alignOffset,
+        this.getMonthLabelSize() - this.props.month_label_gutter_size + justifyOffset
       ];
     }
     const verticalOffset = -2;
+    const [justifyOffset, alignOffset] = this.setContentLayout(this.getHeight(), this.getWidth());
     return [
-      0,
-      (weekIndex + 1) * this.getSquareSizeWithGutter() + verticalOffset
+      0 + alignOffset,
+      (weekIndex + 1) * this.getSquareSizeWithGutter() + verticalOffset + justifyOffset
     ];
   }
 
@@ -246,19 +301,21 @@ class ContributionGraph extends AbstractChart {
     }
 
     const [x, y] = this.getSquareCoordinates(dayIndex);
-    const { squareSize = SQUARE_SIZE } = this.props;
+    const { squareSize } = this.props;
 
     return (
       <Rect
         key={index}
         width={squareSize}
         height={squareSize}
-        x={x + paddingLeft}
+        x={x}
         y={y}
         title={this.getTitleForIndex(index)}
         fill={this.getClassNameForIndex(index)}
         onPress={() => {
           this.handleDayPress(index);
+        }}
+        onLongPress={() => {
         }}
         {...this.getTooltipDataAttrsForIndex(index)}
       />
@@ -299,6 +356,7 @@ class ContributionGraph extends AbstractChart {
   }
 
   renderMonthLabels() {
+    const { paddingTop, paddingBottom, paddingLeft, paddingRight } = this.props.chartConfig.chartStyle;
     if (!this.props.showMonthLabels) {
       return null;
     }
@@ -309,11 +367,12 @@ class ContributionGraph extends AbstractChart {
         (weekIndex + 1) * DAYS_IN_WEEK
       );
       const [x, y] = this.getMonthLabelCoordinates(weekIndex);
+
       return endOfWeek.getDate() >= 1 && endOfWeek.getDate() <= DAYS_IN_WEEK ? (
         <Text
           key={weekIndex}
-          x={x + paddingLeft}
-          y={y + 8}
+          x={x}
+          y={y}
           {...this.getPropsForLabels()}
         >
           {this.props.getMonthLabel
@@ -326,11 +385,30 @@ class ContributionGraph extends AbstractChart {
 
   render() {
     const { style = {} } = this.props;
-    let { borderRadius = 0 } = style;
-    if (!borderRadius && this.props.chartConfig.style) {
-      const stupidXo = this.props.chartConfig.style.borderRadius;
-      borderRadius = stupidXo;
+    const defaultChartStyle = {
+        borderRadius: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
+        paddingRight: 0,
+        paddingLeft: 0,
+        justifyContent: 'start',
+        justifyOffset: 0,
+        alignItems: 'start',
+        alignOffset: 0,
     }
+
+    this.props.chartConfig = {
+      ...this.props.chartConfig,
+      chartStyle: {
+        ...defaultChartStyle,
+        ...this.props.chartConfig.chartStyle,
+      },
+    }
+
+    // setup dynamic size if user does not provide their own squareSize
+    this.props.squareSize = this.props.squareSize || this.setDynamicSquareSize() || 20;
+    this.mainLayoutSetup();
+
     return (
       <View style={style}>
         <Svg height={this.props.height} width={this.props.width}>
@@ -342,8 +420,8 @@ class ContributionGraph extends AbstractChart {
           <Rect
             width="100%"
             height={this.props.height}
-            rx={borderRadius}
-            ry={borderRadius}
+            rx={this.props.chartConfig.chartStyle.borderRadius}
+            ry={this.props.chartConfig.chartStyle.borderRadius}
             fill="url(#backgroundGradient)"
           />
           <G>{this.renderMonthLabels()}</G>
@@ -358,12 +436,13 @@ ContributionGraph.defaultProps = {
   numDays: 200,
   endDate: new Date(),
   gutterSize: 1,
-  squareSize: SQUARE_SIZE,
+  month_label_gutter_size: 8,
+  squareSize: 0,
   horizontal: true,
   showMonthLabels: true,
   showOutOfRangeDays: false,
   accessor: "count",
-  classForValue: value => (value ? "black" : "#8cc665")
+  classForValue: value => (value ? "black" : "#8cc665"),
 };
 
 export default ContributionGraph;
