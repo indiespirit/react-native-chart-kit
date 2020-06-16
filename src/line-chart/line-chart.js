@@ -135,7 +135,7 @@ class LineChart extends AbstractChart {
       scrollableDotRadius,
       scrollableInfoViewStyle,
       scrollableInfoTextStyle,
-      scrollableInfoTextDecorator = (text => text),
+      scrollableInfoTextDecorator = (text => `${text}`),
       scrollableInfoSize,
       scrollableInfoOffset
     } = config;
