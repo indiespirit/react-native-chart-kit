@@ -422,6 +422,11 @@ export interface ChartConfig {
   scrollableInfoTextStyle?: TextStyle;
 
   /**
+   * Define decorator function for scrollable dot text
+   */
+  scrollableInfoTextDecorator?: (text: string) => string
+
+  /**
    * Set Info View offset
    */
   scrollableInfoOffset?: number;
