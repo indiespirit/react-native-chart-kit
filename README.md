@@ -423,6 +423,15 @@ const commitsData = [
   chartConfig={chartConfig}
 />
 ```
+Extra chartStyle for heatmap
+```js
+const chartConfig = {
+  chartStyle: {
+    justifyContent: 'start' || 'center' || 'end', //optional, defualt is 'start';
+    alignItems: 'start' || 'center' || 'end', //optional,  default is 'start';
+  },
+};
+```
 
 | Property           | Type     | Description                                                                                 |
 | ------------------ | -------- | ------------------------------------------------------------------------------------------- |
@@ -430,7 +439,7 @@ const commitsData = [
 | width              | Number   | Width of the chart, use 'Dimensions' library to get the width of your screen for responsive |
 | height             | Number   | Height of the chart                                                                         |
 | gutterSize         | Number   | Size of the gutters between the squares in the chart                                        |
-| squareSize         | Number   | Size of the squares in the chart                                                            |
+| squareSize         | Number   | Optional, Size of the squares in the chart, dynamic size will be auto applied if prop is not provided                                                           |
 | horizontal         | boolean  | Should graph be laid out horizontally? Defaults to `true`                                   |
 | showMonthLabels    | boolean  | Should graph include labels for the months? Defaults to `true`                              |
 | showOutOfRangeDays | boolean  | Should graph be filled with squares, including days outside the range? Defaults to `false`  |
