@@ -238,6 +238,8 @@ export interface BarChartProps {
   style?: ViewStyle;
   horizontalLabelRotation?: number;
   verticalLabelRotation?: number;
+  withHorizontalLabels?: boolean;
+  withVerticalLabels?: boolean;  
   /**
    * The number of horizontal lines
    */
