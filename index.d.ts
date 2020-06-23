@@ -324,6 +324,9 @@ export interface ContributionGraphProps {
   accessor?: string;
   getMonthLabel?: (monthIndex: number) => string;
   onDayPress?: ({ count: number, date: Date }) => void;
+  toggleTooltip?: boolean;
+  tooltipContent?: (dateInfo: { date: string, [accessor: string]: string},
+    args: {x:number, y:number, index:number}) => JSX.Element;
 }
 
 export class ContributionGraph extends React.Component<
