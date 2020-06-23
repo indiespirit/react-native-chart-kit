@@ -23,25 +23,36 @@ class ContributionGraph extends AbstractChart {
   constructor(props) {
     super(props);
 
-    let { maxValue, minValue, valueCache } = this.getValueCache(props.values);
-
     this.state = {
-      maxValue,
-      minValue,
-      valueCache
+      maxValue: +Infinity,
+      minValue: -Infinity,
+      valueCache: {},
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  setupValueCacheFromProps() {
     let { maxValue, minValue, valueCache } = this.getValueCache(
-      nextProps.values
+      this.props.values
     );
-
     this.setState({
       maxValue,
       minValue,
       valueCache
     });
+  }
+
+  componentDidMount() {
+    this.setupValueCacheFromProps();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const large = (prevProps.values.length < this.props.values.length) ? this.props.values : prevProps.values;
+    const small = (prevProps.values.length < this.props.values.length) ? prevProps.values : this.props.values;
+    var res = large.filter(item1 =>
+    !small.some(item2 => (item2['date'] === item1['date'] && item2['value'] === item2['value'])));
+    if(res.length > 0) {
+      this.setupValueCacheFromProps();
+    }
   }
 
   setContentLayout(contentWidth, contentHeight) {
@@ -162,10 +173,9 @@ class ContributionGraph extends AbstractChart {
     return {
       valueCache: values.reduce((memo, value) => {
         const date = convertToDate(value.date);
-        const index = Math.floor(
+        const index = Math.ceil(
           (date - this.getStartDateWithEmptyDays()) / MILLISECONDS_IN_ONE_DAY
         );
-
         minValue = Math.min(value[this.props.accessor], minValue);
         maxValue = Math.max(value[this.props.accessor], maxValue);
 
@@ -304,22 +314,45 @@ class ContributionGraph extends AbstractChart {
     const { squareSize } = this.props;
 
     return (
-      <Rect
+      <Tooltip
         key={index}
-        width={squareSize}
-        height={squareSize}
-        x={x}
-        y={y}
-        title={this.getTitleForIndex(index)}
-        fill={this.getClassNameForIndex(index)}
-        onPress={() => {
-          this.handleDayPress(index);
-        }}
-        onLongPress={() => {
-        }}
-        {...this.getTooltipDataAttrsForIndex(index)}
-      />
+        toggleColor={this.props.chartConfig.toggleColor}
+        from={ (toggleVisible, fill=this.getClassNameForIndex(index)) =>
+          <Rect
+            width={squareSize}
+            height={squareSize}
+            x={x}
+            y={y}
+            onPress={() => {this.handleDayPress(index);}}
+            onPressIn={toggleVisible}
+            onPressOut={toggleVisible}
+            title={this.getTitleForIndex(index)}
+            fill={fill}
+          />
+        }
+        toggleTooltip={this.props.toggleTooltip}
+        >
+        {
+          this.squareTooltip({index, x, y})
+        }
+      </Tooltip>
     );
+  }
+
+  squareTooltip(args) {
+    const { index, x, y } = args;
+    if(!this.props.toggleTooltip && this.props.tooltipContent){
+      return;
+    }
+
+    const dateInfo = this.state.valueCache[index] && this.state.valueCache[index].value
+      ? this.state.valueCache[index].value
+      : {
+          [this.props.accessor]: 0,
+          date: new Date(this.getStartDate().valueOf()
+           + index * MILLISECONDS_IN_ONE_DAY).toISOString().split('T')[0]
+        }
+    return this.props.tooltipContent(dateInfo, args);
   }
 
   handleDayPress(index) {
@@ -333,7 +366,7 @@ class ContributionGraph extends AbstractChart {
             [this.props.accessor]: 0,
             date: new Date(
               this.getStartDate().valueOf() + index * MILLISECONDS_IN_ONE_DAY
-            )
+            ).toISOString().split('T')[0]
           }
     );
   }
@@ -409,6 +442,21 @@ class ContributionGraph extends AbstractChart {
     this.props.squareSize = this.props.squareSize || this.setDynamicSquareSize() || 20;
     this.mainLayoutSetup();
 
+    // reserved code for future if want to handle special gesture events
+    // this._panResponder = PanResponder.create({
+    //   onStartShouldSetPanResponder: (evt, gestureState) => true,
+    //   onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+    //   onMoveShouldSetPanResponder: (evt, gestureState) => true,
+    //   onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+    //   onPanResponderGrant: (evt, gestureState) => {
+    //     console.log(evt.nativeEvent.locationX,evt.nativeEvent.locationY);
+    //   },
+    //   onPanResponderMove: (evt, gestureState) => {
+    //     // X position relative to the page
+    //     console.log(evt.nativeEvent.locationX,evt.nativeEvent.locationY);
+    //   }
+    // });
+
     return (
       <View style={style}>
         <Svg height={this.props.height} width={this.props.width}>
@@ -432,6 +480,29 @@ class ContributionGraph extends AbstractChart {
   }
 }
 
+class Tooltip extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isVisible: false
+    };
+  }
+
+  toggleVisible = () => {
+    this.setState(prevState => ({isVisible: !prevState.isVisible}));
+  }
+  render() {
+    const fill = this.props.toggleTooltip && this.state.isVisible ? this.props.toggleColor : undefined;
+
+    return (
+      <>
+        { this.props.from(this.toggleVisible, fill) }
+        { this.props.toggleTooltip && this.state.isVisible ? this.props.children : null }
+      </>
+    )
+  }
+}
+
 ContributionGraph.defaultProps = {
   numDays: 200,
   endDate: new Date(),
@@ -442,6 +513,7 @@ ContributionGraph.defaultProps = {
   showMonthLabels: true,
   showOutOfRangeDays: false,
   accessor: "count",
+  toggleTooltip: false,
   classForValue: value => (value ? "black" : "#8cc665"),
 };
 
