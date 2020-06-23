@@ -3,17 +3,18 @@ import React, { Component } from "react";
 import { LinearGradient, Line, Text, Defs, Stop } from "react-native-svg";
 
 class AbstractChart extends Component {
+
   calcScaler = data => {
-    if (this.props.fromZero) {
-      return Math.max(...data, 0) - Math.min(...data, 0) || 1;
-    } else {
-      return Math.max(...data) - Math.min(...data) || 1;
-    }
+    const defMin = this.props.defMin ?? Math.min(...data);
+    const defMax = this.props.defMax ?? Math.max(...data);
+    return Math.max(...data, defMin, defMax) - Math.min(...data, defMin, defMax) || 1;
   };
 
   calcBaseHeight = (data, height) => {
-    const min = Math.min(...data);
-    const max = Math.max(...data);
+    const defMin = this.props.defMin ?? Math.min(...data);
+    const defMax = this.props.defMax ?? Math.max(...data);
+    const min = Math.min(...data, defMin, defMax);
+    const max = Math.max(...data, defMin, defMax);
     if (min >= 0 && max >= 0) {
       return height;
     } else if (min < 0 && max <= 0) {
@@ -24,18 +25,16 @@ class AbstractChart extends Component {
   };
 
   calcHeight = (val, data, height) => {
-    const max = Math.max(...data);
-    const min = Math.min(...data);
+    const defMin = this.props.defMin ?? Math.min(...data);
+    const defMax = this.props.defMax ?? Math.max(...data);
+    const max = Math.max(...data, defMin, defMax);
+    const min = Math.min(...data, defMin, defMax);
     if (min < 0 && max > 0) {
       return height * (val / this.calcScaler(data));
     } else if (min >= 0 && max >= 0) {
-      return this.props.fromZero
-        ? height * (val / this.calcScaler(data))
-        : height * ((val - min) / this.calcScaler(data));
+      return height * ((val - min) / this.calcScaler(data));
     } else if (min < 0 && max <= 0) {
-      return this.props.fromZero
-        ? height * (val / this.calcScaler(data))
-        : height * ((val - max) / this.calcScaler(data));
+      return height * ((val - max) / this.calcScaler(data));
     }
   };
 
@@ -58,22 +57,27 @@ class AbstractChart extends Component {
     return {
       fontSize: 12,
       fill: labelColor(0.8),
-      ...propsForLabels
+      ...propsForLabels,
     };
   }
 
   renderHorizontalLines = config => {
-    const { count, width, height, paddingTop, paddingRight } = config;
-    const basePosition = height - height / 4;
-
-    return [...new Array(count + 1)].map((_, i) => {
-      const y = (basePosition / count) * i + paddingTop;
+    const { count, width, height, gutterTop, horizontalLabelWidth, verticalLabelHeight,
+      chartStyle: { paddingTop, paddingLeft, paddingRight, paddingBottom },
+     } = config;
+    const basePosition = height - verticalLabelHeight - paddingBottom;
+    const totalLineHeight = basePosition - paddingTop - gutterTop;
+    const x1 = horizontalLabelWidth + paddingLeft;
+    const x2 = width - paddingRight;
+    const lineGap = (count - 1) || 1; //handle divided by zero
+    return [...new Array(count)].map((_, i) => {
+      const y = basePosition - totalLineHeight / lineGap * i
       return (
         <Line
           key={Math.random()}
-          x1={paddingRight}
+          x1={x1}
           y1={y}
-          x2={width}
+          x2={x2}
           y2={y}
           {...this.getPropsForBackgroundLines()}
         />
@@ -81,65 +85,49 @@ class AbstractChart extends Component {
     });
   };
 
-  renderHorizontalLine = config => {
-    const { width, height, paddingTop, paddingRight } = config;
-    return (
-      <Line
-        key={Math.random()}
-        x1={paddingRight}
-        y1={height - height / 4 + paddingTop}
-        x2={width}
-        y2={height - height / 4 + paddingTop}
-        {...this.getPropsForBackgroundLines()}
-      />
-    );
-  };
-
   renderHorizontalLabels = config => {
     const {
       count,
       data,
       height,
-      paddingTop,
-      paddingRight,
+      gutterTop,
+      horizontalLabelWidth,
       horizontalLabelRotation = 0,
+      verticalLabelHeight,
       decimalPlaces = 2,
-      formatYLabel = yLabel => yLabel
+      formatYLabel = yLabel => yLabel,
+      chartStyle: { paddingTop, paddingLeft, paddingRight, paddingBottom },
     } = config;
+
     const {
       yAxisLabel = "",
       yAxisSuffix = "",
-      yLabelsOffset = 12
+      yLabelsOffset = 12,
+      defMin = Math.min(...data),
+      defMax = Math.max(...data),
     } = this.props;
 
-    return [...Array(count === 1 ? 1 : count + 1).keys()].map((i, _) => {
+    const basePosition = height - verticalLabelHeight - paddingBottom;
+    const totalLineHeight = basePosition - paddingTop - gutterTop;
+    const lineGap = (count - 1) || 1;
+
+    return [...Array(count === 1 ? 1 : count).keys()].map((i, _) => {
       let yLabel = i * count;
 
-      if (count === 1) {
-        yLabel = `${yAxisLabel}${formatYLabel(
-          data[0].toFixed(decimalPlaces)
-        )}${yAxisSuffix}`;
-      } else {
-        const label = this.props.fromZero
-          ? (this.calcScaler(data) / count) * i + Math.min(...data, 0)
-          : (this.calcScaler(data) / count) * i + Math.min(...data);
-        yLabel = `${yAxisLabel}${formatYLabel(
-          label.toFixed(decimalPlaces)
-        )}${yAxisSuffix}`;
-      }
+      const label = this.calcScaler(data) / lineGap * i + Math.min(...data, defMin, defMax);
+      yLabel = `${yAxisLabel}${formatYLabel(
+        label.toFixed(decimalPlaces)
+      )}${yAxisSuffix}`;
 
-      const basePosition = height - height / 4;
-      const x = paddingRight - yLabelsOffset;
-      const y =
-        count === 1 && this.props.fromZero
-          ? paddingTop + 4
-          : (height * 3) / 4 - (basePosition / count) * i + paddingTop;
+      const x = horizontalLabelWidth - yLabelsOffset;
+      const y = basePosition - totalLineHeight / lineGap * i;
+
       return (
         <Text
           rotation={horizontalLabelRotation}
           origin={`${x}, ${y}`}
           key={Math.random()}
-          x={x}
+          x={x + paddingLeft}
           textAnchor="end"
           y={y}
           {...this.getPropsForLabels()}
@@ -155,13 +143,17 @@ class AbstractChart extends Component {
       labels = [],
       width,
       height,
-      paddingRight,
-      paddingTop,
+      horizontalLabelWidth,
+      verticalLabelHeight,
+      gutterTop,
       horizontalOffset = 0,
       stackedBar = false,
       verticalLabelRotation = 0,
-      formatXLabel = xLabel => xLabel
+      formatXLabel = xLabel => xLabel,
+      chartStyle: { paddingTop, paddingLeft, paddingRight, paddingBottom },
+      midPoint = 0,
     } = config;
+
     const {
       xAxisLabel = "",
       xLabelsOffset = 0,
@@ -172,16 +164,18 @@ class AbstractChart extends Component {
     if (stackedBar) {
       fac = 0.71;
     }
+
+    const labelWidth = (width - horizontalLabelWidth - paddingRight - paddingLeft) / labels.length;
+
+    const y = height - paddingBottom - verticalLabelHeight + xLabelsOffset + fontSize*1.5;
+
     return labels.map((label, i) => {
       if (hidePointsAtIndex.includes(i)) {
         return null;
       }
-      const x =
-        (((width - paddingRight) / labels.length) * i +
-          paddingRight +
-          horizontalOffset) *
-        fac;
-      const y = (height * 3) / 4 + paddingTop + fontSize * 2 + xLabelsOffset;
+
+      const x = (paddingLeft + horizontalLabelWidth + labelWidth * i + midPoint + horizontalOffset) * fac;
+
       return (
         <Text
           origin={`${x}, ${y}`}
@@ -199,41 +193,33 @@ class AbstractChart extends Component {
   };
 
   renderVerticalLines = config => {
-    const { data, width, height, paddingTop, paddingRight } = config;
-    const { yAxisInterval = 1 } = this.props;
+    const { data, width, height, gutterTop, horizontalLabelWidth, verticalLabelHeight,
+      chartStyle: { paddingTop, paddingLeft, paddingRight, paddingBottom },
+    } = config;
+    const {
+      yAxisInterval = 1,
+      adjustment = 1,
+    } = this.props;
+    const innerWidth = width - horizontalLabelWidth - paddingLeft - paddingRight;
+    const gap = innerWidth / (data.length / yAxisInterval);
+
     return [...new Array(Math.ceil(data.length / yAxisInterval))].map(
       (_, i) => {
         return (
           <Line
             key={Math.random()}
             x1={Math.floor(
-              ((width - paddingRight) / (data.length / yAxisInterval)) * i +
-                paddingRight
+              gap * i * adjustment + horizontalLabelWidth + paddingLeft
             )}
-            y1={0}
+            y1={paddingTop}
             x2={Math.floor(
-              ((width - paddingRight) / (data.length / yAxisInterval)) * i +
-                paddingRight
+              gap * i * adjustment + horizontalLabelWidth + paddingLeft
             )}
-            y2={height - height / 4 + paddingTop}
+            y2={height - verticalLabelHeight - paddingBottom }
             {...this.getPropsForBackgroundLines()}
           />
         );
       }
-    );
-  };
-
-  renderVerticalLine = config => {
-    const { height, paddingTop, paddingRight } = config;
-    return (
-      <Line
-        key={Math.random()}
-        x1={Math.floor(paddingRight)}
-        y1={0}
-        x2={Math.floor(paddingRight)}
-        y2={height - height / 4 + paddingTop}
-        {...this.getPropsForBackgroundLines()}
-      />
     );
   };
 
@@ -246,9 +232,11 @@ class AbstractChart extends Component {
       useShadowColorFromDataset,
       data
     } = config;
+
     const fromOpacity = config.hasOwnProperty("backgroundGradientFromOpacity")
       ? config.backgroundGradientFromOpacity
       : 1.0;
+
     const toOpacity = config.hasOwnProperty("backgroundGradientToOpacity")
       ? config.backgroundGradientToOpacity
       : 1.0;
