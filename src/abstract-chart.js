@@ -151,6 +151,7 @@ class AbstractChart extends Component {
       verticalLabelRotation = 0,
       formatXLabel = xLabel => xLabel,
       chartStyle: { paddingTop, paddingLeft, paddingRight, paddingBottom },
+      midPoint = 0,
     } = config;
 
     const {
@@ -165,7 +166,6 @@ class AbstractChart extends Component {
     }
 
     const labelWidth = (width - horizontalLabelWidth - paddingRight - paddingLeft) / labels.length;
-    const midPoint = labelWidth / 2;
 
     const y = height - paddingBottom - verticalLabelHeight + xLabelsOffset + fontSize*1.5;
 
@@ -193,23 +193,29 @@ class AbstractChart extends Component {
   };
 
   renderVerticalLines = config => {
-    const { data, width, height, gutterTop, horizontalLabelWidth } = config;
-    const { yAxisInterval = 1 } = this.props;
+    const { data, width, height, gutterTop, horizontalLabelWidth, verticalLabelHeight,
+      chartStyle: { paddingTop, paddingLeft, paddingRight, paddingBottom },
+    } = config;
+    const {
+      yAxisInterval = 1,
+      adjustment = 1,
+    } = this.props;
+    const innerWidth = width - horizontalLabelWidth - paddingLeft - paddingRight;
+    const gap = innerWidth / (data.length / yAxisInterval);
+
     return [...new Array(Math.ceil(data.length / yAxisInterval))].map(
       (_, i) => {
         return (
           <Line
             key={Math.random()}
             x1={Math.floor(
-              ((width - horizontalLabelWidth) / (data.length / yAxisInterval)) * i +
-                horizontalLabelWidth
+              gap * i * adjustment + horizontalLabelWidth + paddingLeft
             )}
-            y1={0}
+            y1={paddingTop}
             x2={Math.floor(
-              ((width - horizontalLabelWidth) / (data.length / yAxisInterval)) * i +
-                horizontalLabelWidth
+              gap * i * adjustment + horizontalLabelWidth + paddingLeft
             )}
-            y2={height - verticalLabelHeight + gutterTop}
+            y2={height - verticalLabelHeight - paddingBottom }
             {...this.getPropsForBackgroundLines()}
           />
         );

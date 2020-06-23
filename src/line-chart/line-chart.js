@@ -15,8 +15,14 @@ import {
   Rect,
   G
 } from "react-native-svg";
-import AbstractChart, { GRAPH_RATIO } from "../abstract-chart";
+import AbstractChart from "../abstract-chart";
 import { LegendItem } from "./legend-item";
+
+const GRAPH_RATIO = {
+  gutterTop: 0.1 ,
+  horizontalLabelWidth: 0.2,
+  verticalLabelHeight: 0.15,
+}
 
 let AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -517,6 +523,7 @@ class LineChart extends AbstractChart {
       onDataPointClick,
       verticalLabelRotation = 0,
       horizontalLabelRotation = 0,
+      gutterTop = 0,
       formatYLabel = yLabel => yLabel,
       formatXLabel = xLabel => xLabel,
       segments,
@@ -534,14 +541,6 @@ class LineChart extends AbstractChart {
 
     const { scrollableDotHorizontalOffset } = this.state;
     const { labels = [] } = data;
-    const {
-      borderRadius = 0,
-      paddingTop = 16,
-      paddingRight = 64,
-      margin = 0,
-      marginRight = 0,
-      paddingBottom = 0
-    } = style;
 
     const config = {
       width,
