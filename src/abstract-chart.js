@@ -276,6 +276,7 @@ class AbstractChart extends Component {
                 y1={0}
                 x2={0}
                 y2={height}
+                gradientUnits="userSpaceOnUse"
               >
                 <Stop
                   offset="0"

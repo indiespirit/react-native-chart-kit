@@ -345,7 +345,9 @@ class LineChart extends AbstractChart {
               ${paddingTop + gutterTop + innerHeight} ${paddingLeft + horizontalLabelWidth},
               ${paddingTop + gutterTop + innerHeight}`
           }
-          fill={`url(#fillShadowGradient${useColorFromDataset ? `_${index}` : ''})`}
+          fill={`url(#fillShadowGradient${
+            useColorFromDataset ? `_${index}` : ""
+          })`}
           strokeWidth={0}
         />
       );
@@ -371,13 +373,14 @@ class LineChart extends AbstractChart {
     const output = [];
 
     const { datas, innerHeight, innerWidth, baseHeight } = this.linePositionHelper(config);
-
+    let lastPoint;
     data.forEach((dataset, index) => {
       const points = dataset.data.map((d, i) => {
         const lineHeight = this.calcHeight(d, datas, innerHeight);
         const gapWidth = innerWidth / dataset.data.length;
         const x = i * gapWidth + horizontalLabelWidth + paddingLeft;
         const y = baseHeight - lineHeight + gutterTop + paddingTop;
+        lastPoint = `${x},${y}`;
         return `${x},${y}`;
       });
       output.push(
@@ -470,7 +473,9 @@ class LineChart extends AbstractChart {
         <Path
           key={index}
           d={d}
-          fill={`url(#fillShadowGradient${useColorFromDataset ? `_${index}` : ''})`}
+          fill={`url(#fillShadowGradient${
+            useColorFromDataset ? `_${index}` : ""
+          })`}
           strokeWidth={0}
         />
       );
@@ -516,7 +521,7 @@ class LineChart extends AbstractChart {
       formatXLabel = xLabel => xLabel,
       segments,
       transparent = false,
-      chartConfig = {},
+      chartConfig = {}
     } = this.props;
 
     const defaultChartStyle = {
