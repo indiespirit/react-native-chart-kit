@@ -162,6 +162,9 @@ class BarChart extends AbstractChart {
     config.verticalLabelHeight = this.props.chartConfig.verticalLabelHeight ??
       (height - config.chartStyle.paddingTop - config.chartStyle.paddingBottom) * BAR_RATIO.verticalLabelHeight;
 
+    const labelWidth = (config.width - config.horizontalLabelWidth -
+      config.chartStyle.paddingRight - config.chartStyle.paddingLeft) / data.labels.length;
+
     return (
       <View style={style} >
         <Svg height={height} width={width}>
@@ -198,6 +201,7 @@ class BarChart extends AbstractChart {
               ? this.renderVerticalLabels({
                   ...config,
                   labels: data.labels,
+                  midPoint: labelWidth / 2,
                 })
               : null}
           </G>
