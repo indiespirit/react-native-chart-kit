@@ -149,8 +149,7 @@ class AbstractChart<
       yAxisSuffix = "",
       yLabelsOffset = 12
     } = this.props;
-
-    return Array(count === 1 ? 1 : count + 1).map((i, _) => {
+    return new Array(count === 1 ? 1 : count + 1).fill(1).map((_, i) => {
       let yLabel = String(i * count);
 
       if (count === 1) {
