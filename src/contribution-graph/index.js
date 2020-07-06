@@ -49,7 +49,7 @@ class ContributionGraph extends AbstractChart {
     const large = (prevProps.values.length < this.props.values.length) ? this.props.values : prevProps.values;
     const small = (prevProps.values.length < this.props.values.length) ? prevProps.values : this.props.values;
     var res = large.filter(item1 =>
-    !small.some(item2 => (item2['date'] === item1['date'] && item2['value'] === item2['value'])));
+    !small.some(item2 => (item2['date'] === item1['date'] && item2['value'] === item1['value'])));
     if(res.length > 0) {
       this.setupValueCacheFromProps();
     }
