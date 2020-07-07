@@ -171,7 +171,7 @@ class LineChart extends AbstractChart {
     const { datas, innerHeight, innerWidth, baseHeight } = this.linePositionHelper(config);
     let vl = [];
 
-    const perData = width / data[0].data.length;
+    const perData = innerWidth / data[0].data.length;
     for (let index = 0; index < data[0].data.length; index++) {
       vl.push(index * perData);
     }
