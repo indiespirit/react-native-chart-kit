@@ -157,7 +157,7 @@ class AbstractChart extends Component {
     const {
       xAxisLabel = "",
       xLabelsOffset = 0,
-      hidePointsAtIndex = []
+      hideLabelsAtIndex = []
     } = this.props;
     const fontSize = 12;
     let fac = 1;
@@ -170,7 +170,7 @@ class AbstractChart extends Component {
     const y = height - paddingBottom - verticalLabelHeight + xLabelsOffset + fontSize*1.5;
 
     return labels.map((label, i) => {
-      if (hidePointsAtIndex.includes(i)) {
+      if (hideLabelsAtIndex.includes(i)) {
         return null;
       }
 
@@ -199,11 +199,15 @@ class AbstractChart extends Component {
     const {
       yAxisInterval = 1,
       adjustment = 1,
+      innerLines,
     } = this.props;
     const innerWidth = width - horizontalLabelWidth - paddingLeft - paddingRight;
-    const gap = innerWidth / (data.length / yAxisInterval);
 
-    return [...new Array(Math.ceil(data.length / yAxisInterval))].map(
+    const lineNum = innerLines || data.length;
+
+    const gap = innerWidth / (lineNum / yAxisInterval);
+
+    return [...new Array(Math.ceil(lineNum / yAxisInterval))].map(
       (_, i) => {
         return (
           <Line
@@ -211,7 +215,7 @@ class AbstractChart extends Component {
             x1={Math.floor(
               gap * i * adjustment + horizontalLabelWidth + paddingLeft
             )}
-            y1={paddingTop}
+            y1={paddingTop+gutterTop}
             x2={Math.floor(
               gap * i * adjustment + horizontalLabelWidth + paddingLeft
             )}
