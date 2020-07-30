@@ -68,6 +68,8 @@ export interface LineChartProps {
    * Show inner dashed lines - default: True.
    */
 
+  defMax?: number;
+  defMin?: number;
   withScrollableDot?: boolean;
   withInnerLines?: boolean;
   /**
@@ -239,6 +241,9 @@ export interface BarChartProps {
   style?: ViewStyle;
   horizontalLabelRotation?: number;
   verticalLabelRotation?: number;
+  hideLabelsAtIndex?: (number | null)[];
+  barWidth?: number;
+  decorator?: ({}:any) => JSX.Element;
   /**
    * The number of horizontal lines
    */
