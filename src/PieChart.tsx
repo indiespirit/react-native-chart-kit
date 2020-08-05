@@ -61,7 +61,7 @@ class PieChart extends AbstractChart<PieChartProps, PieChartState> {
           );
           value = Math.round((100 / total) * c.item[this.props.accessor]) + "%";
           if (avoidFalseZero && percentage === 0) {
-            value = ">1%";
+            value = "<1%";
           } else {
             value = percentage + "%";
           }
