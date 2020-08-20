@@ -417,11 +417,7 @@ class AbstractChart<
               />
               <Stop
                 offset="1"
-                stopColor={
-                  dataset.color
-                    ? dataset.color(fillShadowGradientOpacity)
-                    : fillShadowGradient
-                }
+                stopColor="transparent"
                 stopOpacity="0"
               />
             </LinearGradient>
@@ -440,7 +436,7 @@ class AbstractChart<
               stopColor={fillShadowGradient}
               stopOpacity={fillShadowGradientOpacity}
             />
-            <Stop offset="1" stopColor={fillShadowGradient} stopOpacity="0" />
+            <Stop offset="1" stopColor="transparent" stopOpacity="0" />
           </LinearGradient>
         )}
       </Defs>
