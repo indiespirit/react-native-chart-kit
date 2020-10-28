@@ -18,12 +18,8 @@ import { ChartData } from "./HelperTypes";
 
 const barWidth = 32;
 
-export interface BarChartData extends ChartData {
-  colors?: Array<(opacity: number) => string>;
-}
-
 export interface BarChartProps extends AbstractChartProps {
-  data: BarChartData;
+  data: ChartData;
   width: number;
   height: number;
   fromZero?: boolean;
@@ -49,6 +45,7 @@ export interface BarChartProps extends AbstractChartProps {
   showBarTops?: boolean;
   showValuesOnTopOfBars?: boolean;
   withCustomBarColorFromData?: boolean;
+  flatColor?: boolean;
 }
 
 type BarChartState = {};
@@ -138,26 +135,38 @@ class BarChart extends AbstractChart<BarChartProps, BarChartState> {
     });
   };
 
-  renderColors = ({ data }: Pick<AbstractChartConfig, "data">) => {
-    return data.map((dataset, index) => {
-      return (
-        <Defs>
-          {dataset.colors.map((color, colorIndex) => (
+  renderColors = ({
+    data,
+    flatColor
+  }: Pick<AbstractChartConfig, "data"> & {
+    flatColor?: boolean;
+  }) => {
+    return data.map((dataset, index) => (
+      <Defs>
+        {dataset.colors?.map((color, colorIndex) => {
+          const highOpacityColor = color(1.0);
+          const lowOpacityColor = color(0.1);
+
+          return (
             <LinearGradient
               id={`customColor_${index}_${colorIndex}`}
-              key={`${index}`}
+              key={`${index}_${colorIndex}`}
               x1={0}
               y1={0}
               x2={0}
               y2={1}
             >
-              <Stop offset="0" stopColor={color(1.0)} stopOpacity="1" />
-              <Stop offset="1" stopColor={color(0.1)} stopOpacity="0" />
+              <Stop offset="0" stopColor={highOpacityColor} stopOpacity="1" />
+              {flatColor ? (
+                <Stop offset="1" stopColor={highOpacityColor} stopOpacity="1" />
+              ) : (
+                <Stop offset="1" stopColor={lowOpacityColor} stopOpacity="0" />
+              )}
             </LinearGradient>
-          ))}
-        </Defs>
-      );
-    });
+          );
+        })}
+      </Defs>
+    ));
   };
 
   renderValuesOnTopOfBars = ({
@@ -210,6 +219,7 @@ class BarChart extends AbstractChart<BarChartProps, BarChartState> {
       showBarTops = true,
       withCustomBarColorFromData = false,
       showValuesOnTopOfBars = false,
+      flatColor = false,
       segments = 4
     } = this.props;
 
@@ -244,7 +254,8 @@ class BarChart extends AbstractChart<BarChartProps, BarChartState> {
             ...this.props.chartConfig
           })}
           {this.renderColors({
-            ...this.props.chartConfig
+            ...this.props.chartConfig,
+            flatColor: flatColor
           })}
           <Rect
             width="100%"
