@@ -139,7 +139,7 @@ class BarChart extends AbstractChart<BarChartProps, BarChartState> {
     data,
     flatColor
   }: Pick<AbstractChartConfig, "data"> & {
-    flatColor?: boolean;
+    flatColor: boolean;
   }) => {
     return data.map((dataset, index) => (
       <Defs>
