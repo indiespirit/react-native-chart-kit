@@ -1,16 +1,7 @@
 import Pie from "paths-js/pie";
 import React from "react";
 import { View, ViewStyle } from "react-native";
-import {
-  Defs,
-  G,
-  LinearGradient,
-  Path,
-  Rect,
-  Stop,
-  Svg,
-  Text
-} from "react-native-svg";
+import { Defs, G, Path, Rect, Svg, Text } from "react-native-svg";
 
 import AbstractChart, {
   AbstractChartConfig,
@@ -112,13 +103,6 @@ class ProgressChart extends AbstractChart<
     const withColor = (i: number) =>
       (data as any).colors && (data as any).colors[i];
 
-    // const withGradientColor = (i: number) =>
-    //   (data as any).gradientColors && `url(#ringGradient${i})`;
-    // }
-
-    // (data as any).colors && "url(#ringGradient)";
-    // (data as any).colors && "pink";
-
     const legend = !hideLegend && (
       <>
         <G>
@@ -187,40 +171,7 @@ class ProgressChart extends AbstractChart<
             height: this.props.height,
             ...this.props.chartConfig
           })}
-          <Defs>
-            {data.gradientColors}
-            {/* {data.gradientColors.map((ring, id) => {
-              return (
-                <LinearGradient
-                  key={`ringGradient${id}`}
-                  id={`ringGradient${id}`}
-                  x1={0}
-                  y1={0}
-                  x2={0}
-                  y2={"0.6082"}
-                >
-                  <Stop offset="0" stopColor={ring.ringGradientFrom} />
-                  <Stop offset="1" stopColor={ring.ringGradientTo} />
-                </LinearGradient>
-              );
-            })} */}
-            {/* <LinearGradient
-          id="ringGradientZa"
-          x1={0}
-          y1={0}
-          x2={0}
-          y2={1}
-        >
-          <Stop
-            offset="0"
-            stopColor={"#08D2B4"}
-          />
-          <Stop
-            offset="1"
-            stopColor={"#4F58DF"}
-          />
-        </LinearGradient> */}
-          </Defs>
+          <Defs>{data.gradientColors}</Defs>
           <Rect
             width="100%"
             height={this.props.height}

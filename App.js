@@ -4,8 +4,7 @@ import React from "react";
 import { Dimensions, ScrollView, StatusBar, Text } from "react-native";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import ScrollableTabView from "react-native-scrollable-tab-view";
-import ProgressChart from "./src/ProgressChart";
-import { LinearGradient, Stop } from "react-native-svg";
+
 import {
   contributionData,
   data,
@@ -18,17 +17,83 @@ import {
   ContributionGraph,
   LineChart,
   PieChart,
-  // ProgressChart,
+  ProgressChart,
   StackedBarChart
 } from "./dist/";
 
 // in Expo - swipe left to see the following styling, or create your own
 const chartConfigs = [
   {
+    backgroundColor: "#000000",
+    backgroundGradientFrom: "#1E2923",
+    backgroundGradientTo: "#08130D",
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    style: {
+      borderRadius: 16
+    }
+  },
+  {
+    backgroundColor: "#022173",
+    backgroundGradientFrom: "#022173",
+    backgroundGradientTo: "#1b3fa0",
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    style: {
+      borderRadius: 16
+    },
+    propsForBackgroundLines: {
+      strokeDasharray: "" // solid background lines with no dashes
+    }
+  },
+  {
     backgroundColor: "#ffffff",
     backgroundGradientFrom: "#ffffff",
     backgroundGradientTo: "#ffffff",
     color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+  },
+  {
+    backgroundColor: "#26872a",
+    backgroundGradientFrom: "#43a047",
+    backgroundGradientTo: "#66bb6a",
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    style: {
+      borderRadius: 16
+    }
+  },
+  {
+    backgroundColor: "#000000",
+    backgroundGradientFrom: "#000000",
+    backgroundGradientTo: "#000000",
+    color: (opacity = 1) => `rgba(${255}, ${255}, ${255}, ${opacity})`
+  },
+  {
+    backgroundColor: "#0091EA",
+    backgroundGradientFrom: "#0091EA",
+    backgroundGradientTo: "#0091EA",
+    color: (opacity = 1) => `rgba(${255}, ${255}, ${255}, ${opacity})`
+  },
+  {
+    backgroundColor: "#e26a00",
+    backgroundGradientFrom: "#fb8c00",
+    backgroundGradientTo: "#ffa726",
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    style: {
+      borderRadius: 16
+    }
+  },
+  {
+    backgroundColor: "#b90602",
+    backgroundGradientFrom: "#e53935",
+    backgroundGradientTo: "#ef5350",
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    style: {
+      borderRadius: 16
+    }
+  },
+  {
+    backgroundColor: "#ff3e03",
+    backgroundGradientFrom: "#ff3e03",
+    backgroundGradientTo: "#ff3e03",
+    color: (opacity = 1) => `rgba(${0}, ${0}, ${0}, ${opacity})`
   }
 ];
 
@@ -40,37 +105,6 @@ export default class App extends React.Component {
   render() {
     const { width } = Dimensions.get("window");
     const height = 256;
-    const linear = (
-      <LinearGradient
-        id="customLinear"
-        key={"customLinear"}
-        x1={0}
-        y1={0}
-        x2={0}
-        y2={1}
-      >
-        <Stop offset="0" stopColor={"#08D2B4"} />
-        <Stop offset="1" stopColor={"#4F58DF"} />
-      </LinearGradient>
-    );
-    const linear2 = (
-      <LinearGradient
-        id="customLinear2"
-        key={"customLinear2"}
-        x1={0}
-        y1={0}
-        x2={0}
-        y2={1}
-      >
-        <Stop offset="0" stopColor={"#4F58DF"} />
-        <Stop offset="1" stopColor={"#08D2B4"} />
-      </LinearGradient>
-    );
-    const progressChartDataTmp = {
-      data: [0.5, 0.3, 0.5],
-      colors: ["url(#customLinear)", "blue", "url(#customLinear2)"],
-      gradientColors: [linear, linear2]
-    };
     return (
       <ScrollableTabView renderTabBar={this.renderTabBar}>
         {chartConfigs.map(chartConfig => {
@@ -114,23 +148,22 @@ export default class App extends React.Component {
               <FlashMessage duration={1000} />
               <Text style={labelStyle}>Progress Chart</Text>
               <ProgressChart
-                data={progressChartDataTmp}
+                data={progressChartData}
                 width={width}
                 height={height}
                 chartConfig={chartConfig}
                 style={graphStyle}
                 hideLegend={false}
-                withCustomBarColorFromData={true}
               />
               <Text style={labelStyle}>Bar Graph</Text>
-              {/* <BarChart
+              <BarChart
                 width={width}
                 height={height}
                 data={data}
                 yAxisLabel="$"
                 chartConfig={chartConfig}
                 style={graphStyle}
-              /> */}
+              />
               <Text style={labelStyle}>Stacked Bar Graph</Text>
               <StackedBarChart
                 style={graphStyle}
