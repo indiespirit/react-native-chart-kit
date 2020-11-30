@@ -44,7 +44,8 @@
     "test": "jest",
     "build": "tsc",
     "dev": "tsc --watch",
-    "prepublish": "yarn build"
+    "prepublish": "yarn build",
+    "prepare": "yarn build"
   },
   "jest": {
     "preset": "jest-expo"
