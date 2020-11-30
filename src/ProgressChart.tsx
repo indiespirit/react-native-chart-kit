@@ -1,7 +1,7 @@
 import Pie from "paths-js/pie";
 import React from "react";
 import { View, ViewStyle } from "react-native";
-import { Defs, G, Path, Rect, Svg, Text } from "react-native-svg";
+import { Circle, Defs, G, Path, Rect, Svg, Text } from "react-native-svg";
 
 import AbstractChart, {
   AbstractChartConfig,
@@ -15,6 +15,8 @@ export type ProgressChartData =
       colors?: Array<string>;
       gradientColors?: Array<Element>;
       data: Array<number>;
+      goalPointData?: Array<number>;
+      goalPointColors?: Array<string>;
     };
 
 export interface ProgressChartProps extends AbstractChartProps {
@@ -33,6 +35,7 @@ export interface ProgressChartProps extends AbstractChartProps {
   strokeWidth?: number;
   radius?: number;
   withCustomBarColorFromData?: boolean;
+  withCustomColorGoalPoint?: boolean;
 }
 
 type ProgressChartState = {};
@@ -61,7 +64,30 @@ class ProgressChart extends AbstractChart<
         data
       };
     }
-
+    const goalPoints = data.goalPointData.map((goalData, i) => {
+      const r =
+        ((height / 2 - 32) /
+          (Array.isArray(data) ? data.length : data.data.length)) *
+          i +
+        radius;
+      let goalTwice: number = goalData * 2;
+      let isLeftZone: boolean = false;
+      if (goalTwice > 1.0) {
+        goalTwice -= 1;
+        isLeftZone = true;
+      }
+      return {
+        centroid: Pie({
+          r,
+          R: r,
+          center: [0, 0],
+          data: [goalTwice, 1 - goalTwice],
+          accessor(x: string) {
+            return x;
+          }
+        }).curves[isLeftZone ? 1 : 0].sector.centroid
+      };
+    });
     const pies = data.data.map((pieData, i) => {
       const r =
         ((height / 2 - 32) /
@@ -102,6 +128,9 @@ class ProgressChart extends AbstractChart<
 
     const withColor = (i: number) =>
       (data as any).colors && (data as any).colors[i];
+
+    const withGoalPointColor = (i: number) =>
+      (data as any).goalPointColors && (data as any).goalPointColors[i];
 
     const legend = !hideLegend && (
       <>
@@ -207,6 +236,26 @@ class ProgressChart extends AbstractChart<
                     stroke={
                       this.props.withCustomBarColorFromData
                         ? withColor(i)
+                        : this.props.chartConfig.color(
+                            (i / pies.length) * 0.5 + 0.5,
+                            i
+                          )
+                    }
+                  />
+                );
+              })}
+            </G>
+            <G>
+              {goalPoints.map((goal, i) => {
+                return (
+                  <Circle
+                    key={Math.random()}
+                    cx={goal.centroid[0]}
+                    cy={goal.centroid[1]}
+                    r={strokeWidth / 2}
+                    fill={
+                      this.props.withCustomColorGoalPoint
+                        ? withGoalPointColor(i)
                         : this.props.chartConfig.color(
                             (i / pies.length) * 0.5 + 0.5,
                             i
