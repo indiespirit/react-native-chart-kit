@@ -28,6 +28,7 @@ export interface AbstractChartConfig extends ChartConfig {
   labels?: string[];
   horizontalOffset?: number;
   stackedBar?: boolean;
+  withRightSideLabels?: boolean;
   verticalLabelRotation?: number;
   formatXLabel?: (xLabel: string) => string;
 }
@@ -169,6 +170,8 @@ class AbstractChart<
       height,
       paddingTop,
       paddingRight,
+      width,
+      withRightSideLabels,
       horizontalLabelRotation = 0,
       decimalPlaces = 2,
       formatYLabel = (yLabel: string) => yLabel
@@ -196,7 +199,7 @@ class AbstractChart<
       }
 
       const basePosition = height - height / 4;
-      const x = paddingRight - yLabelsOffset;
+      const x = withRightSideLabels ? width : paddingRight - yLabelsOffset;
       const y =
         count === 1 && this.props.fromZero
           ? paddingTop + 4

@@ -92,6 +92,10 @@ export interface LineChartProps extends AbstractChartProps {
    */
   withHorizontalLabels?: boolean;
   /**
+   * Show horizontal in right side labels - default: True.
+   */
+  withRightSideLabels?: boolean;
+  /**
    * Render charts from 0 not from the minimum value. - default: False.
    */
   fromZero?: boolean;
@@ -796,6 +800,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       withHorizontalLines = true,
       withVerticalLines = true,
       withHorizontalLabels = true,
+      withRightSideLabels = false,
       withVerticalLabels = true,
       style = {},
       decorator,
@@ -884,6 +889,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
                   paddingTop: paddingTop as number,
                   paddingRight: paddingRight as number,
                   formatYLabel,
+                  withRightSideLabels,
                   decimalPlaces: chartConfig.decimalPlaces
                 })}
             </G>
