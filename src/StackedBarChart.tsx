@@ -189,7 +189,8 @@ class StackedBarChart extends AbstractChart<
       percentile = false,
       formatYLabel = (yLabel: string) => {
         return yLabel;
-      }
+      },
+      hideLegend = false
     } = this.props;
 
     const { borderRadius = 0 } = style;
@@ -214,7 +215,8 @@ class StackedBarChart extends AbstractChart<
       border = max;
     }
 
-    var stackedBar = data.legend && data.legend.length == 0 ? false : true;
+    const showLegend = !hideLegend && data.legend && data.legend.length != 0;
+    const stackedBar = showLegend;
 
     return (
       <View style={style}>
@@ -273,8 +275,7 @@ class StackedBarChart extends AbstractChart<
               stackedBar
             })}
           </G>
-          {data.legend &&
-            data.legend.length != 0 &&
+          {showLegend &&
             this.renderLegend({
               ...config,
               legend: data.legend,
