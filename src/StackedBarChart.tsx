@@ -55,6 +55,8 @@ export interface StackedBarChartProps extends AbstractChartProps {
    * (space below chart)
    */
   verticalLabelsHeightPercentage?: number;
+
+  formatYLabel?: (yLabel: string) => string;
 }
 
 type StackedBarChartState = {};
@@ -198,7 +200,11 @@ class StackedBarChart extends AbstractChart<
       segments = 4,
       decimalPlaces,
       percentile = false,
-      verticalLabelsHeightPercentage = DEFAULT_X_LABELS_HEIGHT_PERCENTAGE
+      verticalLabelsHeightPercentage = DEFAULT_X_LABELS_HEIGHT_PERCENTAGE,
+      formatYLabel = (yLabel: string) => {
+        return yLabel;
+      },
+      hideLegend = false
     } = this.props;
 
     const { borderRadius = 0 } = style;
@@ -223,7 +229,8 @@ class StackedBarChart extends AbstractChart<
       border = max;
     }
 
-    var stackedBar = data.legend && data.legend.length == 0 ? false : true;
+    const showLegend = !hideLegend && data.legend && data.legend.length != 0;
+    const stackedBar = showLegend;
 
     return (
       <View style={style}>
@@ -256,7 +263,8 @@ class StackedBarChart extends AbstractChart<
                   paddingTop,
                   paddingRight,
                   decimalPlaces,
-                  verticalLabelsHeightPercentage
+                  verticalLabelsHeightPercentage,
+                  formatYLabel
                 })
               : null}
           </G>
@@ -285,8 +293,7 @@ class StackedBarChart extends AbstractChart<
               verticalLabelsHeightPercentage
             })}
           </G>
-          {data.legend &&
-            data.legend.length != 0 &&
+          {showLegend &&
             this.renderLegend({
               ...config,
               legend: data.legend,
