@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TextInput,
   View,
-  ViewStyle
+  ViewStyle,
+  PanResponder,
 } from "react-native";
 import {
   Circle,
@@ -222,10 +223,95 @@ type LineChartState = {
 
 class LineChart extends AbstractChart<LineChartProps, LineChartState> {
   label = React.createRef<TextInput>();
+  listCoorPoint = [];
+  currentNearestPoint = null;
+  onPanMoveShouldSetPanResponder = (event, gestureState) => {
+    return true;
+  };
 
+  onPanStartShouldSetPanResponder = (event, gestureState) => {
+    return true;
+  };
+
+  onPanResponderMove = (event, gestureState) => {
+    const {dy, dx,moveX,moveY} = gestureState;
+    const newNearestPoint = this.getNearestPoint(moveX,moveY)
+    const {onMoveChangePoint} = this.props;
+    if(!this.currentNearestPoint){
+      onMoveChangePoint && onMoveChangePoint(newNearestPoint)
+      this.currentNearestPoint = newNearestPoint
+    }else{
+      if(newNearestPoint.x !== this.currentNearestPoint.x || newNearestPoint.y !== this.currentNearestPoint.y){
+        onMoveChangePoint && onMoveChangePoint(newNearestPoint)
+        this.currentNearestPoint = newNearestPoint
+      }
+    }
+
+  };
+
+  onPanRelease = (event, gestureState) => {
+    const {dy, dx} = gestureState;
+    const {onMoveChangePoint} = this.props;
+    onMoveChangePoint && onMoveChangePoint(null)
+  };
+
+  componentDidMount(){
+    const {data,width,style,height} = this.props;
+    const {datasets} = data
+    const {
+      paddingTop = 16,
+      paddingRight = 64,
+    } = style;
+    const datas = this.getDatas(datasets);
+    const baseHeight = this.calcBaseHeight(datas, height);
+
+    datasets.forEach(innerDataset => {
+      innerDataset.data.forEach((x, i) => {
+        const cx =
+          paddingRight + (innerDataset.dataX[i]/100 * (width - paddingRight));
+
+        const cy =
+          ((baseHeight - this.calcHeight(x, datas, height)) / 4) * 3 +
+          paddingTop;
+        this.listCoorPoint.push({x:cx,y:cy})
+      });
+    });
+  }
+
+  getNearestPoint = (x,y)=>{
+    const arrayDistance = this.getAllDistanceArray(x,y);
+    let minIndex = 0;
+    let minValue = 9999;
+    for (let index = 0; index < arrayDistance.length; index++) {
+      const distance = arrayDistance[index];
+        if(distance< minValue){
+          minValue = distance;
+          minIndex = index;
+        }
+    }
+    
+    return this.listCoorPoint[minIndex];
+  }
+
+  getAllDistanceArray = (x,y)=>{
+    return this.listCoorPoint.map(it=>{ 
+      return Math.sqrt(Math.pow(it.x - x,2) + Math.pow(it.y -y,2))
+    })
+  }
+
+  panContainer = PanResponder.create({
+    onStartShouldSetPanResponder: this.onPanStartShouldSetPanResponder,
+
+    onMoveShouldSetPanResponder: this.onPanMoveShouldSetPanResponder,
+
+    onPanResponderMove: this.onPanResponderMove,
+
+    onPanResponderRelease: this.onPanRelease,
+  });
   state = {
     scrollableDotHorizontalOffset: new Animated.Value(0)
   };
+
 
   getColor = (dataset: Dataset, opacity: number) => {
     return (dataset.color || this.props.chartConfig.color)(opacity);
@@ -288,7 +374,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
         }
 
         const cx =
-          paddingRight + (i * (width - paddingRight)) / dataset.data.length;
+        paddingRight + (dataset.dataX[i]/100 * (width - paddingRight));
 
         const cy =
           ((baseHeight - this.calcHeight(x, datas, height)) / 4) * 3 +
@@ -669,16 +755,14 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     const datas = this.getDatas(data);
 
     const x = (i: number) =>
-      Math.floor(
-        paddingRight + (i * (width - paddingRight)) / dataset.data.length
-      );
+        paddingRight + (dataset.dataX[i]/100 * (width - paddingRight))
 
     const baseHeight = this.calcBaseHeight(datas, height);
 
     const y = (i: number) => {
       const yHeight = this.calcHeight(dataset.data[i], datas, height);
 
-      return Math.floor(((baseHeight - yHeight) / 4) * 3 + paddingTop);
+      return ((baseHeight - yHeight) / 4) * 3 + paddingTop;
     };
 
     return [`M${x(0)},${y(0)}`]
@@ -715,7 +799,6 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
         paddingTop,
         data
       });
-
       return (
         <Path
           key={index}
@@ -753,8 +836,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
           data
         }) +
         ` L${paddingRight +
-          ((width - paddingRight) / dataset.data.length) *
-            (dataset.data.length - 1)},${(height / 4) * 3 +
+          ((width - paddingRight) * Math.max(...dataset.dataX)/100)},${(height / 4) * 3 +
           paddingTop} L${paddingRight},${(height / 4) * 3 + paddingTop} Z`;
 
       return (
@@ -841,7 +923,9 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     const legendOffset = this.props.data.legend ? height * 0.15 : 0;
 
     return (
-      <View style={style}>
+      <Animated.View 
+        {...this.panContainer.panHandlers}
+        style={style}>
         <Svg
           height={height + (paddingBottom as number) + legendOffset}
           width={width - (margin as number) * 2 - (marginRight as number)}
@@ -987,7 +1071,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
             bounces={false}
           />
         )}
-      </View>
+      </Animated.View>
     );
   }
 }
