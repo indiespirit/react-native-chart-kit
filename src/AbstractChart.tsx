@@ -495,7 +495,7 @@ class AbstractChart<
               stopColor={fillShadowGradientFrom}
               stopOpacity={fillShadowGradientFromOpacity}
             />
-            <Stop offset="1" stopColor={fillShadowGradientTo || fillShadowGradientFrom} stopOpacity="0" />
+            <Stop offset="1" stopColor={fillShadowGradientTo || fillShadowGradientFrom} stopOpacity={fillShadowGradientToOpacity || 0} />
           </LinearGradient>
         )}
       </Defs>
