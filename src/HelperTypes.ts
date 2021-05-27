@@ -54,8 +54,13 @@ export interface ChartConfig {
    * Defines the second color opacity in the linear gradient of a chart's background
    */
   backgroundGradientToOpacity?: number;
-  fillShadowGradient?: string;
-  fillShadowGradientOpacity?: number;
+  /**
+   * Defines the linear gradient for the fill shadow
+   */
+  fillShadowGradientFrom?: string;
+  fillShadowGradientFromOpacity?: number;
+  fillShadowGradientTo?: string;
+  fillShadowGradientToOpacity?: number;
   /**
    * Defines the option to use color from dataset to each chart data
    */
