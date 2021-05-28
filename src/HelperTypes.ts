@@ -55,13 +55,24 @@ export interface ChartConfig {
    */
   backgroundGradientToOpacity?: number;
   /**
-   * Defines the linear gradient for the fill shadow
+   * Defines the first color in the linear gradient of the area under data
    */
   fillShadowGradientFrom?: string;
+  /**
+   * Defines the first color opacity in the linear gradient of the area under data
+   */
   fillShadowGradientFromOpacity?: number;
+  /**
+   * Defines the second color in the linear gradient of the area under data
+   */
   fillShadowGradientTo?: string;
+  /**
+   * Defines the second color opacity in the linear gradient of the area under data
+   */
   fillShadowGradientToOpacity?: number;
-  // these are here to maintain backwards compatibility:
+  /**
+   * Defines the previous options to maintain backwards compatibility
+   */
   fillShadowGradient?: string;
   fillShadowGradientOpacity?: number;
   /**
