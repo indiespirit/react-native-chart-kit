@@ -380,8 +380,10 @@ class AbstractChart<
         | "fillShadowGradientOpacity"
         | "fillShadowGradientFrom"
         | "fillShadowGradientFromOpacity"
+        | "fillShadowGradientFromOffset"
         | "fillShadowGradientTo"
         | "fillShadowGradientToOpacity"
+        | "fillShadowGradientToOffset"
       >,
       | "width"
       | "height"
@@ -395,8 +397,10 @@ class AbstractChart<
       | "fillShadowGradientOpacity"
       | "fillShadowGradientFrom"
       | "fillShadowGradientFromOpacity"
+      | "fillShadowGradientFromOffset"
       | "fillShadowGradientTo"
       | "fillShadowGradientToOpacity"
+      | "fillShadowGradientToOffset"
     >
   ) => {
     const {
@@ -437,6 +441,12 @@ class AbstractChart<
       ? config.fillShadowGradientFromOpacity
       : 0.1;
 
+    const fillShadowGradientFromOffset = config.hasOwnProperty(
+      "fillShadowGradientFromOffset"
+    )
+      ? config.fillShadowGradientFromOffset
+      : 0;
+
     const fillShadowGradientTo = config.hasOwnProperty("fillShadowGradientTo")
       ? config.fillShadowGradientTo
       : this.props.chartConfig.color(1.0);
@@ -446,6 +456,12 @@ class AbstractChart<
     )
       ? config.fillShadowGradientToOpacity
       : 0.1;
+
+    const fillShadowGradientToOffset = config.hasOwnProperty(
+      "fillShadowGradientToOffset"
+    )
+      ? config.fillShadowGradientToOffset
+      : 1;
 
     return (
       <Defs>
@@ -480,7 +496,7 @@ class AbstractChart<
               gradientUnits="userSpaceOnUse"
             >
               <Stop
-                offset="0"
+                offset={fillShadowGradientFromOffset}
                 stopColor={
                   dataset.color
                     ? dataset.color(1.0)
@@ -491,7 +507,7 @@ class AbstractChart<
                 }
               />
               <Stop
-                offset="1"
+                offset={fillShadowGradientToOffset}
                 stopColor={
                   dataset.color
                     ? dataset.color(
@@ -514,14 +530,14 @@ class AbstractChart<
             gradientUnits="userSpaceOnUse"
           >
             <Stop
-              offset="0"
+              offset={fillShadowGradientFromOffset}
               stopColor={fillShadowGradientFrom || fillShadowGradient}
               stopOpacity={
                 fillShadowGradientFromOpacity || fillShadowGradientOpacity
               }
             />
             <Stop
-              offset="1"
+              offset={fillShadowGradientToOffset}
               stopColor={
                 fillShadowGradientTo ||
                 fillShadowGradientFrom ||
