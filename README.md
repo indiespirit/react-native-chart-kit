@@ -101,10 +101,10 @@ const chartConfig = {
 | backgroundGradientToOpacity   | Number             | Defines the second color opacity in the linear gradient of a chart's background                                                      |
 | fillShadowGradientFrom        | string             | Defines the first color in the linear gradient of the area under data (can also be specified as `fillShadowGradient`)                |
 | fillShadowGradientFromOpacity | Number             | Defines the first color opacity in the linear gradient of the area under data (can also be specified as `fillShadowGradientOpacity`) |
-| fillShadowGradientFromOffset  | Number             | Defines the first color offset in the linear gradient of the area under data                                                         |
+| fillShadowGradientFromOffset  | Number             | Defines the first color offset (0-1) in the linear gradient of the area under data                                                   |
 | fillShadowGradientTo          | string             | Defines the second color in the linear gradient of the area under data                                                               |
 | fillShadowGradientToOpacity   | Number             | Defines the second color opacity in the linear gradient of the area under data                                                       |
-| fillShadowGradientToOffset    | Number             | Defines the second color offset in the linear gradient of the area under data                                                        |
+| fillShadowGradientToOffset    | Number             | Defines the second color offset (0-1) in the linear gradient of the area under data                                                  |
 | useShadowColorFromDataset     | Boolean            | Defines the option to use color from dataset to each chart data. Default is false                                                    |
 | color                         | function => string | Defines the base color function that is used to calculate colors of labels and sectors used in a chart                               |
 | strokeWidth                   | Number             | Defines the base stroke width in a chart                                                                                             |
