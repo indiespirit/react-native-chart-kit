@@ -376,6 +376,8 @@ class AbstractChart<
         AbstractChartConfig,
         | "backgroundGradientFromOpacity"
         | "backgroundGradientToOpacity"
+        | "fillShadowGradient"
+        | "fillShadowGradientOpacity"
         | "fillShadowGradientFrom"
         | "fillShadowGradientFromOpacity"
         | "fillShadowGradientTo"
@@ -389,6 +391,8 @@ class AbstractChart<
       | "data"
       | "backgroundGradientFromOpacity"
       | "backgroundGradientToOpacity"
+      | "fillShadowGradient"
+      | "fillShadowGradientOpacity"
       | "fillShadowGradientFrom"
       | "fillShadowGradientFromOpacity"
       | "fillShadowGradientTo"
@@ -411,7 +415,19 @@ class AbstractChart<
       ? config.backgroundGradientToOpacity
       : 1.0;
 
-    const fillShadowGradientFrom = config.hasOwnProperty("fillShadowGradientFrom")
+    const fillShadowGradient = config.hasOwnProperty("fillShadowGradient")
+      ? config.fillShadowGradient
+      : this.props.chartConfig.color(1.0);
+
+    const fillShadowGradientOpacity = config.hasOwnProperty(
+      "fillShadowGradientOpacity"
+    )
+      ? config.fillShadowGradientOpacity
+      : 0.1;
+
+    const fillShadowGradientFrom = config.hasOwnProperty(
+      "fillShadowGradientFrom"
+    )
       ? config.fillShadowGradientFrom
       : this.props.chartConfig.color(1.0);
 
@@ -430,7 +446,7 @@ class AbstractChart<
     )
       ? config.fillShadowGradientToOpacity
       : 0.1;
-    
+
     return (
       <Defs>
         <LinearGradient
@@ -466,18 +482,25 @@ class AbstractChart<
               <Stop
                 offset="0"
                 stopColor={
-                  dataset.color ? dataset.color(1.0) : fillShadowGradientFrom
+                  dataset.color
+                    ? dataset.color(1.0)
+                    : fillShadowGradientFrom || fillShadowGradient
                 }
-                stopOpacity={fillShadowGradientFromOpacity}
+                stopOpacity={
+                  fillShadowGradientFromOpacity || fillShadowGradientOpacity
+                }
               />
               <Stop
                 offset="1"
                 stopColor={
                   dataset.color
-                    ? dataset.color(fillShadowGradientFromOpacity)
-                    : fillShadowGradientFrom
+                    ? dataset.color(
+                        fillShadowGradientFromOpacity ||
+                          fillShadowGradientOpacity
+                      )
+                    : fillShadowGradientFrom || fillShadowGradient
                 }
-                stopOpacity="0"
+                stopOpacity={fillShadowGradientToOpacity || 0}
               />
             </LinearGradient>
           ))
@@ -492,10 +515,20 @@ class AbstractChart<
           >
             <Stop
               offset="0"
-              stopColor={fillShadowGradientFrom}
-              stopOpacity={fillShadowGradientFromOpacity}
+              stopColor={fillShadowGradientFrom || fillShadowGradient}
+              stopOpacity={
+                fillShadowGradientFromOpacity || fillShadowGradientOpacity
+              }
             />
-            <Stop offset="1" stopColor={fillShadowGradientTo || fillShadowGradientFrom} stopOpacity={fillShadowGradientToOpacity || 0} />
+            <Stop
+              offset="1"
+              stopColor={
+                fillShadowGradientTo ||
+                fillShadowGradientFrom ||
+                fillShadowGradient
+              }
+              stopOpacity={fillShadowGradientToOpacity || 0}
+            />
           </LinearGradient>
         )}
       </Defs>

@@ -61,6 +61,9 @@ export interface ChartConfig {
   fillShadowGradientFromOpacity?: number;
   fillShadowGradientTo?: string;
   fillShadowGradientToOpacity?: number;
+  // these are here to maintain backwards compatibility:
+  fillShadowGradient?: string;
+  fillShadowGradientOpacity?: number;
   /**
    * Defines the option to use color from dataset to each chart data
    */
