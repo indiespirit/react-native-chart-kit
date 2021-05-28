@@ -433,13 +433,13 @@ class AbstractChart<
       "fillShadowGradientFrom"
     )
       ? config.fillShadowGradientFrom
-      : this.props.chartConfig.color(1.0);
+      : fillShadowGradient;
 
     const fillShadowGradientFromOpacity = config.hasOwnProperty(
       "fillShadowGradientFromOpacity"
     )
       ? config.fillShadowGradientFromOpacity
-      : 0.1;
+      : fillShadowGradientOpacity;
 
     const fillShadowGradientFromOffset = config.hasOwnProperty(
       "fillShadowGradientFromOffset"
@@ -498,23 +498,16 @@ class AbstractChart<
               <Stop
                 offset={fillShadowGradientFromOffset}
                 stopColor={
-                  dataset.color
-                    ? dataset.color(1.0)
-                    : fillShadowGradientFrom || fillShadowGradient
+                  dataset.color ? dataset.color(1.0) : fillShadowGradientFrom
                 }
-                stopOpacity={
-                  fillShadowGradientFromOpacity || fillShadowGradientOpacity
-                }
+                stopOpacity={fillShadowGradientFromOpacity}
               />
               <Stop
                 offset={fillShadowGradientToOffset}
                 stopColor={
                   dataset.color
-                    ? dataset.color(
-                        fillShadowGradientFromOpacity ||
-                          fillShadowGradientOpacity
-                      )
-                    : fillShadowGradientFrom || fillShadowGradient
+                    ? dataset.color(fillShadowGradientFromOpacity)
+                    : fillShadowGradientFrom
                 }
                 stopOpacity={fillShadowGradientToOpacity || 0}
               />
@@ -531,18 +524,12 @@ class AbstractChart<
           >
             <Stop
               offset={fillShadowGradientFromOffset}
-              stopColor={fillShadowGradientFrom || fillShadowGradient}
-              stopOpacity={
-                fillShadowGradientFromOpacity || fillShadowGradientOpacity
-              }
+              stopColor={fillShadowGradientFrom}
+              stopOpacity={fillShadowGradientFromOpacity}
             />
             <Stop
               offset={fillShadowGradientToOffset}
-              stopColor={
-                fillShadowGradientTo ||
-                fillShadowGradientFrom ||
-                fillShadowGradient
-              }
+              stopColor={fillShadowGradientTo || fillShadowGradientFrom}
               stopOpacity={fillShadowGradientToOpacity || 0}
             />
           </LinearGradient>

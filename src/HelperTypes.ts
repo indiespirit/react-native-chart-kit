@@ -55,6 +55,11 @@ export interface ChartConfig {
    */
   backgroundGradientToOpacity?: number;
   /**
+   * Defines the previous options to maintain backwards compatibility
+   */
+  fillShadowGradient?: string;
+  fillShadowGradientOpacity?: number;
+  /**
    * Defines the first color in the linear gradient of the area under data
    */
   fillShadowGradientFrom?: string;
@@ -78,11 +83,6 @@ export interface ChartConfig {
    * Defines the second color offset in the linear gradient of the area under data
    */
   fillShadowGradientToOffset?: number;
-  /**
-   * Defines the previous options to maintain backwards compatibility
-   */
-  fillShadowGradient?: string;
-  fillShadowGradientOpacity?: number;
   /**
    * Defines the option to use color from dataset to each chart data
    */
