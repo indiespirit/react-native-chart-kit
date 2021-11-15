@@ -74,7 +74,9 @@ class AbstractChart<
 
   calcHeight = (val: number, data: number[], height: number) => {
     const max = Math.max(...data);
-    const min = Math.min(...data);
+    const min = this.props.fromNumber
+      ? Math.min(...data, this.props.fromNumber)
+      : Math.min(...data);
 
     if (min < 0 && max > 0) {
       return height * (val / this.calcScaler(data));
@@ -212,6 +214,9 @@ class AbstractChart<
       } else {
         const label = this.props.fromZero
           ? (this.calcScaler(data) / count) * i + Math.min(...data, 0)
+          : this.props.fromNumber
+          ? (this.calcScaler(data) / count) * i +
+            Math.min(...data, this.props.fromNumber)
           : (this.calcScaler(data) / count) * i + Math.min(...data);
         yLabel = `${yAxisLabel}${formatYLabel(
           label.toFixed(decimalPlaces)
