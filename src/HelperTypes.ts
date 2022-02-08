@@ -11,6 +11,9 @@ export interface Dataset {
   /** A function returning array of the colors of the stroke given an input opacity value for each data value. */
   colors?: Array<(opacity: number) => string>;
 
+  /** A function returning the color of the shadow given an input opacity value. */
+  shadowColor?:(opacity: number) => string;
+
   /** The width of the stroke. Defaults to 2. */
   strokeWidth?: number;
 

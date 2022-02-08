@@ -231,6 +231,10 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     return (dataset.color || this.props.chartConfig.color)(opacity);
   };
 
+  getShadowColor = (dataset: Dataset, opacity: number) => {
+    return (dataset.shadowColor || dataset.color || this.props.chartConfig.color)(opacity);
+  };
+
   getStrokeWidth = (dataset: Dataset) => {
     return dataset.strokeWidth || this.props.chartConfig.strokeWidth || 3;
   };
@@ -584,9 +588,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
                 (dataset.data.length - 1)},${(height / 4) * 3 +
               paddingTop} ${paddingRight},${(height / 4) * 3 + paddingTop}`
           }
-          fill={`url(#fillShadowGradient${
-            useColorFromDataset ? `_${index}` : ""
-          })`}
+          fill={this.getShadowColor(dataset, 0.2)}
           strokeWidth={0}
         />
       );
@@ -761,9 +763,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
         <Path
           key={index}
           d={d}
-          fill={`url(#fillShadowGradient${
-            useColorFromDataset ? `_${index}` : ""
-          })`}
+          fill={this.getShadowColor(dataset, 0.2)}
           strokeWidth={0}
         />
       );
