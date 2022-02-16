@@ -44,7 +44,9 @@ class AbstractChart<
 > extends Component<AbstractChartProps & IProps, AbstractChartState & IState> {
   calcScaler = (data: number[]) => {
     if (this.props.fromZero && this.props.fromNumber) {
-      return Math.max(...data, this.props.fromNumber) - Math.min(...data, 0) || 1;
+      return (
+        Math.max(...data, this.props.fromNumber) - Math.min(...data, 0) || 1
+      );
     } else if (this.props.fromZero) {
       return Math.max(...data, 0) - Math.min(...data, 0) || 1;
     } else if (this.props.fromNumber) {
@@ -177,6 +179,27 @@ class AbstractChart<
         {...this.getPropsForBackgroundLines()}
       />
     );
+  };
+
+  renderCustomHorizontalLines = config => {
+    const { width, paddingRight, customXAxisData } = config;
+    const datasets =
+      customXAxisData && customXAxisData.datasets
+        ? customXAxisData.datasets
+        : [];
+    return datasets.map(d => {
+      const lineStyle = d.lineStyle || { ...this.getPropsForBackgroundLines() };
+      return (
+        <Line
+          key={Math.random()}
+          x1={paddingRight}
+          y1={d.calcPts}
+          x2={width}
+          y2={d.calcPts}
+          {...lineStyle}
+        />
+      );
+    });
   };
 
   renderHorizontalLabels = (
