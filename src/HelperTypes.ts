@@ -36,6 +36,25 @@ export interface ChartData {
   datasets: Dataset[];
 }
 
+export interface CustomAxisStyle {
+  /** The Custom Axis Style */
+  stroke?: (opacity: number, index?: number) => string;
+  strokeDasharray?: string;
+  strokeWidth?: number;
+}
+
+export interface CustomAxisInfo {
+  /** The custom line information */
+  pts: number;
+  calcPts: number;
+  lineStyle: CustomAxisStyle;
+}
+
+export interface CustomAxisData {
+  /** The custom line data */
+  datasets: CustomAxisInfo[];
+}
+
 export interface ChartConfig {
   backgroundColor?: string;
   /**
