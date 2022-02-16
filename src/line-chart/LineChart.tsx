@@ -21,7 +21,7 @@ import AbstractChart, {
   AbstractChartConfig,
   AbstractChartProps
 } from "../AbstractChart";
-import { ChartData, Dataset } from "../HelperTypes";
+import { ChartData, Dataset, CustomAxisData } from "../HelperTypes";
 import { LegendItem } from "./LegendItem";
 
 let AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -91,6 +91,27 @@ export interface LineChartProps extends AbstractChartProps {
    * Show horizontal labels - default: True.
    */
   withHorizontalLabels?: boolean;
+  /**
+   * Show custom horizontal lines - default: False.
+   */
+  withCustomXAxis?: boolean;
+  /**
+   * Data for the custom X-axis.
+   *
+   * ```javascript
+   * const customXAxisData = {
+   *   datasets: [{
+   *     pts: 8.38,
+   *     lineStyle: {
+   *       stroke: Colors.black,
+   *       strokeWidth: 2,
+   *       strokeDasharray: "2, 4",
+   *     },
+   *   }],
+   * }
+   * ```
+   */
+  customXAxisData?: CustomAxisData;
   /**
    * Render charts from 0 not from the minimum value. - default: False.
    */
@@ -792,6 +813,19 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     ));
   };
 
+  prepareCustomXAxisData = (paddingTop, customXAxisData) => {
+    const { height } = this.props;
+    const { datasets } = this.props.data;
+    if (!customXAxisData || !customXAxisData.datasets || !datasets) return;
+    const datas = this.getDatas(datasets);
+    const baseHeight = this.calcBaseHeight(datas, height);
+    customXAxisData.datasets.map(d => {
+      d.calcPts =
+        ((baseHeight - this.calcHeight(d.pts, datas, height)) / 4) * 3 +
+        paddingTop;
+    });
+  };
+
   render() {
     const {
       width,
@@ -806,6 +840,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       withVerticalLines = true,
       withHorizontalLabels = true,
       withVerticalLabels = true,
+      withCustomXAxis = false,
+      customXAxisData,
       style = {},
       decorator,
       onDataPointClick,
@@ -844,6 +880,9 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     }
 
     const legendOffset = this.props.data.legend ? height * 0.15 : 0;
+
+    // just preparing the custom axis data to render
+    this.prepareCustomXAxisData(paddingTop, customXAxisData);
 
     return (
       <View style={style}>
@@ -922,6 +961,16 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
                   paddingRight: paddingRight as number,
                   formatXLabel
                 })}
+            </G>
+            <G>
+              {withCustomXAxis &&
+                (customXAxisData && customXAxisData.datasets
+                  ? this.renderCustomHorizontalLines({
+                      ...config,
+                      paddingRight,
+                      customXAxisData
+                    })
+                  : null)}
             </G>
             <G>
               {this.renderLine({

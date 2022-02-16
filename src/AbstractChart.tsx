@@ -179,6 +179,27 @@ class AbstractChart<
     );
   };
 
+  renderCustomHorizontalLines = config => {
+    const { width, paddingRight, customXAxisData } = config;
+    const datasets =
+      customXAxisData && customXAxisData.datasets
+        ? customXAxisData.datasets
+        : [];
+    return datasets.map(d => {
+      const lineStyle = d.lineStyle || { ...this.getPropsForBackgroundLines() };
+      return (
+        <Line
+          key={Math.random()}
+          x1={paddingRight}
+          y1={d.calcPts}
+          x2={width}
+          y2={d.calcPts}
+          {...lineStyle}
+        />
+      );
+    });
+  };
+
   renderHorizontalLabels = (
     config: Omit<AbstractChartConfig, "data"> & { data: number[] }
   ) => {
