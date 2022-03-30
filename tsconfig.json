@@ -22,6 +22,5 @@
     "esModuleInterop": true,
     "noErrorTruncation": true,
     "jsx": "react-native"
-  },
-  "extends": "expo/tsconfig.base"
+  }
 }
