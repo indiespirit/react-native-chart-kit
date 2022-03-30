@@ -13,7 +13,7 @@
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "1.x",
-    "expo": "^37.0.0",
+    "expo": "41.0.0",
     "husky": "^3.0.7",
     "jest-expo": "^37.0.0",
     "prettier": "^1.18.2",
