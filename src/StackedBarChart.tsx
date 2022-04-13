@@ -33,9 +33,10 @@ export interface StackedBarChartProps extends AbstractChartProps {
   /**
    * Use for 90 degree verticalLabelRotation or extra height for chart
    */
-  extraHeight: number;
+  extraHeight?: number;
   chartConfig: AbstractChartConfig;
-  hideLegend: boolean;
+  hideLegend?: boolean;
+  hideLabels?: boolean;
   style?: Partial<ViewStyle>;
   barPercentage?: number;
   decimalPlaces?: number;
@@ -139,7 +140,7 @@ class StackedBarChart extends AbstractChart<
           />
         );
 
-        if (!this.props.hideLegend) {
+        if (!this.props.hideLabels) {
           ret.push(
             <Text
               key={Math.random()}
@@ -205,6 +206,7 @@ class StackedBarChart extends AbstractChart<
       withVerticalLabels = true,
       verticalLabelRotation = 0,
       horizontalLabelRotation = 0,
+      hideLabels = false,
       extraHeight = 0,
       segments = 4,
       decimalPlaces,
@@ -222,6 +224,7 @@ class StackedBarChart extends AbstractChart<
       height,
       verticalLabelRotation,
       horizontalLabelRotation,
+      hideLabels,
       extraHeight
     };
 
