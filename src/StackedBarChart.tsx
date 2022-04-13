@@ -30,6 +30,10 @@ export interface StackedBarChartProps extends AbstractChartProps {
   data: StackedBarChartData;
   width: number;
   height: number;
+  /**
+   * Use for 90 degree verticalLabelRotation or extra height for chart
+   */
+  extraHeight: number;
   chartConfig: AbstractChartConfig;
   hideLegend: boolean;
   style?: Partial<ViewStyle>;
@@ -46,6 +50,8 @@ export interface StackedBarChartProps extends AbstractChartProps {
   /**
    * The number of horizontal lines
    */
+  horizontalLabelRotation?: number;
+  verticalLabelRotation?: number;
   segments?: number;
 
   percentile?: boolean;
@@ -197,6 +203,9 @@ class StackedBarChart extends AbstractChart<
       data,
       withHorizontalLabels = true,
       withVerticalLabels = true,
+      verticalLabelRotation = 0,
+      horizontalLabelRotation = 0,
+      extraHeight = 0,
       segments = 4,
       decimalPlaces,
       percentile = false,
@@ -210,7 +219,10 @@ class StackedBarChart extends AbstractChart<
     const { borderRadius = 0 } = style;
     const config = {
       width,
-      height
+      height,
+      verticalLabelRotation,
+      horizontalLabelRotation,
+      extraHeight
     };
 
     let border = 0;
@@ -234,14 +246,14 @@ class StackedBarChart extends AbstractChart<
 
     return (
       <View style={style}>
-        <Svg height={height} width={width}>
+        <Svg height={height + extraHeight} width={width}>
           {this.renderDefs({
             ...config,
             ...this.props.chartConfig
           })}
           <Rect
             width="100%"
-            height={height}
+            height={height + extraHeight}
             rx={borderRadius}
             ry={borderRadius}
             fill="url(#backgroundGradient)"
