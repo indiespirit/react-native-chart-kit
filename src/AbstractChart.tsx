@@ -11,6 +11,7 @@ export interface AbstractChartProps {
   yAxisSuffix?: string;
   yLabelsOffset?: number;
   yAxisInterval?: number;
+  yAxisLabelInterval?: number;
   xAxisLabel?: string;
   xLabelsOffset?: number;
   hidePointsAtIndex?: number[];
@@ -41,7 +42,7 @@ export const DEFAULT_X_LABELS_HEIGHT_PERCENTAGE = 0.75;
 class AbstractChart<
   IProps extends AbstractChartProps,
   IState extends AbstractChartState
-> extends Component<AbstractChartProps & IProps, AbstractChartState & IState> {
+  > extends Component<AbstractChartProps & IProps, AbstractChartState & IState> {
   calcScaler = (data: number[]) => {
     if (this.props.fromZero && this.props.fromNumber) {
       return Math.max(...data, this.props.fromNumber) - Math.min(...data, 0) || 1;
@@ -50,7 +51,7 @@ class AbstractChart<
     } else if (this.props.fromNumber) {
       return (
         Math.max(...data, this.props.fromNumber) -
-          Math.min(...data, this.props.fromNumber) || 1
+        Math.min(...data, this.props.fromNumber) || 1
       );
     } else {
       return Math.max(...data) - Math.min(...data) || 1;
@@ -221,8 +222,8 @@ class AbstractChart<
         count === 1 && this.props.fromZero
           ? paddingTop + 4
           : height * verticalLabelsHeightPercentage -
-            (basePosition / count) * i +
-            paddingTop;
+          (basePosition / count) * i +
+          paddingTop;
       return (
         <Text
           rotation={horizontalLabelRotation}
@@ -267,7 +268,8 @@ class AbstractChart<
     const {
       xAxisLabel = "",
       xLabelsOffset = 0,
-      hidePointsAtIndex = []
+      hidePointsAtIndex = [],
+      yAxisLabelInterval = 1
     } = this.props;
 
     const fontSize = 12;
@@ -281,7 +283,9 @@ class AbstractChart<
       if (hidePointsAtIndex.includes(i)) {
         return null;
       }
-
+      if (i % yAxisLabelInterval) {
+        return null;
+      }
       const x =
         (((width - paddingRight) / labels.length) * i +
           paddingRight +
@@ -339,12 +343,12 @@ class AbstractChart<
             key={Math.random()}
             x1={Math.floor(
               ((width - paddingRight) / (data.length / yAxisInterval)) * i +
-                paddingRight
+              paddingRight
             )}
             y1={0}
             x2={Math.floor(
               ((width - paddingRight) / (data.length / yAxisInterval)) * i +
-                paddingRight
+              paddingRight
             )}
             y2={height * verticalLabelsHeightPercentage + paddingTop}
             {...this.getPropsForBackgroundLines()}
