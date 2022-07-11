@@ -833,7 +833,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       width,
       height,
       verticalLabelRotation,
-      horizontalLabelRotation
+      horizontalLabelRotation,
+      verticalLabelsHeightPercentage: chartConfig.verticalLabelsHeightPercentage,
     };
 
     const datas = this.getDatas(data.datasets);
