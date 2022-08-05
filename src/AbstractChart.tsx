@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Defs, Line, LinearGradient, Stop, Text } from "react-native-svg";
+import { Platform } from "react-native";
+import { G, Defs, Line, LinearGradient, Stop, Text } from "react-native-svg";
 
 import { ChartConfig, Dataset, PartialBy } from "./HelperTypes";
 
@@ -294,19 +295,23 @@ class AbstractChart<
         fontSize * 2 +
         xLabelsOffset;
 
+      const gPositionProps = Platform.OS === 'web' ? { x, y } : {}
+      const textPositionProps = Platform.OS !== 'web' ? { x, y } : {}
+
       return (
-        <Text
-          origin={`${x}, ${y}`}
-          rotation={verticalLabelRotation}
-          key={Math.random()}
-          x={x}
-          y={y}
-          textAnchor={verticalLabelRotation === 0 ? "middle" : "start"}
-          {...this.getPropsForLabels()}
-          {...this.getPropsForVerticalLabels()}
-        >
-          {`${formatXLabel(label)}${xAxisLabel}`}
-        </Text>
+        <G {...gPositionProps}>
+          <Text
+            origin={`${x}, ${y}`}
+            rotation={verticalLabelRotation}
+            key={Math.random()}
+            textAnchor={verticalLabelRotation === 0 ? "middle" : "start"}
+            {...textPositionProps}
+            {...this.getPropsForLabels()}
+            {...this.getPropsForVerticalLabels()}
+          >
+            {`${formatXLabel(label)}${xAxisLabel}`}
+          </Text>
+        </G>
       );
     });
   };
