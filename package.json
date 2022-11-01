@@ -20,7 +20,7 @@
     "pretty-quick": "^1.11.1",
     "react": "16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
-    "react-native-builder-bob": "^0.20.0",
+    "react-native-builder-bob": "0.17.1",
     "react-native-flash-message": "^0.1.10",
     "react-native-scrollable-tab-view": "^1.0.0",
     "react-native-svg": "11.0.1",
