@@ -33,7 +33,8 @@
   "module": "lib/module/index.js",
   "types": "lib/typescript/index.d.ts",
   "files": [
-    "dist"
+    "src",
+    "lib"
   ],
   "scripts": {
     "start": "expo start",
