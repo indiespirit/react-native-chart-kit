@@ -20,17 +20,21 @@
     "pretty-quick": "^1.11.1",
     "react": "16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
+    "react-native-builder-bob": "0.17.1",
     "react-native-flash-message": "^0.1.10",
     "react-native-scrollable-tab-view": "^1.0.0",
     "react-native-svg": "11.0.1",
     "react-test-renderer": "16.7.0",
     "typescript": "^3.9.5"
   },
-  "_main": "./node_modules/expo/AppEntry.js",
-  "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "main": "lib/commonjs/index.js",
+  "source": "src/index.ts",
+  "react-native": "src/index.ts",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/index.d.ts",
   "files": [
-    "dist"
+    "src",
+    "lib"
   ],
   "scripts": {
     "start": "expo start",
@@ -38,8 +42,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "test": "jest",
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "bob build",
     "prepublish": "yarn build",
     "prepare": "yarn build"
   },
@@ -69,5 +72,19 @@
   },
   "resolutions": {
     "@types/react": "16.14.8"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.json"
+        }
+      ]
+    ]
   }
 }

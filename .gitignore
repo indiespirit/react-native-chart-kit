@@ -2,8 +2,7 @@ node_modules/
 .expo/
 .DS_Store
 npm-debug.*
-package-lock.json
 .idea
 .vscode
-yarn.lock
 dist
+lib

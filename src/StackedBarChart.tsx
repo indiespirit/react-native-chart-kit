@@ -120,31 +120,33 @@ class StackedBarChart extends AbstractChart<
             barWidth / 2) *
           fac;
 
-        ret.push(
-          <Rect
-            key={Math.random()}
-            x={xC}
-            y={y}
-            rx={this.getBarRadius(ret, x)}
-            ry={this.getBarRadius(ret, x)}
-            width={barWidth}
-            height={h}
-            fill={colors[z]}
-          />
-        );
-
-        if (!this.props.hideLegend) {
+        if (x[z] > 0) {
           ret.push(
-            <Text
+            <Rect
               key={Math.random()}
-              x={xC + 7 + barWidth / 2}
-              textAnchor="end"
-              y={h > 15 ? y + 15 : y + 7}
-              {...this.getPropsForLabels()}
-            >
-              {x[z]}
-            </Text>
+              x={xC}
+              y={y}
+              rx={this.getBarRadius(ret, x)}
+              ry={this.getBarRadius(ret, x)}
+              width={barWidth}
+              height={h}
+              fill={colors[z]}
+            />
           );
+
+          if (!this.props.hideLegend) {
+            ret.push(
+              <Text
+                key={Math.random()}
+                x={xC + 4 + barWidth / 2}
+                textAnchor="end"
+                y={h > 15 ? y + 15 : y + 7}
+                {...this.getPropsForLabels()}
+              >
+                {x[z]}
+              </Text>
+            );
+          }
         }
 
         st -= h;

@@ -14,7 +14,6 @@
     "module": "esnext",
     "moduleResolution": "node",
     "rootDir": "./src",
-    "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
     "inlineSourceMap": true,
