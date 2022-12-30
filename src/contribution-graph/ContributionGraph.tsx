@@ -180,6 +180,22 @@ class ContributionGraph extends AbstractChart<
     return this.props.chartConfig.color(0.15);
   }
 
+  getClassNameForValue(value: number) {
+      const count = value;
+
+      if (count) {
+        const opacity = mapValue(
+          count,
+          this.state.maxValue === this.state.minValue ? 0: this.state.minValue,
+          isNaN(this.state.maxValue) ? 1 : this.state.maxValue,
+          0.15 + 0.05, // + 0.05 to make smaller values a bit more visible
+          1
+        );
+
+        return this.props.chartConfig.color(opacity, count);
+      }
+  }
+
   getTitleForIndex(index: number) {
     if (this.state.valueCache[index]) {
       return this.state.valueCache[index].title;
@@ -321,6 +337,52 @@ class ContributionGraph extends AbstractChart<
     );
   }
 
+  renderScale() {
+    if (this.props.showScale) {
+      /*function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+      }
+      
+      // usage example:
+      var a = ['a', 1, 'a', 2, '1'];*/
+      var tempvalues = this.props.values.map((value) => {
+        return value.count;
+      });
+      if(this.props.maxValue != null)
+        tempvalues.push(this.props.maxValue);
+      if(this.props.minValue != null)
+        tempvalues.push(this.props.minValue);
+      var unique = tempvalues.filter((value, index, self) => {
+        return self.indexOf(value) === index;
+      });
+      var sorted = unique.sort((a, b) => { return a - b });
+      const { squareSize = SQUARE_SIZE } = this.props;
+      var squares =  sorted.map((value, index) => {
+        return (
+          <Rect
+            key={index}
+            width={squareSize/2}
+            height={squareSize/2}
+            x={60 + (sorted.length - index) * (squareSize/2 + 5)}
+            y={this.props.height- squareSize}
+            fill={this.getClassNameForValue(value)}
+          />
+        )});
+
+      return (
+        <G>
+          <Text    
+          width={30}
+          x={30}
+          y={this.props.height- squareSize/2}
+          {...this.getPropsForLabels()}>
+            {this.props.scaleText? this.props.scaleText: "Scale:"}
+          </Text>
+          {squares}
+        </G>
+      )
+    }
+  }
   renderMonthLabels() {
     if (!this.props.showMonthLabels) {
       return null;
@@ -391,6 +453,7 @@ class ContributionGraph extends AbstractChart<
           />
           <G>{this.renderMonthLabels()}</G>
           <G>{this.renderAllWeeks()}</G>
+          <G>{this.renderScale()}</G>
         </Svg>
       </View>
     );
