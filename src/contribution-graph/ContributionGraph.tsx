@@ -172,7 +172,7 @@ class ContributionGraph extends AbstractChart<
             1
           );
 
-          return this.props.chartConfig.color(opacity);
+          return this.props.chartConfig.color(opacity, count);
         }
       }
     }
