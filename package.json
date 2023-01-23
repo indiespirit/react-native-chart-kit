@@ -1,6 +1,6 @@
 {
   "name": "@Paindrainer/pd-react-native-chart-kit",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "type": "module",
   "description": "PD statistics and text generation.",
   "main": "src/index.ts",
