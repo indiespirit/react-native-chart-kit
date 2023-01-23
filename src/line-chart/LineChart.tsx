@@ -285,7 +285,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       if (dataset.withDots == false) return;
 
       dataset.data.forEach((x, i) => {
-        if (hidePointsAtIndex.includes(i)) {
+        if (hidePointsAtIndex.includes(i) || x === null) {
           return;
         }
 
@@ -569,6 +569,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
           points={
             dataset.data
               .map((d, i) => {
+                if( d != null){
+
                 const x =
                   paddingRight +
                   (i * (width - paddingRight)) / dataset.data.length;
@@ -578,6 +580,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
                   paddingTop;
 
                 return `${x},${y}`;
+                }
               })
               .join(" ") +
             ` ${paddingRight +
