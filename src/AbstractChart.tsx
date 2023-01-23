@@ -194,6 +194,8 @@ class AbstractChart<
       verticalLabelsHeightPercentage = DEFAULT_X_LABELS_HEIGHT_PERCENTAGE
     } = config;
 
+    console.log(config);
+
     const {
       yAxisLabel = "",
       yAxisSuffix = "",
@@ -215,6 +217,8 @@ class AbstractChart<
         )}${yAxisSuffix}`;
       }
 
+      console.log("yLabel", yLabel)
+
       const basePosition = height * verticalLabelsHeightPercentage;
       const x = paddingRight - yLabelsOffset;
       const y =
@@ -223,6 +227,9 @@ class AbstractChart<
           : height * verticalLabelsHeightPercentage -
             (basePosition / count) * i +
             paddingTop;
+
+      console.log("x", x)
+      console.log("y", y)
       return (
         <Text
           rotation={horizontalLabelRotation}

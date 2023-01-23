@@ -46,7 +46,8 @@ export interface BarChartProps extends AbstractChartProps {
   showValuesOnTopOfBars?: boolean;
   withCustomBarColorFromData?: boolean;
   flatColor?: boolean;
-  
+  // adds additional canvas space to the right
+  canvasPaddingRight?: number;
 }
 
 type BarChartState = {};
@@ -230,7 +231,8 @@ class BarChart extends AbstractChart<BarChartProps, BarChartState> {
       withCustomBarColorFromData = false,
       showValuesOnTopOfBars = false,
       flatColor = false,
-      segments = 4
+      segments = 4,
+      canvasPaddingRight=0,
     } = this.props;
 
     const { borderRadius = 0, paddingTop = 16, paddingRight = 64 } = style;
@@ -258,7 +260,7 @@ class BarChart extends AbstractChart<BarChartProps, BarChartState> {
 
     return (
       <View style={style}>
-        <Svg height={height} width={width}>
+        <Svg height={height} width={width + canvasPaddingRight}>
           {this.renderDefs({
             ...config,
             ...this.props.chartConfig

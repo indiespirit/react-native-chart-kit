@@ -214,6 +214,8 @@ export interface LineChartProps extends AbstractChartProps {
    * The number of horizontal lines
    */
   segments?: number;
+  // adds additional canvas space to the right
+  canvasPaddingRight?: number;
 }
 
 type LineChartState = {
@@ -815,7 +817,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       formatXLabel = xLabel => xLabel,
       segments,
       transparent = false,
-      chartConfig
+      chartConfig,
+      canvasPaddingRight=0,
     } = this.props;
 
     const { scrollableDotHorizontalOffset } = this.state;
@@ -826,7 +829,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       paddingRight = 64,
       margin = 0,
       marginRight = 0,
-      paddingBottom = 0
+      paddingBottom = 0,
     } = style;
 
     const config = {
@@ -849,7 +852,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       <View style={style}>
         <Svg
           height={height + (paddingBottom as number) + legendOffset}
-          width={width - (margin as number) * 2 - (marginRight as number)}
+          width={width -(margin as number) * 2 - (marginRight as number) + canvasPaddingRight}
         >
           <Rect
             width="100%"
