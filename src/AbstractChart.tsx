@@ -301,7 +301,7 @@ class AbstractChart<
           key={Math.random()}
           x={x}
           y={y}
-          textAnchor={verticalLabelRotation === 0 ? "middle" : "start"}
+          textAnchor={verticalLabelRotation === 0 ? "middle" : "middle"}
           {...this.getPropsForLabels()}
           {...this.getPropsForVerticalLabels()}
         >
