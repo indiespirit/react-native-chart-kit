@@ -180,20 +180,17 @@ class ContributionGraph extends AbstractChart<
     return this.props.chartConfig.color(0.15);
   }
 
-  getClassNameForValue(value: number) {
+  getColorForValue(value: number) {
       const count = value;
 
-      if (count) {
-        const opacity = mapValue(
-          count,
-          this.state.maxValue === this.state.minValue ? 0: this.state.minValue,
-          isNaN(this.state.maxValue) ? 1 : this.state.maxValue,
-          0.15 + 0.05, // + 0.05 to make smaller values a bit more visible
-          1
-        );
-
+      const opacity = mapValue(
+        count,
+        this.state.maxValue === this.state.minValue ? 0: this.state.minValue,
+        isNaN(this.state.maxValue) ? 1 : this.state.maxValue,
+        0.15 + 0.05, // + 0.05 to make smaller values a bit more visible
+        1
+      );
         return this.props.chartConfig.color(opacity, count);
-      }
   }
 
   getTitleForIndex(index: number) {
@@ -355,30 +352,44 @@ class ContributionGraph extends AbstractChart<
       var unique = tempvalues.filter((value, index, self) => {
         return self.indexOf(value) === index;
       });
-      var sorted = unique.sort((a, b) => { return a - b });
+      var sorted = unique.sort((a, b) => { return b-a });
       const { squareSize = SQUARE_SIZE } = this.props;
+
+      let maxLegendWidth = Math.max(...sorted.map((value) => {
+        return this.props.chartConfig.colorLegend(value).toString().length;
+      }))*7;
+
+      maxLegendWidth = Math.max(maxLegendWidth,squareSize/2);
+
+      const startX = this.getWidth() - (sorted.length)*maxLegendWidth;
+
       var squares =  sorted.map((value, index) => {
         return (
           <Rect
             key={index}
             width={squareSize/2}
             height={squareSize/2}
-            x={60 + (sorted.length - index) * (squareSize/2 + 5)}
+            x={startX + (sorted.length - index-1) * (maxLegendWidth)}
             y={this.props.height- squareSize}
-            fill={this.getClassNameForValue(value)}
+            fill={this.getColorForValue(value)}
           />
+        )});
+
+      var texts =  sorted.map((value, index) => {
+        const cl = this.props.chartConfig.colorLegend(value);
+        return (
+          <Text
+            key={index}
+            x={startX + (sorted.length - index-1) * (maxLegendWidth)}
+            y={this.props.height+5}
+            {...this.getPropsForLabels()}
+          >{cl}</Text>
         )});
 
       return (
         <G>
-          <Text    
-          width={30}
-          x={30}
-          y={this.props.height- squareSize/2}
-          {...this.getPropsForLabels()}>
-            {this.props.scaleText? this.props.scaleText: "Scale:"}
-          </Text>
           {squares}
+          {texts}
         </G>
       )
     }
@@ -436,9 +447,12 @@ class ContributionGraph extends AbstractChart<
       borderRadius = stupidXo;
     }
 
+    // make room for scale if enabled
+    const canvasHeight = this.props.showScale ? this.props.height + 10 : this.props.height;
+
     return (
       <View style={style}>
-        <Svg height={this.props.height} width={this.props.width}>
+        <Svg height={canvasHeight} width={this.props.width}>
           {this.renderDefs({
             width: this.props.width,
             height: this.props.height,

@@ -260,6 +260,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     data,
     width,
     height,
+    nullDotOpacity,
     paddingTop,
     paddingRight,
     onDataPointClick
@@ -285,7 +286,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       if (dataset.withDots == false) return;
 
       dataset.data.forEach((x, i) => {
-        if (hidePointsAtIndex.includes(i) || x === null) {
+        if (hidePointsAtIndex.includes(i)) {
           return;
         }
 
@@ -320,6 +321,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
                 ? getDotColor(x, i)
                 : this.getColor(dataset, 0.9)
             }
+            fillOpacity = {x == null ? nullDotOpacity : 1}
             onPress={onPress}
             {...this.getPropsForDots(x, i)}
           />,
@@ -839,7 +841,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       width,
       height,
       verticalLabelRotation,
-      horizontalLabelRotation
+      horizontalLabelRotation,
     };
 
     const datas = this.getDatas(data.datasets);
@@ -952,6 +954,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
               {withDots &&
                 this.renderDots({
                   ...config,
+                  nullDotOpacity: chartConfig.nullDotOpacity,
                   data: data.datasets,
                   paddingTop: paddingTop as number,
                   paddingRight: paddingRight as number,
