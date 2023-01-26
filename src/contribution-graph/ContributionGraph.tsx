@@ -374,13 +374,14 @@ class ContributionGraph extends AbstractChart<
 
       const charWidth = 6;
 
-      let maxLegendWidth = Math.max(...range.map((value) => {
+      let scaleStepsWidth = Math.max(...range.map((value) => {
         return cl.formatCLabel(value).toString().length;
       }))*charWidth;
 
-      maxLegendWidth = Math.max(maxLegendWidth,squareSize/2);
+      scaleStepsWidth = Math.max(scaleStepsWidth,squareSize/2);
+      const titleWidth = cl.title.length*charWidth;
 
-      const startX = this.getWidth() - (range.length)*maxLegendWidth;
+      const legendWidth = (range.length)*scaleStepsWidth + titleWidth + squareSize/2;
 
       var squares =  range.map((value, index) => {
         return (
@@ -388,7 +389,7 @@ class ContributionGraph extends AbstractChart<
             key={index}
             width={squareSize/2}
             height={squareSize/2}
-            x={startX + (range.length - index-1) * (maxLegendWidth)}
+            x={paddingLeft + titleWidth + squareSize/2 + (range.length - index-1) * (scaleStepsWidth)}
             y={this.props.height-squareSize}
             fill={this.getColorForValue(value)}
           />
@@ -398,7 +399,7 @@ class ContributionGraph extends AbstractChart<
         return (
           <Text
             key={index}
-            x={startX + (range.length - index-1) * (maxLegendWidth)}
+            x={paddingLeft + titleWidth + squareSize/2 + (range.length - index-1) * (scaleStepsWidth)}
             y={this.props.height+charWidth}
             {...this.getPropsForLabels()}
           >{cl.formatCLabel(value)}</Text>
@@ -407,7 +408,7 @@ class ContributionGraph extends AbstractChart<
       return (
         <G>
            <Text
-            x={startX - 10 - cl.title.length*charWidth}
+            x={paddingLeft}
             y={this.props.height}
             {...this.getPropsForLabels()}
           >{cl.title}</Text>
@@ -520,7 +521,7 @@ class ContributionGraph extends AbstractChart<
           <G>{this.renderWeekDayLabels()}</G>
           <G>{this.renderMonthLabels()}</G>
           <G>{this.renderAllWeeks()}</G>
-          <G>{this.renderScale()}</G>
+          <G justifyContent= 'center' alignItems = 'center'>{this.renderScale()}</G>
         </Svg>
       </View>
     );
