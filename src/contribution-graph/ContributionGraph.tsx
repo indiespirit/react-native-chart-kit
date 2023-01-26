@@ -172,37 +172,15 @@ class ContributionGraph extends AbstractChart<
     if (this.state.valueCache[index]) {
       if (this.state.valueCache[index].value) {
         const count = this.state.valueCache[index].value[this.props.accessor];
-
-        if (count) {
-          const opacity = mapValue(
-            count,
-            this.state.maxValue === this.state.minValue ? 0: this.state.minValue,
-            isNaN(this.state.maxValue) ? 1 : this.state.maxValue,
-            0.15 + 0.05, // + 0.05 to make smaller values a bit more visible
-            1
-          );
-
-          return this.props.chartConfig.color(opacity, count);
-        }
+        return this.props.chartConfig.color(count);
       }
+    } else {
+      return this.props.chartConfig.color(undefined)
     }
-
-    return this.props.chartConfig.color(0.15);
   }
 
   getColorForValue(value: number) {
-      if (value) {
-        const opacity = mapValue(
-          value,
-          this.state.maxValue === this.state.minValue ? 0: this.state.minValue,
-          isNaN(this.state.maxValue) ? 1 : this.state.maxValue,
-          0.15 + 0.05, // + 0.05 to make smaller values a bit more visible
-          1
-        );
-
-        return this.props.chartConfig.color(opacity, value);
-      }
-    return this.props.chartConfig.color(0.15);
+    return this.props.chartConfig.color(value);
   }
 
   getTitleForIndex(index: number) {
@@ -362,8 +340,11 @@ class ContributionGraph extends AbstractChart<
         return item.value;
       });
 
-      const upperBound = Math.max(Math.max(...tempvalues), cl.maxValue);
-      const lowerBound = Math.min(Math.min(...tempvalues), cl.minValue);
+      let upperBound = Math.max(...tempvalues);
+      let lowerBound = Math.min(...tempvalues);
+
+      if (cl.maxValue != null) upperBound = Math.max(upperBound, cl.maxValue);
+      if (cl.minValue != null) lowerBound = Math.min(lowerBound, cl.minValue);
 
       const createDescRange = (start, end) =>  
         Array.from({length: (end - start+1)}, (v, k) => -k + end);
@@ -378,7 +359,7 @@ class ContributionGraph extends AbstractChart<
         return cl.formatCLabel(value).toString().length;
       }))*charWidth;
 
-      scaleStepsWidth = Math.max(scaleStepsWidth,squareSize/2);
+      scaleStepsWidth = Math.max(scaleStepsWidth, squareSize *3/4);
       const titleWidth = cl.title.length*charWidth;
 
       var squares =  range.map((value, index) => {
