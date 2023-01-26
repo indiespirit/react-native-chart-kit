@@ -381,8 +381,6 @@ class ContributionGraph extends AbstractChart<
       scaleStepsWidth = Math.max(scaleStepsWidth,squareSize/2);
       const titleWidth = cl.title.length*charWidth;
 
-      const legendWidth = (range.length)*scaleStepsWidth + titleWidth + squareSize/2;
-
       var squares =  range.map((value, index) => {
         return (
           <Rect
@@ -409,7 +407,7 @@ class ContributionGraph extends AbstractChart<
         <G>
            <Text
             x={paddingLeft}
-            y={this.props.height}
+            y={this.props.height-squareSize/2}
             {...this.getPropsForLabels()}
           >{cl.title}</Text>
           {squares}
