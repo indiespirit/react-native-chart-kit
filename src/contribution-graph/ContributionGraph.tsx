@@ -19,7 +19,7 @@ import { ContributionGraphProps, ContributionGraphState } from ".";
 
 const SQUARE_SIZE = 20;
 const MONTH_LABEL_GUTTER_SIZE = 8;
-const paddingLeft = 32;
+const paddingLeft = 40;
 
 export type ContributionChartValue = {
   value: number;
@@ -88,11 +88,19 @@ class ContributionGraph extends AbstractChart<
   }
 
   getNumEmptyDaysAtStart() {
-    return this.getStartDate().getDay();
+    const dow = this.getDow(this.getStartDate());
+    return dow < 0 ? 6 : dow;
+  }
+
+  getDow(date: Date) {
+    const dow = date.getDay()-1;
+    return dow < 0 ? 6 : dow;
   }
 
   getNumEmptyDaysAtEnd() {
-    return DAYS_IN_WEEK - 1 - this.getEndDate().getDay();
+    let dow = this.getDow(this.getEndDate());
+    dow = dow < 0 ? 6 : dow;
+    return DAYS_IN_WEEK - 1 - dow;
   }
 
   getWeekCount() {
@@ -128,10 +136,12 @@ class ContributionGraph extends AbstractChart<
       valueCache: values.reduce((memo, value) => {
         const date = convertToDate(value.date);
 
-        const index = Math.floor(
+        let index = Math.floor(
           (date.valueOf() - this.getStartDateWithEmptyDays().valueOf()) /
             MILLISECONDS_IN_ONE_DAY
         );
+
+        index = index;
 
         minValue = Math.min(value[this.props.accessor], minValue);
         maxValue = Math.max(value[this.props.accessor], maxValue);
@@ -158,7 +168,7 @@ class ContributionGraph extends AbstractChart<
     return null;
   }
 
-  getClassNameForIndex(index: number) {
+  getColorForIndex(index: number) {
     if (this.state.valueCache[index]) {
       if (this.state.valueCache[index].value) {
         const count = this.state.valueCache[index].value[this.props.accessor];
@@ -181,16 +191,18 @@ class ContributionGraph extends AbstractChart<
   }
 
   getColorForValue(value: number) {
-      const count = value;
+      if (value) {
+        const opacity = mapValue(
+          value,
+          this.state.maxValue === this.state.minValue ? 0: this.state.minValue,
+          isNaN(this.state.maxValue) ? 1 : this.state.maxValue,
+          0.15 + 0.05, // + 0.05 to make smaller values a bit more visible
+          1
+        );
 
-      const opacity = mapValue(
-        count,
-        this.state.maxValue === this.state.minValue ? 0: this.state.minValue,
-        isNaN(this.state.maxValue) ? 1 : this.state.maxValue,
-        0.15 + 0.05, // + 0.05 to make smaller values a bit more visible
-        1
-      );
-        return this.props.chartConfig.color(opacity, count);
+        return this.props.chartConfig.color(opacity, value);
+      }
+    return this.props.chartConfig.color(0.15);
   }
 
   getTitleForIndex(index: number) {
@@ -260,14 +272,22 @@ class ContributionGraph extends AbstractChart<
   getMonthLabelCoordinates(weekIndex: number) {
     if (this.props.horizontal) {
       return [
-        weekIndex * this.getSquareSizeWithGutter(),
+        (weekIndex+1) * this.getSquareSizeWithGutter(),
         this.getMonthLabelSize() - MONTH_LABEL_GUTTER_SIZE
       ];
     }
     const verticalOffset = -2;
     return [
       0,
-      (weekIndex + 1) * this.getSquareSizeWithGutter() + verticalOffset
+      (weekIndex+1) * this.getSquareSizeWithGutter() + verticalOffset
+    ];
+  }
+
+  getDayLabelCoordinates(dayIndex: number) {
+    const hOffset = -3;
+    return [
+      +hOffset,
+      dayIndex * this.getSquareSizeWithGutter()
     ];
   }
 
@@ -281,6 +301,7 @@ class ContributionGraph extends AbstractChart<
     }
 
     const [x, y] = this.getSquareCoordinates(dayIndex);
+
     const { squareSize = SQUARE_SIZE } = this.props;
 
     return (
@@ -291,7 +312,7 @@ class ContributionGraph extends AbstractChart<
         x={x + paddingLeft}
         y={y}
         title={this.getTitleForIndex(index)}
-        fill={this.getClassNameForIndex(index)}
+        fill={this.getColorForIndex(index)}
         onPress={() => {
           this.handleDayPress(index);
         }}
@@ -335,65 +356,96 @@ class ContributionGraph extends AbstractChart<
   }
 
   renderScale() {
-    if (this.props.showScale) {
-      /*function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-      }
-      
-      // usage example:
-      var a = ['a', 1, 'a', 2, '1'];*/
-      var tempvalues = this.props.values.map((value) => {
-        return value.count;
+    if (this.props.colorLegend) {
+      const cl = this.props.colorLegend;
+      var tempvalues = this.props.values.map((item) => {
+        return item.value;
       });
-      if(this.props.maxValue != null)
-        tempvalues.push(this.props.maxValue);
-      if(this.props.minValue != null)
-        tempvalues.push(this.props.minValue);
-      var unique = tempvalues.filter((value, index, self) => {
-        return self.indexOf(value) === index;
-      });
-      var sorted = unique.sort((a, b) => { return b-a });
+
+      const upperBound = Math.max(Math.max(...tempvalues), cl.maxValue);
+      const lowerBound = Math.min(Math.min(...tempvalues), cl.minValue);
+
+      const createDescRange = (start, end) =>  
+        Array.from({length: (end - start+1)}, (v, k) => -k + end);
+
+      const range = createDescRange(lowerBound, upperBound);
+
       const { squareSize = SQUARE_SIZE } = this.props;
 
-      let maxLegendWidth = Math.max(...sorted.map((value) => {
-        return this.props.chartConfig.colorLegend(value).toString().length;
-      }))*7;
+      const charWidth = 6;
+
+      let maxLegendWidth = Math.max(...range.map((value) => {
+        return cl.formatCLabel(value).toString().length;
+      }))*charWidth;
 
       maxLegendWidth = Math.max(maxLegendWidth,squareSize/2);
 
-      const startX = this.getWidth() - (sorted.length)*maxLegendWidth;
+      const startX = this.getWidth() - (range.length)*maxLegendWidth;
 
-      var squares =  sorted.map((value, index) => {
+      var squares =  range.map((value, index) => {
         return (
           <Rect
             key={index}
             width={squareSize/2}
             height={squareSize/2}
-            x={startX + (sorted.length - index-1) * (maxLegendWidth)}
-            y={this.props.height- squareSize}
+            x={startX + (range.length - index-1) * (maxLegendWidth)}
+            y={this.props.height-squareSize}
             fill={this.getColorForValue(value)}
           />
         )});
 
-      var texts =  sorted.map((value, index) => {
-        const cl = this.props.chartConfig.colorLegend(value);
+      var texts =  range.map((value, index) => {
         return (
           <Text
             key={index}
-            x={startX + (sorted.length - index-1) * (maxLegendWidth)}
-            y={this.props.height+5}
+            x={startX + (range.length - index-1) * (maxLegendWidth)}
+            y={this.props.height+charWidth}
             {...this.getPropsForLabels()}
-          >{cl}</Text>
+          >{cl.formatCLabel(value)}</Text>
         )});
 
       return (
         <G>
+           <Text
+            x={startX - 10 - cl.title.length*charWidth}
+            y={this.props.height}
+            {...this.getPropsForLabels()}
+          >{cl.title}</Text>
           {squares}
           {texts}
         </G>
       )
     }
   }
+
+  renderWeekDayLabels() {
+    if (!this.props.showWeekdayLabels) {
+      return null;
+    }
+
+    const dowRange = _.range(DAYS_IN_WEEK);
+
+    const [x0, y0] = this.getTransformForWeek(-1);
+
+    return(
+      <G x={x0} y={y0}>{dowRange.map(dow => {
+
+      const [x, y] = this.getDayLabelCoordinates(dow);
+      return (
+        <Text
+          key={dow}
+          x={x + paddingLeft-this.props.squareSize/4}
+          y={y + this.props.squareSize*0.75}
+          {...this.getPropsForLabels()}
+        >
+          {this.props.weekdayLabel(dow)}
+        </Text>
+      );
+    })}
+    </G>);
+
+  }
+
   renderMonthLabels() {
     if (!this.props.showMonthLabels) {
       return null;
@@ -432,7 +484,7 @@ class ContributionGraph extends AbstractChart<
     horizontal: true,
     showMonthLabels: true,
     showOutOfRangeDays: false,
-    accessor: "count",
+    accessor: "value",
     classForValue: value => (value ? "black" : "#8cc665"),
     style: {}
   };
@@ -448,7 +500,7 @@ class ContributionGraph extends AbstractChart<
     }
 
     // make room for scale if enabled
-    const canvasHeight = this.props.showScale ? this.props.height + 10 : this.props.height;
+    const canvasHeight = this.props.showLegend ? this.props.height + 10 : this.props.height;
 
     return (
       <View style={style}>
@@ -465,6 +517,7 @@ class ContributionGraph extends AbstractChart<
             ry={borderRadius}
             fill="url(#backgroundGradient)"
           />
+          <G>{this.renderWeekDayLabels()}</G>
           <G>{this.renderMonthLabels()}</G>
           <G>{this.renderAllWeeks()}</G>
           <G>{this.renderScale()}</G>
