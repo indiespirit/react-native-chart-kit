@@ -359,17 +359,17 @@ class ContributionGraph extends AbstractChart<
         return cl.formatCLabel(value).toString().length;
       }))*charWidth;
 
-      scaleStepsWidth = Math.max(scaleStepsWidth, squareSize *3/4);
+      scaleStepsWidth = Math.max(scaleStepsWidth, squareSize);
       const titleWidth = cl.title.length*charWidth;
 
       var squares =  range.map((value, index) => {
         return (
           <Rect
             key={index}
-            width={squareSize/2}
-            height={squareSize/2}
+            width={squareSize}
+            height={squareSize}
             x={paddingLeft + titleWidth + squareSize/2 + (range.length - index-1) * (scaleStepsWidth)}
-            y={this.props.height-squareSize}
+            y={this.props.height-squareSize*1.25}
             fill={this.getColorForValue(value)}
           />
         )});
@@ -379,7 +379,7 @@ class ContributionGraph extends AbstractChart<
           <Text
             key={index}
             x={paddingLeft + titleWidth + squareSize/2 + (range.length - index-1) * (scaleStepsWidth)}
-            y={this.props.height+charWidth}
+            y={this.props.height+squareSize/2}
             {...this.getPropsForLabels()}
           >{cl.formatCLabel(value)}</Text>
         )});
@@ -480,7 +480,7 @@ class ContributionGraph extends AbstractChart<
     }
 
     // make room for scale if enabled
-    const canvasHeight = this.props.showLegend ? this.props.height + 10 : this.props.height;
+    const canvasHeight = this.props.showLegend ? this.props.height + 15 : this.props.height;
 
     return (
       <View style={style}>
