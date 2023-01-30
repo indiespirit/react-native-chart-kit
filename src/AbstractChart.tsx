@@ -14,6 +14,7 @@ export interface AbstractChartProps {
   xAxisLabel?: string;
   xLabelsOffset?: number;
   hidePointsAtIndex?: number[];
+  weekdayLabel?: (dow: number) => string;
 }
 
 export interface AbstractChartConfig extends ChartConfig {

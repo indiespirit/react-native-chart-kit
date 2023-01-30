@@ -19,7 +19,9 @@ import { ContributionGraphProps, ContributionGraphState } from ".";
 
 const SQUARE_SIZE = 20;
 const MONTH_LABEL_GUTTER_SIZE = 8;
-const paddingLeft = 40;
+const charWidth = 7;
+const charHeight = charWidth*1.2;
+const distTop = 50;
 
 export type ContributionChartValue = {
   value: number;
@@ -69,10 +71,7 @@ class ContributionGraph extends AbstractChart<
     if (!this.props.showMonthLabels) {
       return 0;
     }
-    if (this.props.horizontal) {
-      return squareSize + MONTH_LABEL_GUTTER_SIZE;
-    }
-    return 2 * (squareSize + MONTH_LABEL_GUTTER_SIZE);
+    return squareSize + MONTH_LABEL_GUTTER_SIZE;
   }
 
   getStartDate() {
@@ -116,9 +115,13 @@ class ContributionGraph extends AbstractChart<
   }
 
   getWidth() {
+
+    const weekdayWidth = this.props.showWeekdayLabels ? charWidth*4 : 0;
+
     return (
       this.getWeekCount() * this.getSquareSizeWithGutter() -
-      this.props.gutterSize
+      this.props.gutterSize +
+      weekdayWidth
     );
   }
 
@@ -212,61 +215,47 @@ class ContributionGraph extends AbstractChart<
     return tooltipDataAttrs;
   }
 
+  getPaddingLeft(){
+    return (this.props.width - this.getWidth())/2;
+  }
+
   getTransformForWeek(weekIndex: number) {
-    if (this.props.horizontal) {
-      return [weekIndex * this.getSquareSizeWithGutter(), 50];
-    }
-    return [10, weekIndex * this.getSquareSizeWithGutter()];
+    const xOffset = this.props.showWeekdayLabels ? charWidth*4 : 0;
+
+    return [weekIndex * this.getSquareSizeWithGutter() + this.getPaddingLeft() + xOffset, distTop];
   }
 
   getTransformForMonthLabels() {
-    if (this.props.horizontal) {
-      return null;
-    }
-    return `${this.getWeekWidth() + MONTH_LABEL_GUTTER_SIZE}, 0`;
+    const xOffset = this.props.showWeekdayLabels ? charWidth*4 : 0;
+    return [xOffset+ this.getPaddingLeft(), 0]
   }
 
-  getTransformForAllWeeks() {
-    if (this.props.horizontal) {
-      return `0, ${this.getMonthLabelSize() - 100}`;
-    }
-    return null;
-  }
+  // getTransformForAllWeeks() {
+  //   return `0, ${this.getMonthLabelSize() - 100}`;
+  // }
 
-  getViewBox() {
-    if (this.props.horizontal) {
-      return `${this.getWidth()} ${this.getHeight()}`;
-    }
-    return `${this.getHeight()} ${this.getWidth()}`;
-  }
+  // getViewBox() {
+  //   return `${this.getWidth()} ${this.getHeight()}`;
+  // }
 
   getSquareCoordinates(dayIndex: number) {
-    if (this.props.horizontal) {
-      return [0, dayIndex * this.getSquareSizeWithGutter()];
-    }
-    return [dayIndex * this.getSquareSizeWithGutter(), 0];
+    return [0, dayIndex * this.getSquareSizeWithGutter()];
   }
 
   getMonthLabelCoordinates(weekIndex: number) {
-    if (this.props.horizontal) {
-      return [
-        (weekIndex+1) * this.getSquareSizeWithGutter(),
-        this.getMonthLabelSize() - MONTH_LABEL_GUTTER_SIZE
-      ];
-    }
-    const verticalOffset = -2;
     return [
-      0,
-      (weekIndex+1) * this.getSquareSizeWithGutter() + verticalOffset
+      (weekIndex+1) * this.getSquareSizeWithGutter(),
+      this.getMonthLabelSize() - MONTH_LABEL_GUTTER_SIZE
     ];
   }
 
-  getDayLabelCoordinates(dayIndex: number) {
-    const hOffset = -3;
-    return [
-      +hOffset,
-      dayIndex * this.getSquareSizeWithGutter()
-    ];
+  getTransformForColorLegend() {
+    // align to left of weekday labels if they exist
+    return [this.getPaddingLeft(), this.props.height];
+  }
+
+  getTransformForDayLabels() {
+    return [this.getPaddingLeft(), distTop];
   }
 
   renderSquare(dayIndex: number, index: number) {
@@ -287,7 +276,7 @@ class ContributionGraph extends AbstractChart<
         key={index}
         width={squareSize}
         height={squareSize}
-        x={x + paddingLeft}
+        x={x}
         y={y}
         title={this.getTitleForIndex(index)}
         fill={this.getColorForIndex(index)}
@@ -353,14 +342,14 @@ class ContributionGraph extends AbstractChart<
 
       const { squareSize = SQUARE_SIZE } = this.props;
 
-      const charWidth = 6;
-
       let scaleStepsWidth = Math.max(...range.map((value) => {
         return cl.formatCLabel(value).toString().length;
       }))*charWidth;
 
       scaleStepsWidth = Math.max(scaleStepsWidth, squareSize);
-      const titleWidth = cl.title.length*charWidth;
+      const titleWidth = (cl.title.length+1)*charWidth;
+
+      const [x0, y0] = this.getTransformForColorLegend();
 
       var squares =  range.map((value, index) => {
         return (
@@ -368,8 +357,8 @@ class ContributionGraph extends AbstractChart<
             key={index}
             width={squareSize}
             height={squareSize}
-            x={paddingLeft + titleWidth + squareSize/2 + (range.length - index-1) * (scaleStepsWidth)}
-            y={this.props.height-squareSize*1.25}
+            x={titleWidth + (range.length - index-1) * (scaleStepsWidth)}
+            y={-charHeight*3}
             fill={this.getColorForValue(value)}
           />
         )});
@@ -378,21 +367,21 @@ class ContributionGraph extends AbstractChart<
         return (
           <Text
             key={index}
-            x={paddingLeft + titleWidth + squareSize/2 + (range.length - index-1) * (scaleStepsWidth)}
-            y={this.props.height+squareSize/2}
+            x={titleWidth + (range.length - index-1) * (scaleStepsWidth)}
+            y={charHeight}
             {...this.getPropsForLabels()}
           >{cl.formatCLabel(value)}</Text>
         )});
 
       return (
-        <G>
+        <G x={x0} y={y0}>
            <Text
-            x={paddingLeft}
-            y={this.props.height-squareSize/2}
+            x={0}
+            y={-charHeight}
             {...this.getPropsForLabels()}
           >{cl.title}</Text>
-          {squares}
           {texts}
+          {squares}
         </G>
       )
     }
@@ -405,17 +394,15 @@ class ContributionGraph extends AbstractChart<
 
     const dowRange = _.range(DAYS_IN_WEEK);
 
-    const [x0, y0] = this.getTransformForWeek(-1);
+    const [x0, y0] = this.getTransformForDayLabels();
 
     return(
       <G x={x0} y={y0}>{dowRange.map(dow => {
-
-      const [x, y] = this.getDayLabelCoordinates(dow);
       return (
         <Text
           key={dow}
-          x={x + paddingLeft-this.props.squareSize/4}
-          y={y + this.props.squareSize*0.75}
+          x={0}
+          y={dow*this.getSquareSizeWithGutter() + this.props.squareSize*0.75}
           {...this.getPropsForLabels()}
         >
           {this.props.weekdayLabel(dow)}
@@ -433,7 +420,9 @@ class ContributionGraph extends AbstractChart<
 
     const weekRange = _.range(this.getWeekCount() - 1); // don't render for last week, because label will be cut off
 
-    return weekRange.map(weekIndex => {
+    const [x0, y0] = this.getTransformForMonthLabels();
+
+    const labels = weekRange.map(weekIndex => {
       const endOfWeek = shiftDate(
         this.getStartDateWithEmptyDays(),
         (weekIndex + 1) * DAYS_IN_WEEK
@@ -444,8 +433,8 @@ class ContributionGraph extends AbstractChart<
       return endOfWeek.getDate() >= 1 && endOfWeek.getDate() <= DAYS_IN_WEEK ? (
         <Text
           key={weekIndex}
-          x={x + paddingLeft}
-          y={y + 8}
+          x={x}
+          y={y}
           {...this.getPropsForLabels()}
         >
           {this.props.getMonthLabel
@@ -454,6 +443,8 @@ class ContributionGraph extends AbstractChart<
         </Text>
       ) : null;
     });
+
+    return(<G x={x0} y={y0}>{labels}</G>);
   }
 
   public static defaultProps = {
@@ -500,7 +491,7 @@ class ContributionGraph extends AbstractChart<
           <G>{this.renderWeekDayLabels()}</G>
           <G>{this.renderMonthLabels()}</G>
           <G>{this.renderAllWeeks()}</G>
-          <G justifyContent= 'center' alignItems = 'center'>{this.renderScale()}</G>
+          <G>{this.renderScale()}</G>
         </Svg>
       </View>
     );
