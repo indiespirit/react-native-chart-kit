@@ -5,6 +5,9 @@ export interface Dataset {
   /** The data corresponding to the x-axis label. */
   data: number[];
 
+  /** Opacity values for each data point (optional) */
+  opacity?: number[];
+
   /** A function returning the color of the stroke given an input opacity value. */
   color?: (opacity: number) => string;
 
