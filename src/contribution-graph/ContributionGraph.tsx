@@ -21,7 +21,7 @@ const SQUARE_SIZE = 20;
 const MONTH_LABEL_GUTTER_SIZE = 8;
 const charWidth = 7;
 const charHeight = charWidth*1.2;
-const distTop = 50;
+const distTop = 40;
 
 export type ContributionChartValue = {
   value: number;
@@ -116,7 +116,7 @@ class ContributionGraph extends AbstractChart<
 
   getWidth() {
 
-    const weekdayWidth = this.props.showWeekdayLabels ? charWidth*4 : 0;
+    const weekdayWidth = this.props.showWeekdayLabels ? charWidth*5 : 0;
 
     return (
       this.getWeekCount() * this.getSquareSizeWithGutter() -
@@ -220,13 +220,13 @@ class ContributionGraph extends AbstractChart<
   }
 
   getTransformForWeek(weekIndex: number) {
-    const xOffset = this.props.showWeekdayLabels ? charWidth*4 : 0;
+    const xOffset = this.props.showWeekdayLabels ? charWidth*5 : 0;
 
     return [weekIndex * this.getSquareSizeWithGutter() + this.getPaddingLeft() + xOffset, distTop];
   }
 
   getTransformForMonthLabels() {
-    const xOffset = this.props.showWeekdayLabels ? charWidth*4 : 0;
+    const xOffset = this.props.showWeekdayLabels ? charWidth*5 : 0;
     return [xOffset+ this.getPaddingLeft(), 0]
   }
 
