@@ -44,7 +44,9 @@ class AbstractChart<
   IState extends AbstractChartState
 > extends Component<AbstractChartProps & IProps, AbstractChartState & IState> {
   calcScaler = (data: number[]) => {
-    if (this.props.fromZero && this.props.fromNumber) {
+    if(data.length === 0) {
+      return 0;
+    } else if (this.props.fromZero && this.props.fromNumber) {
       return Math.max(...data, this.props.fromNumber) - Math.min(...data, 0) || 1;
     } else if (this.props.fromZero) {
       return Math.max(...data, 0) - Math.min(...data, 0) || 1;
@@ -53,7 +55,7 @@ class AbstractChart<
         Math.max(...data, this.props.fromNumber) -
           Math.min(...data, this.props.fromNumber) || 1
       );
-    } else {
+    } else{
       return Math.max(...data) - Math.min(...data) || 1;
     }
   };
@@ -203,14 +205,22 @@ class AbstractChart<
     return new Array(count === 1 ? 1 : count + 1).fill(1).map((_, i) => {
       let yLabel = String(i * count);
 
+      let minY = 0;
+      if(this.props.fromNumber){
+        minY = Math.min(...data, this.props.fromNumber);
+      } else if (this.props.fromZero) {
+        minY = Math.min(...data, 0);
+      } else if (data.length > 0) {
+        minY = Math.min(...data);
+      }
+
       if (count === 1) {
         yLabel = `${yAxisLabel}${formatYLabel(
           data[0]?.toFixed(decimalPlaces)
         )}${yAxisSuffix}`;
       } else {
-        const label = this.props.fromZero
-          ? (this.calcScaler(data) / count) * i + Math.min(...data, 0)
-          : (this.calcScaler(data) / count) * i + Math.min(...data);
+        const delta = (this.calcScaler(data) / count) * i;
+        const label = delta + minY;
         yLabel = `${yAxisLabel}${formatYLabel(
           label?.toFixed(decimalPlaces)
         )}${yAxisSuffix}`;
