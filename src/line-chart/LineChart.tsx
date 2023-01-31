@@ -569,31 +569,33 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     const baseHeight = this.calcBaseHeight(datas, height);
 
     return data.map((dataset, index) => {
+
+      if(dataset.data.length == 0) return (null)
+
+      const p = dataset.data
+      .map((d, i) => {
+        if( d != null){
+
+        const x =
+          paddingRight +
+          (i * (width - paddingRight)) / dataset.data.length;
+
+        const y =
+          ((baseHeight - this.calcHeight(d, datas, height)) / 4) * 3 +
+          paddingTop;
+
+        return `${x},${y}`;
+        }
+      })
+      .join(" ") +
+    ` ${paddingRight +
+      ((width - paddingRight) / dataset.data.length) *
+        (dataset.data.length - 1)},${(height / 4) * 3 +
+      paddingTop} ${paddingRight},${(height / 4) * 3 + paddingTop}`;
       return (
         <Polygon
           key={index}
-          points={
-            dataset.data
-              .map((d, i) => {
-                if( d != null){
-
-                const x =
-                  paddingRight +
-                  (i * (width - paddingRight)) / dataset.data.length;
-
-                const y =
-                  ((baseHeight - this.calcHeight(d, datas, height)) / 4) * 3 +
-                  paddingTop;
-
-                return `${x},${y}`;
-                }
-              })
-              .join(" ") +
-            ` ${paddingRight +
-              ((width - paddingRight) / dataset.data.length) *
-                (dataset.data.length - 1)},${(height / 4) * 3 +
-              paddingTop} ${paddingRight},${(height / 4) * 3 + paddingTop}`
-          }
+          points={p}
           fill={`url(#fillShadowGradientFrom${
             useColorFromDataset ? `_${index}` : ""
           })`}
@@ -758,8 +760,14 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
   > & {
     useColorFromDataset: AbstractChartConfig["useShadowColorFromDataset"];
   }) =>
+
     data.map((dataset, index) => {
       const xMax = this.getXMaxValues(data);
+
+      if(dataset.data.length === 0) {
+        return null;
+      }
+
       const d =
         this.getBezierLinePoints(dataset, {
           width,
