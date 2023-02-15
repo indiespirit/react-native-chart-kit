@@ -1,5 +1,6 @@
 import React from "react";
-import { Color, Rect, Text, TextProps } from "react-native-svg";
+import { Rect, Text, TextProps } from "react-native-svg";
+import { ColorValue } from "react-native";
 
 const CIRCLE_WIDTH = 16;
 const PADDING_LEFT = 4;
@@ -10,7 +11,7 @@ export type LegendItemProps = {
   index: number;
   legendOffset: number;
   legendText: string;
-  iconColor: Color;
+  iconColor: ColorValue;
   labelProps: TextProps;
 };
 

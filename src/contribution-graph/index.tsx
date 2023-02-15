@@ -3,7 +3,7 @@ import { ViewStyle } from "react-native";
 import { AbstractChartProps } from "../AbstractChart";
 import ContributionGraph, {
   ContributionChartValue,
-  TooltipDataAttrs
+  TooltipDataAttrs,
 } from "./ContributionGraph";
 
 export interface ContributionGraphProps extends AbstractChartProps {
@@ -19,7 +19,7 @@ export interface ContributionGraphProps extends AbstractChartProps {
   showOutOfRangeDays?: boolean;
   accessor?: string;
   getMonthLabel?: (monthIndex: number) => string;
-  onDayPress?: ({ count: number, date: Date }) => void;
+  onDayPress?: ({ count, date }: { count: number; date: Date }) => void;
   classForValue?: (value: string) => string;
   style?: Partial<ViewStyle>;
   titleForValue?: (value: ContributionChartValue) => string;
