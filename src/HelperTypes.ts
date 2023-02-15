@@ -17,6 +17,9 @@ export interface Dataset {
   /** A boolean indicating whether to render dots for this line */
   withDots?: boolean;
 
+  /** A boolean indicating whether to render shadows for this dataset */
+  withShadow?: boolean;
+
   /** Override of LineChart's withScrollableDot property just for this dataset */
   withScrollableDot?: boolean;
 
