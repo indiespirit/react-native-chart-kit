@@ -116,10 +116,10 @@ class AbstractChart<
     const {
       propsForVerticalLabels = {},
       color,
-      labelColor = color
+      verticalLabelColor = color
     } = this.props.chartConfig;
     return {
-      fill: labelColor(0.8),
+      fill: verticalLabelColor(0.8),
       ...propsForVerticalLabels
     };
   }
@@ -128,10 +128,10 @@ class AbstractChart<
     const {
       propsForHorizontalLabels = {},
       color,
-      labelColor = color
+      horizontalLabelColor = color
     } = this.props.chartConfig;
     return {
-      fill: labelColor(0.8),
+      fill: horizontalLabelColor(0.8),
       ...propsForHorizontalLabels
     };
   }

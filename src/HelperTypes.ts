@@ -99,6 +99,14 @@ export interface ChartConfig {
    */
   labelColor?: (opacity: number) => string;
   /**
+   * Defines the function that is used to calculate the color of vertical labels.
+   */
+  verticalLabelColor?: (opacity: number) => string;
+  /**
+   * Defines the function that is used to calculate the color of horizontal labels.
+   */
+  horizontalLabelColor?: (opacity: number) => string;
+  /**
    * Defines the base stroke width in a chart
    */
   strokeWidth?: number;
