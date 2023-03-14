@@ -279,61 +279,66 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       }
     } = this.props;
     const xMax = this.getXMaxValues(data);
-    data.forEach(dataset => {
-      if (dataset.withDots == false) return;
-
-      dataset.data.forEach((x, i) => {
-        if (hidePointsAtIndex.includes(i)) {
-          return;
-        }
-
-        const cx = paddingRight + (i * (width - paddingRight)) / xMax;
-
-        const cy =
-          ((baseHeight - this.calcHeight(x, datas, height)) / 4) * 3 +
-          paddingTop;
-
-        const onPress = () => {
-          if (!onDataPointClick || hidePointsAtIndex.includes(i)) {
-            return;
-          }
-
-          onDataPointClick({
-            index: i,
-            value: x,
-            dataset,
-            x: cx,
-            y: cy,
-            getColor: opacity => this.getColor(dataset, opacity)
-          });
-        };
-
-        output.push(
-          <Circle
-            key={Math.random()}
-            cx={cx}
-            cy={cy}
-            fill={
-              typeof getDotColor === "function"
-                ? getDotColor(x, i)
-                : this.getColor(dataset, 0.9)
+    
+    if (data != null){
+      data.forEach(dataset => {
+        if (dataset.withDots == false) return;
+        
+        if (dataset.data != null){
+          dataset.data.forEach((x, i) => {
+            if (hidePointsAtIndex.includes(i)) {
+              return;
             }
-            onPress={onPress}
-            {...this.getPropsForDots(x, i)}
-          />,
-          <Circle
-            key={Math.random()}
-            cx={cx}
-            cy={cy}
-            r="14"
-            fill="#fff"
-            fillOpacity={0}
-            onPress={onPress}
-          />,
-          renderDotContent({ x: cx, y: cy, index: i, indexData: x })
-        );
+
+            const cx = paddingRight + (i * (width - paddingRight)) / xMax;
+
+            const cy =
+              ((baseHeight - this.calcHeight(x, datas, height)) / 4) * 3 +
+              paddingTop;
+
+            const onPress = () => {
+              if (!onDataPointClick || hidePointsAtIndex.includes(i)) {
+                return;
+              }
+
+              onDataPointClick({
+                index: i,
+                value: x,
+                dataset,
+                x: cx,
+                y: cy,
+                getColor: opacity => this.getColor(dataset, opacity)
+              });
+            };
+
+            output.push(
+              <Circle
+                key={Math.random()}
+                cx={cx}
+                cy={cy}
+                fill={
+                  typeof getDotColor === "function"
+                    ? getDotColor(x, i)
+                    : this.getColor(dataset, 0.9)
+                }
+                onPress={onPress}
+                {...this.getPropsForDots(x, i)}
+              />,
+              <Circle
+                key={Math.random()}
+                cx={cx}
+                cy={cy}
+                r="14"
+                fill="#fff"
+                fillOpacity={0}
+                onPress={onPress}
+              />,
+              renderDotContent({ x: cx, y: cy, index: i, indexData: x })
+            );
+          });
+        }
       });
-    });
+    }
 
     return output;
   };
@@ -650,7 +655,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
 
   getXMaxValues = (data: Dataset[]) => {
     return data.reduce((acc, cur) => {
-      return cur.data.length > acc ? cur.data.length : acc;
+      return cur.data == null ? acc : cur.data.length > acc ? cur.data.length : acc;
     }, 0);
   };
 
@@ -667,7 +672,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       "width" | "height" | "paddingRight" | "paddingTop" | "data"
     >
   ) => {
-    if (dataset.data.length === 0) {
+    if (dataset.data == null || dataset.data.length === 0) {
       return "M0,0";
     }
 
@@ -711,7 +716,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     AbstractChartConfig,
     "data" | "width" | "height" | "paddingRight" | "paddingTop"
   >) => {
-    return data.map((dataset, index) => {
+    return data == null ? 0 : data.map((dataset, index) => {
       const result = this.getBezierLinePoints(dataset, {
         width,
         height,
@@ -759,7 +764,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
         }) +
         ` L${paddingRight +
           ((width - paddingRight) / xMax) *
-            (dataset.data.length - 1)},${(height / 4) * 3 +
+            (dataset.data == null ? 0 : dataset.data.length - 1)},${(height / 4) * 3 +
           paddingTop} L${paddingRight},${(height / 4) * 3 + paddingTop} Z`;
 
       return (
