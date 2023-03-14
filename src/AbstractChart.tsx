@@ -332,7 +332,7 @@ class AbstractChart<
   > & { data: number[] }) => {
     const { yAxisInterval = 1 } = this.props;
 
-    return [...new Array(Math.ceil(data.length / yAxisInterval))].map(
+    return [...new Array(Math.ceil(data == null ? 0 : data.length / yAxisInterval))].map(
       (_, i) => {
         return (
           <Line
@@ -471,8 +471,8 @@ class AbstractChart<
         <LinearGradient
           id="backgroundGradient"
           x1={0}
-          y1={height}
-          x2={width}
+          y1={height == null ? 0 : height}
+          x2={width == null ? 0 : width}
           y2={0}
           gradientUnits="userSpaceOnUse"
         >
