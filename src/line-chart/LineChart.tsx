@@ -227,8 +227,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     scrollableDotHorizontalOffset: new Animated.Value(0)
   };
 
-  getColor = (dataset: Dataset, opacity: number) => {
-    return (dataset.color || this.props.chartConfig.color)(opacity);
+  getColor = (dataset: Dataset, opacity: number, index: number) => {
+    return (dataset.color || this.props.chartConfig.color)(opacity, index);
   };
 
   getStrokeWidth = (dataset: Dataset) => {
@@ -316,7 +316,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
             fill={
               typeof getDotColor === "function"
                 ? getDotColor(x, i)
-                : this.getColor(dataset, 0.9)
+                : this.getColor(dataset, 0.9, i)
             }
             onPress={onPress}
             {...this.getPropsForDots(x, i)}
@@ -637,7 +637,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
           strokeLinejoin={linejoinType}
           points={points.join(" ")}
           fill="none"
-          stroke={this.getColor(dataset, 0.2)}
+          stroke={this.getColor(dataset, 0.2, index)}
           strokeWidth={this.getStrokeWidth(dataset)}
           strokeDasharray={dataset.strokeDashArray}
           strokeDashoffset={dataset.strokeDashOffset}
@@ -725,7 +725,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
           key={index}
           d={result}
           fill="none"
-          stroke={this.getColor(dataset, 0.2)}
+          stroke={this.getColor(dataset, 0.2, index)}
           strokeWidth={this.getStrokeWidth(dataset)}
           strokeDasharray={dataset.strokeDashArray}
           strokeDashoffset={dataset.strokeDashOffset}
@@ -782,7 +782,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       <G key={Math.random()}>
         <LegendItem
           index={i}
-          iconColor={this.getColor(datasets[i], 0.9)}
+          iconColor={this.getColor(datasets[i], 0.9, i)}
           baseLegendItemX={baseLegendItemX}
           legendText={legendItem}
           labelProps={{ ...this.getPropsForLabels() }}
