@@ -6,7 +6,7 @@ export interface Dataset {
   data: number[];
 
   /** A function returning the color of the stroke given an input opacity value. */
-  color?: (opacity: number) => string;
+  color?: (opacity: number, index: number) => string;
 
   /** A function returning array of the colors of the stroke given an input opacity value for each data value. */
   colors?: Array<(opacity: number) => string>;
@@ -90,7 +90,7 @@ export interface ChartConfig {
   /**
    * Defines the base color function that is used to calculate colors of labels and sectors used in a chart
    */
-  color?: (opacity: number, index?: number) => string;
+  color?: (opacity: number, index: number) => string;
   /**
    * Defines the function that is used to calculate the color of the labels used in a chart.
    */
