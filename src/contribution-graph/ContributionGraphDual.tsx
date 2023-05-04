@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { View } from "react-native";
-import { G, Rect, RectProps, Svg, Text } from "react-native-svg";
+import { G, Rect,  Svg, Text, Polygon} from "react-native-svg";
 
 import AbstractChart from "../AbstractChart";
 import {
@@ -14,7 +14,7 @@ import {
   MILLISECONDS_IN_ONE_DAY,
   MONTH_LABELS
 } from "./constants";
-import { ContributionGraphDualProps, ContributionGraphState } from ".";
+import { ContributionGraphProps, ContributionGraphDualState } from ".";
 
 const SQUARE_SIZE = 20;
 const MONTH_LABEL_GUTTER_SIZE = 8;
@@ -24,32 +24,29 @@ const distTop = 40;
 
 export type ContributionChartValueDual = {
   value: number;
-  title: string;
-  TooltipDataAttrsDual: TooltipDataAttrsDual;
+  valueDual: number;
   date: Date;
 };
 
-export type TooltipDataAttrsDual = (
-  value: ContributionChartValueDual
-) => Partial<RectProps> | Partial<RectProps>;
-
 class ContributionGraphDual extends AbstractChart<
-ContributionGraphDualProps,
-  ContributionGraphState
+ContributionGraphProps,
+  ContributionGraphDualState
 > {
-  constructor(props: ContributionGraphDualProps) {
+  constructor(props: ContributionGraphProps) {
     super(props);
 
-    let { maxValue, minValue, valueCache } = this.getValueCache(props.values);
+    let { minValue, maxValue, minValueDual, maxValueDual, valueCache } = this.getValueCache(props.values);
 
     this.state = {
-      maxValue,
       minValue,
+      maxValue,
+      minValueDual,
+      maxValueDual,
       valueCache
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps: ContributionGraphDualProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: ContributionGraphProps) {
     let { maxValue, minValue, valueCache } = this.getValueCache(
       nextProps.values
     );
@@ -131,8 +128,8 @@ ContributionGraphDualProps,
   }
 
   getValueCache(values: ContributionChartValueDual[]) {
-    let minValue = Infinity,
-      maxValue = -Infinity;
+    let minValue = Infinity, maxValue = -Infinity;
+    let minValueDual = Infinity, maxValueDual = -Infinity;
 
     return {
       valueCache: values.reduce((memo, value) => {
@@ -148,14 +145,19 @@ ContributionGraphDualProps,
         minValue = Math.min(value[this.props.accessor], minValue);
         maxValue = Math.max(value[this.props.accessor], maxValue);
 
+        minValueDual = Math.min(value[this.props.accessorDual], minValueDual);
+        maxValueDual = Math.max(value[this.props.accessorDual], maxValueDual);
+
         memo[index] = {
-          value
+          value // of type ContributionChartValueDual
         };
 
         return memo;
       }, {}),
       minValue,
-      maxValue
+      maxValue,
+      minValueDual,
+      maxValueDual
     };
   }
 
@@ -166,14 +168,15 @@ ContributionGraphDualProps,
     return null;
   }
 
-  getColorForIndex(index: number) {
+  getColorsForIndex(index: number) {
     if (this.state.valueCache[index]) {
       if (this.state.valueCache[index].value) {
         const count = this.state.valueCache[index].value[this.props.accessor];
-        return this.props.chartConfig.color(count);
+        const countDual = this.state.valueCache[index].value[this.props.accessorDual];
+        return [this.props.chartConfig.color(count), this.props.chartConfig.colorDual(countDual)];
       }
     } else {
-      return this.props.chartConfig.color(undefined)
+      return [this.props.chartConfig.color(undefined), this.props.chartConfig.colorDual(undefined)];
     }
   }
 
@@ -229,15 +232,25 @@ ContributionGraphDualProps,
 
     const { squareSize = SQUARE_SIZE } = this.props;
 
+    const colorList = this.getColorsForIndex(index);
+
+    const ul_points = `${x},${y} ${x+squareSize},${y} ${x},${y+squareSize}`
+    const ll_points = `${x+squareSize},${y} ${x+squareSize},${y+squareSize} ${x},${y+squareSize}`
+
+
     return (
-      <Rect
-        key={index}
-        width={squareSize}
-        height={squareSize}
-        x={x}
-        y={y}
-        fill={this.getColorForIndex(index)}
+      <G key={index}>
+      <Polygon
+        key={1000+index}
+        points={ll_points}
+        fill={colorList[1]}
       />
+            <Polygon
+        key={index}
+        points={ul_points}
+        fill={colorList[0]}
+      />
+      </G>
     );
   }
 
@@ -258,23 +271,22 @@ ContributionGraphDualProps,
     );
   }
 
-  renderScale() {
-    if (this.props.colorLegend1) {
-      const cl = this.props.colorLegend1;
-      var tempvalues = this.props.values.map((item) => {
-        return item.value;
-      });
+  renderScale(cl, dual=false) {
 
-      let upperBound = Math.max(...tempvalues);
-      let lowerBound = Math.min(...tempvalues);
+      let upperBound = cl.maxValue;
+      let lowerBound = cl.minValue;
 
-      if (cl.maxValue != null) upperBound = Math.max(upperBound, cl.maxValue);
-      if (cl.minValue != null) lowerBound = Math.min(lowerBound, cl.minValue);
+      const yOffset = dual ? 45 : -5;
+      const cMap = dual ? this.props.chartConfig.colorDual : this.props.chartConfig.color;
 
       const createDescRange = (start, end) =>  
         Array.from({length: (end - start+1)}, (v, k) => -k + end);
 
-      const range = createDescRange(lowerBound, upperBound);
+      const createAscRange = (start, end) =>  
+        Array.from({length: (end - start+1)}, (v, k) => start + k);
+
+
+      const range = cl.descending? createDescRange(lowerBound, upperBound): createAscRange(lowerBound, upperBound);
 
       const { squareSize = SQUARE_SIZE } = this.props;
 
@@ -287,24 +299,26 @@ ContributionGraphDualProps,
 
       const [x0, y0] = this.getTransformForcolorLegend1();
 
+      
       var squares =  range.map((value, index) => {
+        const x = titleWidth + (index) * (scaleStepsWidth);
+        const y = -charHeight*3 + yOffset;
+        const triangle_points = dual ? `${x+squareSize},${y} ${x+squareSize},${y+squareSize} ${x},${y+squareSize}` : `${x},${y} ${x+squareSize},${y} ${x},${y+squareSize}`
         return (
-          <Rect
-            key={index}
-            width={squareSize}
-            height={squareSize}
-            x={titleWidth + (range.length - index-1) * (scaleStepsWidth)}
-            y={-charHeight*3}
-            fill={this.getColorForValue(value)}
+          <Polygon
+            key={index + 1000*Number(dual)}
+            points={triangle_points}
+            fill={cMap(value)}
           />
         )});
 
       var texts =  range.map((value, index) => {
         return (
           <Text
-            key={index}
-            x={titleWidth + (range.length - index-1) * (scaleStepsWidth)}
-            y={charHeight}
+            key={index+ 1000*Number(dual)}
+            x={titleWidth + (index) * (scaleStepsWidth)}
+            y={charHeight +yOffset}
+            fill={"black"}
             {...this.getPropsForLabels()}
           >{cl.formatCLabel(value)}</Text>
         )});
@@ -313,14 +327,13 @@ ContributionGraphDualProps,
         <G x={x0} y={y0}>
            <Text
             x={0}
-            y={-charHeight}
+            y={-charHeight +yOffset}
             {...this.getPropsForLabels()}
           >{cl.title}</Text>
           {texts}
           {squares}
         </G>
       )
-    }
   }
 
   renderWeekDayLabels() {
@@ -400,20 +413,20 @@ ContributionGraphDualProps,
   render() {
     const { style } = this.props;
 
-    let { borderRadius = 0 } = style;
+     let { borderRadius = 0 } = style;
 
     if (!borderRadius && this.props.chartConfig.style) {
       const stupidXo = this.props.chartConfig.style.borderRadius;
       borderRadius = stupidXo;
     }
 
-    // make room for scale if enabled
-    const canvasHeight = this.props.showLegend ? this.props.height + 15 : this.props.height;
+    // // make room for scales
+    const canvasHeight = this.props.height + 60;
 
     return (
       <View style={style}>
         <Svg height={canvasHeight} width={this.props.width}>
-          {this.renderDefs({
+        {this.renderDefs({
             width: this.props.width,
             height: this.props.height,
             ...this.props.chartConfig
@@ -428,7 +441,8 @@ ContributionGraphDualProps,
           <G>{this.renderWeekDayLabels()}</G>
           <G>{this.renderMonthLabels()}</G>
           <G>{this.renderAllWeeks()}</G>
-          <G>{this.renderScale()}</G>
+          <G>{this.renderScale(this.props.colorLegend, false)}</G>
+          <G>{this.renderScale(this.props.colorLegendDual, true)}</G>
         </Svg>
       </View>
     );

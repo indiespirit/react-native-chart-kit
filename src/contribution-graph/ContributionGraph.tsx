@@ -270,7 +270,7 @@ class ContributionGraph extends AbstractChart<
     const [x, y] = this.getSquareCoordinates(dayIndex);
 
     const { squareSize = SQUARE_SIZE } = this.props;
-
+    
     return (
       <Rect
         key={index}
@@ -336,9 +336,13 @@ class ContributionGraph extends AbstractChart<
       if (cl.minValue != null) lowerBound = Math.min(lowerBound, cl.minValue);
 
       const createDescRange = (start, end) =>  
-        Array.from({length: (end - start+1)}, (v, k) => -k + end);
+      Array.from({length: (end - start+1)}, (v, k) => -k + end);
 
-      const range = createDescRange(lowerBound, upperBound);
+      const createAscRange = (start, end) =>  
+        Array.from({length: (end - start+1)}, (v, k) => start + k);
+
+  
+      const range = cl.descending? createDescRange(lowerBound, upperBound): createAscRange(lowerBound, upperBound);
 
       const { squareSize = SQUARE_SIZE } = this.props;
 
@@ -357,7 +361,7 @@ class ContributionGraph extends AbstractChart<
             key={index}
             width={squareSize}
             height={squareSize}
-            x={titleWidth + (range.length - index-1) * (scaleStepsWidth)}
+            x={titleWidth + (index) * (scaleStepsWidth)}
             y={-charHeight*3}
             fill={this.getColorForValue(value)}
           />
@@ -367,7 +371,7 @@ class ContributionGraph extends AbstractChart<
         return (
           <Text
             key={index}
-            x={titleWidth + (range.length - index-1) * (scaleStepsWidth)}
+            x={titleWidth + (index) * (scaleStepsWidth)}
             y={charHeight}
             {...this.getPropsForLabels()}
           >{cl.formatCLabel(value)}</Text>
