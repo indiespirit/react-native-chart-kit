@@ -792,6 +792,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     ));
   };
 
+
   render() {
     const {
       width,
