@@ -782,7 +782,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       <G key={Math.random()}>
         <LegendItem
           index={i}
-          iconColor={this.getColor(datasets[i], 0.9)}
+          iconColor={'transparent'}
           baseLegendItemX={baseLegendItemX}
           legendText={legendItem}
           labelProps={{ ...this.getPropsForLabels() }}
