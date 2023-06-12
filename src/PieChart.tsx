@@ -98,7 +98,7 @@ class PieChart extends AbstractChart<PieChartProps, PieChartState> {
                 12 * 2
               }
             >
-              {`${value} ${c.item.name}`}
+              {`${value.toLocaleString().replace(/,/g, " ")} ${c.item.name}`}
             </Text>
           ) : null}
         </G>
