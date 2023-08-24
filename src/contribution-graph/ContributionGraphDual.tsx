@@ -295,7 +295,7 @@ ContributionGraphProps,
       }))*charWidth;
 
       scaleStepsWidth = Math.max(scaleStepsWidth, squareSize);
-      const titleWidth = (cl.title.length+1)*charWidth;
+      const titleWidth = cl.titleWidth ? cl.titleWidth: (cl.title.length+1)*charWidth;
 
       const [x0, y0] = this.getTransformForcolorLegend1();
 
