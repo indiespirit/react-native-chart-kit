@@ -18,8 +18,7 @@ import { ContributionGraphProps, ContributionGraphDualState } from ".";
 
 const SQUARE_SIZE = 20;
 const MONTH_LABEL_GUTTER_SIZE = 8;
-const charWidth = 7;
-const charHeight = charWidth*1.2;
+const charWidth = 5;
 const distTop = 40;
 
 export type ContributionChartValueDual = {
@@ -212,7 +211,7 @@ ContributionGraphProps,
 
   getTransformForcolorLegend1() {
     // align to left of weekday labels if they exist
-    return [this.getPaddingLeft(), this.props.height];
+    return [this.getPaddingLeft(), this.props.height-55];
   }
 
   getTransformForDayLabels() {
@@ -276,7 +275,7 @@ ContributionGraphProps,
       let upperBound = cl.maxValue;
       let lowerBound = cl.minValue;
 
-      const yOffset = dual ? 45 : -5;
+      const yOffset = dual ? 70 : 0;
       const cMap = dual ? this.props.chartConfig.colorDual : this.props.chartConfig.color;
 
       const createDescRange = (start, end) =>  
@@ -295,14 +294,14 @@ ContributionGraphProps,
       }))*charWidth;
 
       scaleStepsWidth = Math.max(scaleStepsWidth, squareSize);
-      const titleWidth = cl.titleWidth ? cl.titleWidth: (cl.title.length+1)*charWidth;
+      const titleHeight = cl.titleHeight ? cl.titleHeight: 10;
 
       const [x0, y0] = this.getTransformForcolorLegend1();
 
       
       var squares =  range.map((value, index) => {
-        const x = titleWidth + (index) * (scaleStepsWidth);
-        const y = -charHeight*3 + yOffset;
+        const x = (index) * (scaleStepsWidth);
+        const y = yOffset;
         const triangle_points = dual ? `${x+squareSize},${y} ${x+squareSize},${y+squareSize} ${x},${y+squareSize}` : `${x},${y} ${x+squareSize},${y} ${x},${y+squareSize}`
         return (
           <Polygon
@@ -316,8 +315,8 @@ ContributionGraphProps,
         return (
           <Text
             key={index+ 1000*Number(dual)}
-            x={titleWidth + (index) * (scaleStepsWidth)}
-            y={charHeight +yOffset}
+            x={(index) * (scaleStepsWidth)}
+            y={yOffset + 30}
             fill={"black"}
             {...this.getPropsForLabels()}
           >{cl.formatCLabel(value)}</Text>
@@ -327,7 +326,7 @@ ContributionGraphProps,
         <G x={x0} y={y0}>
            <Text
             x={0}
-            y={-charHeight +yOffset}
+            y={-titleHeight +yOffset}
             {...this.getPropsForLabels()}
           >{cl.title}</Text>
           {texts}

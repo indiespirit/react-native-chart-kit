@@ -19,8 +19,7 @@ import { ContributionGraphProps, ContributionGraphState } from ".";
 
 const SQUARE_SIZE = 20;
 const MONTH_LABEL_GUTTER_SIZE = 8;
-const charWidth = 7;
-const charHeight = charWidth*1.2;
+const charWidth = 5;
 const distTop = 40;
 
 export type ContributionChartValue = {
@@ -361,8 +360,8 @@ class ContributionGraph extends AbstractChart<
             key={index}
             width={squareSize}
             height={squareSize}
-            x={titleWidth + (index) * (scaleStepsWidth)}
-            y={-charHeight*3}
+            x={(index) * (scaleStepsWidth)}
+            y={-30}
             fill={this.getColorForValue(value)}
           />
         )});
@@ -371,8 +370,8 @@ class ContributionGraph extends AbstractChart<
         return (
           <Text
             key={index}
-            x={titleWidth + (index) * (scaleStepsWidth)}
-            y={charHeight}
+            x={(index) * (scaleStepsWidth)}
+            y={5}
             {...this.getPropsForLabels()}
           >{cl.formatCLabel(value)}</Text>
         )});
@@ -381,7 +380,7 @@ class ContributionGraph extends AbstractChart<
         <G x={x0} y={y0}>
            <Text
             x={0}
-            y={-charHeight}
+            y={-40}
             {...this.getPropsForLabels()}
           >{cl.title}</Text>
           {texts}
