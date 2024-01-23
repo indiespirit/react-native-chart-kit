@@ -18,7 +18,8 @@ import { ContributionGraphProps, ContributionGraphDualState } from ".";
 
 const SQUARE_SIZE = 20;
 const MONTH_LABEL_GUTTER_SIZE = 8;
-const charWidth = 5;
+const charWidth = 7;
+const charHeight = charWidth*1.2;
 const distTop = 40;
 
 export type ContributionChartValueDual = {
@@ -32,6 +33,8 @@ ContributionGraphProps,
   ContributionGraphDualState
 > {
   constructor(props: ContributionGraphProps) {
+    props.endDate = new Date(props.endDate.setUTCHours(0,0,0,0));
+
     super(props);
 
     let { minValue, maxValue, minValueDual, maxValueDual, valueCache } = this.getValueCache(props.values);
@@ -87,7 +90,7 @@ ContributionGraphProps,
   }
 
   getDow(date: Date) {
-    const dow = date.getDay()-1;
+    const dow = date.getUTCDay()-1;
     return dow < 0 ? 6 : dow;
   }
 
@@ -211,7 +214,7 @@ ContributionGraphProps,
 
   getTransformForcolorLegend1() {
     // align to left of weekday labels if they exist
-    return [this.getPaddingLeft(), this.props.height-55];
+    return [this.getPaddingLeft(), this.props.height];
   }
 
   getTransformForDayLabels() {
@@ -275,7 +278,7 @@ ContributionGraphProps,
       let upperBound = cl.maxValue;
       let lowerBound = cl.minValue;
 
-      const yOffset = dual ? 70 : 0;
+      const yOffset = dual ? 45 : -5;
       const cMap = dual ? this.props.chartConfig.colorDual : this.props.chartConfig.color;
 
       const createDescRange = (start, end) =>  
@@ -294,14 +297,14 @@ ContributionGraphProps,
       }))*charWidth;
 
       scaleStepsWidth = Math.max(scaleStepsWidth, squareSize);
-      const titleHeight = cl.titleHeight ? cl.titleHeight: 10;
+      const titleWidth = cl.titleWidth ? cl.titleWidth: (cl.title.length+1)*charWidth;
 
       const [x0, y0] = this.getTransformForcolorLegend1();
 
       
       var squares =  range.map((value, index) => {
-        const x = (index) * (scaleStepsWidth);
-        const y = yOffset;
+        const x = titleWidth + (index) * (scaleStepsWidth);
+        const y = -charHeight*3 + yOffset;
         const triangle_points = dual ? `${x+squareSize},${y} ${x+squareSize},${y+squareSize} ${x},${y+squareSize}` : `${x},${y} ${x+squareSize},${y} ${x},${y+squareSize}`
         return (
           <Polygon
@@ -315,8 +318,8 @@ ContributionGraphProps,
         return (
           <Text
             key={index+ 1000*Number(dual)}
-            x={(index) * (scaleStepsWidth)}
-            y={yOffset + 30}
+            x={titleWidth + (index) * (scaleStepsWidth)}
+            y={charHeight +yOffset}
             fill={"black"}
             {...this.getPropsForLabels()}
           >{cl.formatCLabel(value)}</Text>
@@ -326,7 +329,7 @@ ContributionGraphProps,
         <G x={x0} y={y0}>
            <Text
             x={0}
-            y={-titleHeight +yOffset}
+            y={-charHeight +yOffset}
             {...this.getPropsForLabels()}
           >{cl.title}</Text>
           {texts}
@@ -378,7 +381,7 @@ ContributionGraphProps,
 
       const [x, y] = this.getMonthLabelCoordinates(weekIndex);
 
-      return endOfWeek.getDate() >= 1 && endOfWeek.getDate() <= DAYS_IN_WEEK ? (
+      return endOfWeek.getUTCDate() >= 1 && endOfWeek.getUTCDate() <= DAYS_IN_WEEK ? (
         <Text
           key={weekIndex}
           x={x}
@@ -387,7 +390,7 @@ ContributionGraphProps,
         >
           {this.props.getMonthLabel
             ? this.props.getMonthLabel(endOfWeek.getMonth())
-            : MONTH_LABELS[endOfWeek.getMonth()]}
+            : MONTH_LABELS[endOfWeek.getUTCMonth()]}
         </Text>
       ) : null;
     });
@@ -397,7 +400,7 @@ ContributionGraphProps,
 
   public static defaultProps = {
     numDays: 200,
-    endDate: new Date(),
+    endDate: (new Date()).setUTCHours(0,0,0,0),
     gutterSize: 1,
     squareSize: SQUARE_SIZE,
     horizontal: true,

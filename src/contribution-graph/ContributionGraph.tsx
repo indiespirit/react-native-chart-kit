@@ -19,7 +19,8 @@ import { ContributionGraphProps, ContributionGraphState } from ".";
 
 const SQUARE_SIZE = 20;
 const MONTH_LABEL_GUTTER_SIZE = 8;
-const charWidth = 5;
+const charWidth = 7;
+const charHeight = charWidth*1.2;
 const distTop = 40;
 
 export type ContributionChartValue = {
@@ -38,9 +39,12 @@ class ContributionGraph extends AbstractChart<
   ContributionGraphState
 > {
   constructor(props: ContributionGraphProps) {
+    props.endDate = new Date(props.endDate.setUTCHours(0,0,0,0));
+
     super(props);
 
     let { maxValue, minValue, valueCache } = this.getValueCache(props.values);
+
 
     this.state = {
       maxValue,
@@ -78,7 +82,7 @@ class ContributionGraph extends AbstractChart<
   }
 
   getEndDate() {
-    return getBeginningTimeForDate(convertToDate(this.props.endDate));
+    return convertToDate(this.props.endDate);
   }
 
   getStartDateWithEmptyDays() {
@@ -91,7 +95,7 @@ class ContributionGraph extends AbstractChart<
   }
 
   getDow(date: Date) {
-    const dow = date.getDay()-1;
+    const dow = date.getUTCDay()-1;
     return dow < 0 ? 6 : dow;
   }
 
@@ -144,7 +148,6 @@ class ContributionGraph extends AbstractChart<
         );
 
         index = index;
-
         minValue = Math.min(value[this.props.accessor], minValue);
         maxValue = Math.max(value[this.props.accessor], maxValue);
 
@@ -268,8 +271,7 @@ class ContributionGraph extends AbstractChart<
 
     const [x, y] = this.getSquareCoordinates(dayIndex);
 
-    const { squareSize = SQUARE_SIZE } = this.props;
-    
+    const { squareSize = SQUARE_SIZE } = this.props;    
     return (
       <Rect
         key={index}
@@ -360,8 +362,8 @@ class ContributionGraph extends AbstractChart<
             key={index}
             width={squareSize}
             height={squareSize}
-            x={(index) * (scaleStepsWidth)}
-            y={-30}
+            x={titleWidth + (index) * (scaleStepsWidth)}
+            y={-charHeight*3}
             fill={this.getColorForValue(value)}
           />
         )});
@@ -370,8 +372,8 @@ class ContributionGraph extends AbstractChart<
         return (
           <Text
             key={index}
-            x={(index) * (scaleStepsWidth)}
-            y={5}
+            x={titleWidth + (index) * (scaleStepsWidth)}
+            y={charHeight}
             {...this.getPropsForLabels()}
           >{cl.formatCLabel(value)}</Text>
         )});
@@ -380,7 +382,7 @@ class ContributionGraph extends AbstractChart<
         <G x={x0} y={y0}>
            <Text
             x={0}
-            y={-40}
+            y={-charHeight}
             {...this.getPropsForLabels()}
           >{cl.title}</Text>
           {texts}
@@ -433,7 +435,7 @@ class ContributionGraph extends AbstractChart<
 
       const [x, y] = this.getMonthLabelCoordinates(weekIndex);
 
-      return endOfWeek.getDate() >= 1 && endOfWeek.getDate() <= DAYS_IN_WEEK ? (
+      return endOfWeek.getUTCDate() >= 1 && endOfWeek.getUTCDate() <= DAYS_IN_WEEK ? (
         <Text
           key={weekIndex}
           x={x}
@@ -441,8 +443,8 @@ class ContributionGraph extends AbstractChart<
           {...this.getPropsForLabels()}
         >
           {this.props.getMonthLabel
-            ? this.props.getMonthLabel(endOfWeek.getMonth())
-            : MONTH_LABELS[endOfWeek.getMonth()]}
+            ? this.props.getMonthLabel(endOfWeek.getUTCMonth())
+            : MONTH_LABELS[endOfWeek.getUTCMonth()]}
         </Text>
       ) : null;
     });
@@ -452,7 +454,7 @@ class ContributionGraph extends AbstractChart<
 
   public static defaultProps = {
     numDays: 200,
-    endDate: new Date(),
+    endDate: (new Date()).setUTCHours(0,0,0,0),
     gutterSize: 1,
     squareSize: SQUARE_SIZE,
     horizontal: true,
