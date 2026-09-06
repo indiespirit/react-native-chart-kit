@@ -45,6 +45,16 @@ export const LineChartRangeSelector = <TData extends Record<string, unknown>>({
   width: number;
 }) => {
   const interactionRef = useRef<LineChartRangeSelectorInteraction>("move");
+  const dragRef = useRef<
+    | {
+        locationX: number;
+        pageX: number;
+        identifier: GestureResponderEvent["nativeEvent"]["identifier"];
+        window: ResolvedChartViewportWindow;
+        lastWindow: ResolvedChartViewportWindow;
+      }
+    | undefined
+  >(undefined);
   const rangeStartPoint = model.interactionPoints.find(
     (point) => point.dataIndex === viewportWindow.startIndex
   );
@@ -110,32 +120,45 @@ export const LineChartRangeSelector = <TData extends Record<string, unknown>>({
         return;
       }
 
+      const drag = dragRef.current;
+      if (!drag) return;
+      const touch =
+        event.nativeEvent.touches?.find(
+          (touch) => touch.identifier === drag.identifier
+        ) ?? event.nativeEvent;
+      if (touch.identifier !== drag.identifier) return;
+      // Android can change the event target during a native gesture. Keep
+      // the local origin from grant and use root-relative movement thereafter.
+      const locationX = drag.locationX + touch.pageX - drag.pageX;
+      if (!Number.isFinite(locationX)) return;
+
       const nextWindow =
         interaction === "move"
           ? resolveChartViewportWindowFromPosition({
               itemCount: dataLength,
-              locationX: event.nativeEvent.locationX,
+              locationX,
               plotWidth: model.boxes.plot.width,
               plotX: model.boxes.plot.x,
-              visibleCount: viewportWindow.visibleCount
+              visibleCount: drag.window.visibleCount
             })
           : resolveChartViewportWindowFromHandlePosition({
-              currentWindow: viewportWindow,
+              currentWindow: drag.window,
               handle: interaction === "resizeStart" ? "start" : "end",
               itemCount: dataLength,
-              locationX: event.nativeEvent.locationX,
+              locationX,
               minVisibleCount: config.minVisiblePoints,
               plotWidth: model.boxes.plot.width,
               plotX: model.boxes.plot.x
             });
 
       if (
-        nextWindow.startIndex === viewportWindow.startIndex &&
-        nextWindow.endIndex === viewportWindow.endIndex
+        nextWindow.startIndex === drag.lastWindow.startIndex &&
+        nextWindow.endIndex === drag.lastWindow.endIndex
       ) {
         return;
       }
 
+      drag.lastWindow = nextWindow;
       emitViewportChange(nextWindow, interaction);
     },
     [
@@ -145,8 +168,7 @@ export const LineChartRangeSelector = <TData extends Record<string, unknown>>({
       isInteractive,
       model.boxes.plot.width,
       model.boxes.plot.x,
-      preventBrowserSelection,
-      viewportWindow
+      preventBrowserSelection
     ]
   );
   const responderProps = isInteractive
@@ -158,6 +180,13 @@ export const LineChartRangeSelector = <TData extends Record<string, unknown>>({
         onResponderGrant: (event: GestureResponderEvent) => {
           const interaction = getInteraction(event.nativeEvent.locationX);
 
+          dragRef.current = {
+            locationX: event.nativeEvent.locationX,
+            pageX: event.nativeEvent.pageX,
+            identifier: event.nativeEvent.identifier,
+            window: viewportWindow,
+            lastWindow: viewportWindow
+          };
           interactionRef.current = interaction;
           config.onGestureStart?.({ interaction });
           handleInteraction(event, interaction);
@@ -166,10 +195,14 @@ export const LineChartRangeSelector = <TData extends Record<string, unknown>>({
           handleInteraction(event, interactionRef.current);
         },
         onResponderRelease: () => {
+          if (!dragRef.current) return;
+          dragRef.current = undefined;
           config.onGestureEnd?.({ interaction: interactionRef.current });
           interactionRef.current = "move";
         },
         onResponderTerminate: () => {
+          if (!dragRef.current) return;
+          dragRef.current = undefined;
           config.onGestureEnd?.({ interaction: interactionRef.current });
           interactionRef.current = "move";
         },

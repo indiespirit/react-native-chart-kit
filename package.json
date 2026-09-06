@@ -1,6 +1,6 @@
 {
   "name": "react-native-chart-kit",
-  "version": "7.0.2",
+  "version": "7.0.3",
   "description": "Beautiful React Native charts for dashboards, reports, and data-rich mobile apps.",
   "keywords": [
     "react-native",
@@ -85,7 +85,8 @@
   },
   "files": [
     "dist",
-    "v2"
+    "v2",
+    "bin"
   ],
   "publishConfig": {
     "access": "public",
@@ -125,7 +126,8 @@
     "clean": "node scripts/clean-dist.mjs",
     "build": "npm run clean && npm run core:build && npm run svg:build && npm run rn:build && tsc && node scripts/assemble-root-modern-dist.mjs",
     "dev": "tsc --watch",
-    "prepare": "npm run build && husky"
+    "prepare": "npm run build && husky",
+    "site:verify": "node scripts/verify-agent-site.mjs"
   },
   "peerDependencies": {
     "react": ">=19.1.0 <20",
@@ -136,21 +138,16 @@
     "paths-js": "^0.4.11"
   },
   "overrides": {
-    "astro": {
-      "esbuild": "0.28.1"
-    },
     "joi": "17.13.4",
-    "shell-quote": "1.8.4",
-    "vite": {
-      ".": "^7.3.3",
-      "esbuild": "0.28.1"
-    },
+    "shell-quote": "1.10.0",
     "volar-service-yaml": {
       "yaml-language-server": "1.23.0"
     },
     "yaml-language-server": {
       "yaml": "2.8.3"
-    }
+    },
+    "metro": "0.83.8",
+    "metro-config": "0.83.8"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -171,5 +168,8 @@
   },
   "bugs": {
     "url": "https://github.com/chart-kit/react-native-chart-kit/issues"
+  },
+  "bin": {
+    "chart-kit": "bin/chart-kit.mjs"
   }
 }

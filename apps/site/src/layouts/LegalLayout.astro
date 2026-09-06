@@ -1,4 +1,5 @@
 ---
+import AgentLinks from "../components/AgentLinks.astro";
 import "../styles/global.css";
 import FaviconLinks from "../components/FaviconLinks.astro";
 import Footer from "../components/Footer.astro";
@@ -35,6 +36,7 @@ const pageUrl = `https://chartkit.io${canonicalPath}`;
     <meta name="twitter:description" content={description} />
     <SocialImageMeta />
     <FaviconLinks />
+    <AgentLinks />
     <ThemeInit />
     <GoogleAnalytics />
   </head>
@@ -199,6 +201,26 @@ const pageUrl = `https://chartkit.io${canonicalPath}`;
   html[data-theme="light"] .legal-content a:hover {
     color: #000;
     text-decoration-color: rgb(0 0 0 / 0.68);
+  }
+
+  .legal-content pre {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    background: rgb(255 255 255 / 0.03);
+    font-size: 0.85rem;
+  }
+
+  html[data-theme="light"] .legal-content pre {
+    border-color: rgb(0 0 0 / 0.1);
+    background: rgb(0 0 0 / 0.03);
+  }
+
+  .legal-content p code,
+  .legal-content p a {
+    overflow-wrap: anywhere;
   }
 
   .legal-content table {

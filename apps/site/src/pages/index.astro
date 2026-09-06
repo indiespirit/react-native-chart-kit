@@ -1,4 +1,6 @@
 ---
+import StructuredData from "../components/StructuredData.astro";
+import AgentLinks from "../components/AgentLinks.astro";
 import "../styles/global.css";
 import ChartKitFeatures from "../components/ChartKitFeatures.astro";
 import ChartKitStats from "../components/ChartKitStats.astro";
@@ -35,6 +37,8 @@ const pageUrl = "https://chartkit.io/";
     <meta name="twitter:description" content={pageDescription} />
     <SocialImageMeta />
     <FaviconLinks />
+    <StructuredData />
+    <AgentLinks />
     <ThemeInit />
     <GoogleAnalytics />
   </head>

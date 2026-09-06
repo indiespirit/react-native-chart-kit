@@ -9,6 +9,7 @@ export default [
     ignores: [
       "dist/**",
       ".tmp/**",
+      ".wrangler/**",
       "apps/site/.astro/**",
       "apps/site/dist/**",
       "packages/*/dist/**",

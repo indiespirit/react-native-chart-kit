@@ -1,0 +1,59 @@
+---
+const data = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://chartkit.io/#software",
+      name: "React Native Chart Kit",
+      description:
+        "A React Native chart library for dashboards, reports, and mobile apps. The public package is MIT licensed. Pro charts require a commercial license.",
+      url: "https://chartkit.io/",
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Android, iOS",
+      license:
+        "https://github.com/chart-kit/react-native-chart-kit/blob/main/LICENSE",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        description: "Public MIT library"
+      },
+      sameAs: [
+        "https://github.com/chart-kit/react-native-chart-kit",
+        "https://www.npmjs.com/package/react-native-chart-kit"
+      ],
+      publisher: { "@id": "https://chartkit.io/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://chartkit.io/#organization",
+      name: "Berman Digital Ltd",
+      url: "https://chartkit.io/",
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: "Ontario",
+        addressCountry: "CA"
+      },
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          email: "support@chartkit.io",
+          contactType: "customer support"
+        },
+        {
+          "@type": "ContactPoint",
+          email: "sales@chartkit.io",
+          contactType: "sales"
+        }
+      ]
+    }
+  ]
+};
+---
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(data).replace(/</g, "\\u003c")}
+/>

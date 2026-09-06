@@ -110,3 +110,15 @@ Chart Kit Pro adds licensed chart workflows for product dashboards:
 - [Troubleshooting](https://chartkit.io/docs/react-native/troubleshooting/)
 - [Contributing](https://chartkit.io/docs/react-native/getting-started/contributing/)
 - [llms.txt](https://chartkit.io/llms.txt)
+
+### Documentation CLI and agent access
+
+Read the public documentation from a terminal:
+
+```sh
+npx --package=react-native-chart-kit chart-kit docs /docs/react-native/charts/line
+```
+
+Use `chart-kit docs` to list pages or add `--json` for structured output. The CLI ships from version 7.0.3. No API key is required. Charts render locally in your application; the HTTP API serves documentation.
+
+See the [developer guide](https://chartkit.io/developers), [agent instructions](https://chartkit.io/llms.txt), and [OpenAPI specification](https://chartkit.io/openapi.json).

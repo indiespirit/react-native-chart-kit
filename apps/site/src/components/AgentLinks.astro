@@ -1,0 +1,12 @@
+---
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const markdownPath = path === "/" ? "/index.md" : `${path}.md`;
+---
+
+<link rel="alternate" type="text/markdown" href={markdownPath} />
+<link rel="describedby" href="/llms.txt" type="text/plain" />
+<link
+  rel="service-desc"
+  href="/openapi.json"
+  type="application/vnd.oai.openapi+json"
+/>

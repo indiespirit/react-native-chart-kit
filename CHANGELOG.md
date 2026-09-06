@@ -1,5 +1,14 @@
 # Changelog
 
+## v7.0.3
+
+- fix range-selector coordinate jumps during Android drags and preserve drag state while controlled viewport updates are pending (issue #780)
+- handle range-selector cancellation and additional touches without stale updates
+- add the `chart-kit docs` CLI for reading public documentation as Markdown or JSON
+- publish Markdown pages, a documentation API and OpenAPI schema, agent instructions, and developer and company pages on chartkit.io
+- return real 404 responses and declare Markdown content negotiation with `Vary: Accept`
+- update build dependencies to pass the release security check
+
 ## v7.0.2
 
 - restore v6 point-slot spacing for the legacy root `LineChart` so custom

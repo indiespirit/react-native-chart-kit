@@ -1,0 +1,119 @@
+---
+import LegalLayout from "../layouts/LegalLayout.astro";
+---
+
+<LegalLayout
+  title="Chart Kit Developer Guide"
+  canonicalPath="/developers"
+  description="Install React Native Chart Kit, test a chart, and read documentation through Markdown, the API, or the CLI."
+  updated="September 6, 2026"
+>
+  <section>
+    <h2>When to use Chart Kit</h2>
+    <p>
+      Use Chart Kit to add line, area, bar, pie, donut, progress, or
+      contribution heatmap charts to a React Native app. It fits mobile
+      dashboards, reports, trends, category comparisons, and activity screens.
+      Use the modern API for new screens. Keep the root import when maintaining
+      a legacy chart. Check the migration guide before changing an existing
+      screen.
+    </p>
+    <p>
+      Chart Kit renders charts locally in your app. The website provides
+      documentation and live examples. The HTTP API below serves documentation.
+      It does not accept chart data or render chart images.
+    </p>
+  </section>
+  <section>
+    <h2>Quickstart</h2>
+    <pre><code>npm install react-native-chart-kit react-native-svg</code></pre>
+    <p>
+      Import modern components from <code>react-native-chart-kit/v2</code>.
+      Follow the <a href="/docs/react-native/getting-started/installation"
+        >installation guide</a
+      > for the current React Native requirements and a complete first chart. The{" "}
+      <a href="/docs/react-native/charts/line">line chart playground</a> provides
+      an interactive example where you can test chart properties in the browser.
+    </p>
+    <p>
+      The public package uses the MIT license. Pro workflows use the separate <code
+        >@chart-kit/pro</code
+      > package. Read <a href="/docs/react-native/charts/pro-installation"
+        >Pro installation</a
+      > and <a href="/docs/react-native/charts/pricing">pricing</a> before you select
+      a commercial feature.
+    </p>
+  </section>
+  <section>
+    <h2>Authentication and API keys</h2>
+    <p>
+      Public documentation, Markdown files, and the documentation API need no
+      authentication or API key. Installing the public library needs no Chart
+      Kit account. Pro license terms apply to production use of Pro packages. A
+      Pro license is separate from access to the public documentation API.
+    </p>
+  </section>
+  <section>
+    <h2>Documentation API</h2>
+    <p>
+      Use <a href="/api/v1/docs">GET /api/v1/docs</a> to list the available paths.
+      Use <a href="/api/v1/docs/page?path=/docs/react-native/charts/line"
+        >GET /api/v1/docs/page?path=/docs/react-native/charts/line</a
+      > to read one page as Markdown inside JSON. The <a href="/openapi.json"
+        >OpenAPI 3.1 specification</a
+      > defines unique operation IDs, parameters, and response schemas for function
+      calling.
+    </p>
+    <pre><code>curl -H 'Accept: application/json' 'https://chartkit.io/api/v1/docs/page?path=/docs/react-native/charts/line'</code></pre>
+    <p>
+      The API supports GET and HEAD. Errors use JSON with <code>error.code</code
+      >, <code>error.message</code>, and <code>error.hint</code>. A missing page
+      returns 404. An invalid path parameter returns 400. An unsupported method
+      returns 405. The API has no account quota. Cloudflare traffic protections
+      can apply. Cache documentation in your client and avoid repeated bulk
+      requests.
+    </p>
+  </section>
+  <section>
+    <h2>Markdown and agent instructions</h2>
+    <p>
+      Start with <a href="/llms.txt">llms.txt</a> to select a task and a page. Read{" "}
+      <a href="/agent-instructions.md">agent-instructions.md</a> for package and licensing
+      rules. Public pages support <code>Accept: text/markdown</code> and a <code
+        >.md</code
+      > URL. The homepage Markdown URL is <a href="/index.md">/index.md</a>. Use <a
+        href="/llms-full.txt">llms-full.txt</a
+      > only when you need the full public content.
+    </p>
+    <pre><code>curl -H 'Accept: text/markdown' https://chartkit.io/docs/react-native/charts/line</code></pre>
+  </section>
+  <section>
+    <h2>Official CLI</h2>
+    <p>
+      The <code>chart-kit</code> CLI ships in <code>react-native-chart-kit</code
+      > from version 7.0.3. It reads the public documentation API and writes Markdown
+      or JSON to standard output. It makes no changes to your app and needs no API
+      key.
+    </p>
+    <pre><code>npx --package=react-native-chart-kit chart-kit docs /docs/react-native/charts/line</code></pre>
+    <p>
+      Use <code>chart-kit docs</code> to list pages, or add <code>--json</code> for
+      structured output. Run <code>chart-kit --help</code> for examples. Failures
+      write a JSON error to standard error and return a nonzero exit code.
+    </p>
+  </section>
+  <section>
+    <h2>More resources</h2>
+    <p>
+      Read the <a href="/docs/react-native">documentation index</a>, <a
+        href="/docs/react-native/migration/from-v1">migration guide</a
+      >, <a href="/docs/react-native/troubleshooting">troubleshooting guide</a>,
+      and <a href="/docs/react-native/getting-started/contributing"
+        >contributor guide</a
+      >. Browse the <a
+        href="https://github.com/chart-kit/react-native-chart-kit"
+        >public source</a
+      > or <a href="/contact">contact Chart Kit</a> for support.
+    </p>
+  </section>
+</LegalLayout>

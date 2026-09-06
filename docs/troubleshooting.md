@@ -81,3 +81,9 @@ order, or undocumented internals. The modern `/v2` charts intentionally use
 their own layout behavior.
 
 Use [the v1 migration guide](migration/from-v1.md) and [prop mapping](migration/prop-mapping.md) to decide whether the chart should stay on the compatibility surface or move to the modern API.
+
+## Range selector inside a native gesture detector
+
+Use `react-native-chart-kit` 7.0.3 or later if the range-selector window jumps on Android while an ancestor uses `GestureDetector`. The range selector keeps the root-relative touch movement for each drag, so a changed native event target does not reset its local coordinate.
+
+Keep `viewport` and `onViewportChange` connected as shown in the line chart guide. An ancestor native recognizer can still cancel a child responder. If a custom pinch handler also changes the viewport, coordinate the handlers so they do not write competing viewport updates during a range-selector drag. The `rangeSelector.onGestureStart` and `rangeSelector.onGestureEnd` callbacks can control that application state.

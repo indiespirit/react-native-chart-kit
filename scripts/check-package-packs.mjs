@@ -51,7 +51,8 @@ const packageChecks = [
       "dist/v2/index.d.ts",
       "v2/index.js",
       "v2/index.d.ts",
-      "v2/package.json"
+      "v2/package.json",
+      "bin/chart-kit.mjs"
     ]
   }
 ];

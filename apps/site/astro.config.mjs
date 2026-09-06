@@ -1,3 +1,5 @@
+import { chartKitAgentResources } from "./src/lib/agent-build.mjs";
+import { unified } from "@astrojs/markdown-remark";
 import starlight from "@astrojs/starlight";
 import react from "@astrojs/react";
 import { defineConfig } from "astro/config";
@@ -81,11 +83,14 @@ const chartKitPreviewWebAliases = () => ({
 
 export default defineConfig({
   site: "https://chartkit.io",
+  markdown: { processor: unified() },
+  build: { inlineStylesheets: "never" },
   devToolbar: {
     enabled: false
   },
   integrations: [
     react(),
+    chartKitAgentResources(),
     starlight({
       title: "React Native Chart Kit",
       description:
@@ -96,7 +101,7 @@ export default defineConfig({
       customCss: ["./src/styles/global.css", "./src/styles/starlight.css"],
       disable404Route: true,
       editLink: {
-        baseUrl: `${repositoryUrl}/edit/main/docs/`
+        baseUrl: `${repositoryUrl}/edit/main/apps/site/`
       },
       sidebar: [
         {
