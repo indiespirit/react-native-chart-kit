@@ -1,5 +1,10 @@
 # Changelog
 
+## v7.0.4
+
+- fix the documentation CLI entry check when npm or npx starts it through a symlink
+- add an executable regression test for help output and failure exit codes
+
 ## v7.0.3
 
 - fix range-selector coordinate jumps during Android drags and preserve drag state while controlled viewport updates are pending (issue #780)

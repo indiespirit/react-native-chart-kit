@@ -119,6 +119,6 @@ Read the public documentation from a terminal:
 npx --package=react-native-chart-kit chart-kit docs /docs/react-native/charts/line
 ```
 
-Use `chart-kit docs` to list pages or add `--json` for structured output. The CLI ships from version 7.0.3. No API key is required. Charts render locally in your application; the HTTP API serves documentation.
+Use `chart-kit docs` to list pages or add `--json` for structured output. The CLI ships from version 7.0.4. No API key is required. Charts render locally in your application; the HTTP API serves documentation.
 
 See the [developer guide](https://chartkit.io/developers), [agent instructions](https://chartkit.io/llms.txt), and [OpenAPI specification](https://chartkit.io/openapi.json).
